@@ -7,32 +7,12 @@ on:
 
 jobs:
   sonarcloud:
-    runs-on: windows-latest  # Измените на windows-latest если работаете с Windows
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     
-    - name: Install dependencies
-      run: |
-        choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
-        choco install ninja -y
-        
-    - name: Configure with CMake
-      run: |
-        mkdir build
-        cd build
-        cmake .. -G "Ninja" -DCMAKE_BUILD_TYPE=Debug
-        
-    - name: Build with build wrapper
-      run: |
-        cd build
-        build-wrapper-win-x86-64.exe --out-dir ../bw-output ninja
-        
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with:
-        args: |
-          -Dsonar.cfamily.build-wrapper-output=bw-output
-          -Dsonar.sourceEncoding=UTF-8

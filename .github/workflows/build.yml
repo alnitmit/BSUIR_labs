@@ -15,11 +15,13 @@ jobs:
         fetch-depth: 0
 
     - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@master
+      uses: sonarsource/sonarqube-scan-action@master
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
+        # Обязательные параметры
+        projectBaseDir: .
         args: >
           -Dsonar.projectKey=NikitaMikhaylovv_BSUIR_labs
           -Dsonar.organization=nikitamikhaylovv
@@ -27,4 +29,3 @@ jobs:
           -Dsonar.sources=.
           -Dsonar.exclusions=**/build/**,**/cmake-build-/**,
           -Dsonar.sourceEncoding=UTF-8
-          -Dsonar.cpd.exclusions=**/*.cpp,**/*.hpp

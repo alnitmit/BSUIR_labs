@@ -19,13 +19,3 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        # Обязательные параметры
-        projectBaseDir: .
-        args: >
-          -Dsonar.projectKey=NikitaMikhaylovv_BSUIR_labs
-          -Dsonar.organization=nikitamikhaylovv
-          -Dsonar.projectName=BSUIR Labs
-          -Dsonar.sources=.
-          -Dsonar.exclusions=**/build/**,**/cmake-build-/**,
-          -Dsonar.sourceEncoding=UTF-8

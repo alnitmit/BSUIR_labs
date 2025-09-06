@@ -1,39 +1,29 @@
-name: SonarQube
+name: SonarCloud Analysis
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches: [ main ]
+
 jobs:
-  build:
-    name: Build and analyze
-    runs-on: windows-latest
-    env:
-      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory
+  sonarcloud:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
-      - name: Install Build Wrapper
-        uses: SonarSource/sonarqube-scan-action/install-build-wrapper@v5
-
-      - name: Run Build Wrapper
-        run: |
-          build-wrapper-win-x86-64.exe --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} g++ -o main lab_01/src/*.cpp
-
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=NikitaMikhaylovv_BSUIR_labs
-            -Dsonar.organization=nikitamikhaylovv
-            -Dsonar.projectName=BSUIR Labs
-            -Dsonar.sources=.
-            -Dsonar.exclusions=**/build/**,**/cmake-build-/**
-            -Dsonar.cfamily.build-wrapper-output=${{ env.BUILD_WRAPPER_OUT_DIR }}
-            -Dsonar.sourceEncoding=UTF-8
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarqube-scan-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        args: >
+          -Dsonar.projectKey=NikitaMikhaylovv_BSUIR_labs
+          -Dsonar.organization=nikitamikhaylovv
+          -Dsonar.projectName=BSUIR Labs
+          -Dsonar.sources=lab_1
+          -Dsonar.exclusions=**/*.exe,**/build/**,**/.vscode/**
+          -Dsonar.sourceEncoding=UTF-8

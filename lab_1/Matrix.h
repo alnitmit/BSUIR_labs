@@ -110,13 +110,9 @@ public:
 void fillRandom() {
     if (!data) return;
     
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    static std::uniform_int_distribution<int> dist(0, 99);
-    
     for (int i = 0; i < rows; ++i) {
         for (int j = 0; j < cols; ++j) {
-            data[i][j] = dist(gen);
+            data[i][j] = std::rand() % 100;
         }
     }
 }

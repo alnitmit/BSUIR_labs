@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <random> 
 
 class Matrix {
 private:
@@ -76,7 +77,7 @@ public:
     int getRows() const { return rows; }
     int getCols() const { return cols; }
     
-    void setValue(int row, int col, double value) {
+    const void setValue(int row, int col, double value) {
         if (row < 0 || row >= rows || col < 0 || col >= cols) {
             std::cout << "Error: Matrix indices out of range" << std::endl;
             return;
@@ -106,18 +107,21 @@ public:
         }
     }
 
-    void fillRandom() {
-        if (!data) return;
-        
-        std::srand(std::time(0));
-        for (int i = 0; i < rows; ++i) {
-            for (int j = 0; j < cols; ++j) {
-                data[i][j] = rand() % 100;
-            }
+void fillRandom() {
+    if (!data) return;
+    
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_int_distribution<int> dist(0, 99);
+    
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            data[i][j] = dist(gen);
         }
     }
+}
 
-    void fillFromInput() {
+    const void fillFromInput() {
         if (!data) return;
         
         std::cout << "Enter " << rows << "x" << cols << " matrix values:" << std::endl;

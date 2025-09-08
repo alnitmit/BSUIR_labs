@@ -12,6 +12,29 @@ private:
     int cols;
     double** data;
 
+    void freeMemory() {
+    if (data) {
+        for (int i = 0; i < rows; ++i) {
+            delete[] data[i];
+        }
+        delete[] data;
+    }
+}
+
+void allocateAndCopyData(const Matrix& other) {
+    data = new double*[rows];
+    for (int i = 0; i < rows; ++i) {
+        data[i] = new double[cols];
+        copyRow(other, i);
+    }
+}
+
+void copyRow(const Matrix& other, int rowIndex) {
+    for (int j = 0; j < cols; ++j) {
+        data[rowIndex][j] = other.data[rowIndex][j];
+    }
+}
+
 public:
     Matrix(int rows, int cols) : rows(rows), cols(cols) {
         if (rows <= 0 || cols <= 0) {
@@ -41,29 +64,22 @@ public:
     }
 
     Matrix& operator=(const Matrix& other) {
-        if (this != &other) {
-            for (int i = 0; i < rows; ++i) {
-                delete[] data[i];
-            }
-            delete[] data;
-
-            rows = other.rows;
-            cols = other.cols;
-            
-            if (rows > 0 && cols > 0) {
-                data = new double*[rows];
-                for (int i = 0; i < rows; ++i) {
-                    data[i] = new double[cols];
-                    for (int j = 0; j < cols; ++j) {
-                        data[i][j] = other.data[i][j];
-                    }
-                }
-            } else {
-                data = nullptr;
-            }
-        }
+    if (this == &other) {
         return *this;
     }
+    freeMemory();
+
+    rows = other.rows;
+    cols = other.cols;
+
+    if (rows > 0 && cols > 0) {
+        allocateAndCopyData(other);
+    } else {
+        data = nullptr;
+    }
+
+    return *this;
+}
 
     ~Matrix() {
         if (data) {

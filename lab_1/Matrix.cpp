@@ -56,7 +56,10 @@ while (!validChoice) {
     }
 }
 
-int rows1, cols1, rows2, cols2;
+int rows1;
+int cols1;
+int rows2;
+int cols2;
 bool validDimensions = false;
 
 while (!validDimensions) {

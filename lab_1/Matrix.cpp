@@ -35,7 +35,7 @@ Matrix multiplyMatrices(const Matrix& a, const Matrix& b) {
     return result;
 }
 
-void fillMatrices(Matrix& m1, Matrix& m2) {
+void fillMatrices(const Matrix& m1, const Matrix& m2) {
     int choice;
     bool validChoice = false;
     
@@ -70,7 +70,7 @@ void fillMatrices(Matrix& m1, Matrix& m2) {
     m2.print();
 }
 
-void performMatrixOperations(Matrix& m1, Matrix& m2) {
+void performMatrixOperations(const Matrix& m1, const Matrix& m2) {
     while (true) {
         std::cout << "\nChoose operation:\n";
         std::cout << "1. Addition\n";
@@ -149,7 +149,7 @@ void matrixOperations() {
     Matrix m1(rows1, cols1);
     Matrix m2(rows2, cols2);
     
-    fillMatrices(m1, m2);
+    fillMatrices( m1, m2);
     
     performMatrixOperations(m1, m2);
 }

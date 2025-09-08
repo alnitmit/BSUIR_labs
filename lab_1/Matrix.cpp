@@ -41,19 +41,18 @@ bool validChoice = false;
 while (!validChoice) {
     std::cout << "Choose matrix input method:\n";
     std::cout << "1. Manual input\n";
-    std::cout << "2. Random values\n";
     
     if (!(std::cin >> choice)) {
-        std::cout << "Invalid input. Please enter a number (1 or 2).\n";
+        std::cout << "Invalid input. Please enter a number (1).\n";
         std::cin.clear();
         std::cin.ignore(10000, '\n');
         continue;
     }
     
-    if (choice == 1 || choice == 2) {
+    if (choice == 1) {
         validChoice = true;
     } else {
-        std::cout << "Invalid choice. Please select 1 or 2.\n";
+        std::cout << "Invalid choice. Please select 1.\n";
     }
 }
 
@@ -92,11 +91,7 @@ while (!validDimensions) {
     if (choice == 1) {
         m1.fillFromInput();
         m2.fillFromInput();
-    } else {
-        m1.fillRandom();
-        m2.fillRandom();
     }
-
     std::cout << "\nMatrix A:" << std::endl;
     m1.print();
     std::cout << "\nMatrix B:" << std::endl;
@@ -144,7 +139,6 @@ while (!validDimensions) {
 }
 
 int main() {
-    std::srand(std::time(nullptr));
     matrixOperations();
     return 0;
 }

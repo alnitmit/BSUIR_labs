@@ -29,7 +29,7 @@ void allocateAndCopyData(const Matrix& other) {
     }
 }
 
-void copyRow(const Matrix& other, int rowIndex) {
+void copyRow(const Matrix& other, int rowIndex) const {
     for (int j = 0; j < cols; ++j) {
         data[rowIndex][j] = other.data[rowIndex][j];
     }

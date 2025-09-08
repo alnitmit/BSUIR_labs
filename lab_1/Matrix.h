@@ -77,7 +77,7 @@ public:
     int getRows() const { return rows; }
     int getCols() const { return cols; }
     
-    const void setValue(int row, int col, double value) {
+    void setValue(int row, int col, double value) const {
         if (row < 0 || row >= rows || col < 0 || col >= cols) {
             std::cout << "Error: Matrix indices out of range" << std::endl;
             return;
@@ -107,7 +107,7 @@ public:
         }
     }
 
-    const void fillFromInput() {
+    void fillFromInput() const {
         if (!data) return;
         
         std::cout << "Enter " << rows << "x" << cols << " matrix values:" << std::endl;

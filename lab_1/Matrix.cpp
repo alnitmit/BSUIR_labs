@@ -1,7 +1,7 @@
 #include "Matrix.h"
 #include <iostream>
 
-void fillMatrices(Matrix &m1, Matrix &m2) {
+void fillMatrices(const Matrix &m1, const Matrix &m2) {
   int choice;
   bool validChoice = false;
 

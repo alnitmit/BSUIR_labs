@@ -119,8 +119,22 @@ public:
               << " matrix values:" << std::endl;
     for (int i = 0; i < rows; ++i) {
       for (int j = 0; j < cols; ++j) {
-        std::cout << "Element [" << i << "][" << j << "]: ";
-        std::cin >> data[i][j];
+        double value;
+        bool validInput = false;
+
+        while (!validInput) {
+          std::cout << "Element [" << i << "][" << j << "]: ";
+
+          if (std::cin >> value) {
+            data[i][j] = value;
+            validInput = true;
+          } else {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "Invalid input! Please enter a valid number."
+                      << std::endl;
+          }
+        }
       }
     }
   }

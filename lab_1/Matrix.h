@@ -111,7 +111,7 @@ public:
     }
   }
 
-  void fillFromInput() {
+  void fillFromInput() const {
     if (!data)
       return;
 

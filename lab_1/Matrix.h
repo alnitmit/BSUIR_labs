@@ -15,33 +15,41 @@ private:
         delete[] data[i];
       }
       delete[] data;
-      data = nullptr;
     }
   }
 
-  void allocateMemory() {
+  void allocateAndCopyData(const Matrix &other) {
+    data = new double *[rows];
+    for (int i = 0; i < rows; ++i) {
+      data[i] = new double[cols];
+      for (int j = 0; j < cols; ++j) {
+        data[i][j] = other.data[i][j];
+      }
+    }
+  }
+
+public:
+  Matrix(int rows, int cols) : rows(rows), cols(cols) {
+    if (rows <= 0 || cols <= 0) {
+      std::cout << "Error: Matrix dimensions must be positive" << std::endl;
+      this->rows = 0;
+      this->cols = 0;
+      data = nullptr;
+      return;
+    }
+
     data = new double *[rows];
     for (int i = 0; i < rows; ++i) {
       data[i] = new double[cols]();
     }
   }
 
-public:
-  Matrix(int rows, int cols) : rows(rows), cols(cols), data(nullptr) {
-    if (rows <= 0 || cols <= 0) {
-      std::cout << "Error: Matrix dimensions must be positive" << std::endl;
-      this->rows = 0;
-      this->cols = 0;
-      return;
-    }
-    allocateMemory();
-  }
-
   Matrix(const Matrix &other)
       : rows(other.rows), cols(other.cols), data(nullptr) {
     if (rows > 0 && cols > 0) {
-      allocateMemory();
+      data = new double *[rows];
       for (int i = 0; i < rows; ++i) {
+        data[i] = new double[cols];
         for (int j = 0; j < cols; ++j) {
           data[i][j] = other.data[i][j];
         }
@@ -49,27 +57,71 @@ public:
     }
   }
 
-  ~Matrix() { freeMemory(); }
-
-  void assign(const Matrix &other) {
+  Matrix &operator=(const Matrix &other) {
     if (this == &other) {
-      return;
+      return *this;
     }
-
     freeMemory();
 
     rows = other.rows;
     cols = other.cols;
 
     if (rows > 0 && cols > 0) {
-      allocateMemory();
-      for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j) {
-          data[i][j] = other.data[i][j];
-        }
-      }
+      allocateAndCopyData(other);
     } else {
       data = nullptr;
+    }
+
+    return *this;
+  }
+
+  ~Matrix() { freeMemory(); }
+
+  int getRows() const { return rows; }
+
+  int getCols() const { return cols; }
+
+  void setValue(int row, int col, double value) const {
+    if (row < 0 || row >= rows || col < 0 || col >= cols) {
+      std::cout << "Error: Matrix indices out of range" << std::endl;
+      return;
+    }
+    data[row][col] = value;
+  }
+
+  double getValue(int row, int col) const {
+    if (row < 0 || row >= rows || col < 0 || col >= cols) {
+      std::cout << "Error: Matrix indices out of range" << std::endl;
+      return 0.0;
+    }
+    return data[row][col];
+  }
+
+  void print() const {
+    if (!data) {
+      std::cout << "Matrix is not initialized" << std::endl;
+      return;
+    }
+
+    for (int i = 0; i < rows; ++i) {
+      for (int j = 0; j < cols; ++j) {
+        std::cout << data[i][j] << "\t";
+      }
+      std::cout << std::endl;
+    }
+  }
+
+  void fillFromInput() {
+    if (!data)
+      return;
+
+    std::cout << "Enter " << rows << "x" << cols
+              << " matrix values:" << std::endl;
+    for (int i = 0; i < rows; ++i) {
+      for (int j = 0; j < cols; ++j) {
+        std::cout << "Element [" << i << "][" << j << "]: ";
+        std::cin >> data[i][j];
+      }
     }
   }
 
@@ -109,63 +161,13 @@ public:
     return result;
   }
 
-  int getRows() const { return rows; }
-  int getCols() const { return cols; }
-
-  void setValue(int row, int col, double value) {
-    if (row < 0 || row >= rows || col < 0 || col >= cols) {
-      std::cout << "Error: Matrix indices out of range" << std::endl;
-      return;
-    }
-    data[row][col] = value;
+  static Matrix addMatrices(const Matrix &a, const Matrix &b) {
+    return a.add(b);
   }
 
-  double getValue(int row, int col) const {
-    if (row < 0 || row >= rows || col < 0 || col >= cols) {
-      std::cout << "Error: Matrix indices out of range" << std::endl;
-      return 0.0;
-    }
-    return data[row][col];
-  }
-
-  void print() const {
-    if (!data) {
-      std::cout << "Matrix is not initialized" << std::endl;
-      return;
-    }
-
-    for (int i = 0; i < rows; ++i) {
-      for (int j = 0; j < cols; ++j) {
-        std::cout << data[i][j] << "\t";
-      }
-      std::cout << std::endl;
-    }
-  }
-
-  void fillFromInput() {
-    if (!data) {
-      return;
-    }
-
-    std::cout << "Enter " << rows << "x" << cols
-              << " matrix values:" << std::endl;
-    for (int i = 0; i < rows; ++i) {
-      for (int j = 0; j < cols; ++j) {
-        while (true) {
-          std::cout << "Element [" << i << "][" << j << "]: ";
-          if (std::cin >> data[i][j]) {
-            break;
-          } else {
-            std::cout << "Invalid input. Please enter a number." << std::endl;
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
-          }
-        }
-      }
-    }
+  static Matrix multiplyMatrices(const Matrix &a, const Matrix &b) {
+    return a.multiply(b);
   }
 };
-
-void matrixOperations();
 
 #endif

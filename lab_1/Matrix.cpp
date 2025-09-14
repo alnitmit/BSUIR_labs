@@ -1,6 +1,5 @@
 #include "Matrix.h"
 #include <iostream>
-#include <limits>
 
 void fillMatrices(Matrix &m1, Matrix &m2) {
   int choice;
@@ -21,17 +20,13 @@ void fillMatrices(Matrix &m1, Matrix &m2) {
       validChoice = true;
     } else {
       std::cout << "Invalid choice. Please select 1.\n";
-      std::cin.clear();
-      std::cin.ignore(10000, '\n');
     }
   }
 
-  if (choice == 1) {
-    std::cout << "Enter values for matrix A:" << std::endl;
-    m1.fillFromInput();
-    std::cout << "Enter values for matrix B:" << std::endl;
-    m2.fillFromInput();
-  }
+  std::cout << "Enter values for matrix A:" << std::endl;
+  m1.fillFromInput();
+  std::cout << "Enter values for matrix B:" << std::endl;
+  m2.fillFromInput();
 
   std::cout << "\nMatrix A:" << std::endl;
   m1.print();
@@ -59,7 +54,7 @@ void performMatrixOperations(const Matrix &m1, const Matrix &m2) {
 
     if (opChoice == 1) {
       if (m1.getRows() == m2.getRows() && m1.getCols() == m2.getCols()) {
-        Matrix sum = m1.add(m2);
+        Matrix sum = Matrix::addMatrices(m1, m2);
         std::cout << "\nSum of A and B:" << std::endl;
         sum.print();
       } else {
@@ -68,7 +63,7 @@ void performMatrixOperations(const Matrix &m1, const Matrix &m2) {
       }
     } else if (opChoice == 2) {
       if (m1.getCols() == m2.getRows()) {
-        Matrix product = m1.multiply(m2);
+        Matrix product = Matrix::multiplyMatrices(m1, m2);
         std::cout << "\nProduct of A and B:" << std::endl;
         product.print();
       } else {
@@ -113,8 +108,6 @@ void matrixOperations() {
     if (rows1 <= 0 || cols1 <= 0 || rows2 <= 0 || cols2 <= 0) {
       std::cout
           << "Error: Matrix dimensions must be positive. Please try again.\n";
-      std::cin.clear();
-      std::cin.ignore(10000, '\n');
     } else {
       validDimensions = true;
     }

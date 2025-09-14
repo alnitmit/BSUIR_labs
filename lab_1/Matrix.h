@@ -2,6 +2,7 @@
 #define MATRIX_H
 
 #include <iostream>
+#include <limits>
 
 class Matrix {
 private:
@@ -111,33 +112,35 @@ public:
     }
   }
 
-  void fillFromInput() const {
+ void fillFromInput() const {
     if (!data)
-      return;
+        return;
 
-    std::cout << "Enter " << rows << "x" << cols
-              << " matrix values:" << std::endl;
+    std::cout << "Enter " << rows << "x" << cols << " matrix values:" << std::endl;
     for (int i = 0; i < rows; ++i) {
-      for (int j = 0; j < cols; ++j) {
-        double value;
-        bool validInput = false;
+        for (int j = 0; j < cols; ++j) {
+            readAndSetElement(i, j);
+        }
+    }
+}
 
-        while (!validInput) {
-          std::cout << "Element [" << i << "][" << j << "]: ";
+void readAndSetElement(int i, int j) const {
+    double value;
+    bool validInput = false;
 
-          if (std::cin >> value) {
+    while (!validInput) {
+        std::cout << "Element [" << i << "][" << j << "]: ";
+
+        if (std::cin >> value) {
             data[i][j] = value;
             validInput = true;
-          } else {
+        } else {
             std::cin.clear();
             std::cin.ignore(10000, '\n');
-            std::cout << "Invalid input! Please enter a valid number."
-                      << std::endl;
-          }
+            std::cout << "Invalid input! Please enter a valid number." << std::endl;
         }
-      }
     }
-  }
+}
 
   Matrix add(const Matrix &other) const {
     if (rows != other.rows || cols != other.cols) {

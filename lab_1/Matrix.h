@@ -58,24 +58,6 @@ public:
     }
   }
 
-  Matrix &operator=(const Matrix &other) {
-    if (this == &other) {
-      return *this;
-    }
-    freeMemory();
-
-    rows = other.rows;
-    cols = other.cols;
-
-    if (rows > 0 && cols > 0) {
-      allocateAndCopyData(other);
-    } else {
-      data = nullptr;
-    }
-
-    return *this;
-  }
-
   ~Matrix() { freeMemory(); }
 
   int getRows() const { return rows; }

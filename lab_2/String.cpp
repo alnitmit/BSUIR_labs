@@ -1,4 +1,4 @@
-#include "string.h"
+#include "String.h"
 #include <cctype>
 #include <iostream>
 #include <limits>
@@ -118,6 +118,6 @@ int main() {
       break;
     }
     }
-  };
+  }
   return 0;
 }

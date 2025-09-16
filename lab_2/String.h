@@ -14,29 +14,26 @@ private:
     length = 0;
   }
 
-  void copyFrom(std::span<const char> str_span) {
-    int len = str_span.size();
+  void copyFrom(const char *str, int len) {
     data = new char[len + 1];
     for (int i = 0; i < len; i++) {
-      data[i] = str_span[i];
+      data[i] = str[i];
     }
     data[len] = '\0';
     length = len;
   }
 
 public:
-  String() : data(nullptr), length(0) {
-    data = new char[1];
+  String() : data(new char[1]), length(0) {
     data[0] = '\0';
   }
 
-  String(const String &other) {
+  String(const String &other) : data(nullptr), length(0) {
     if (other.data) {
       copyFrom(other.data, other.length);
     } else {
       data = new char[1];
       data[0] = '\0';
-      length = 0;
     }
   }
 
@@ -47,6 +44,10 @@ public:
       freeMemory();
       if (other.data) {
         copyFrom(other.data, other.length);
+      } else {
+        data = new char[1];
+        data[0] = '\0';
+        length = 0;
       }
     }
     return *this;

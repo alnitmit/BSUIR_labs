@@ -1,4 +1,4 @@
-#include "string.h"
+#include "Strin.h"
 #include <cctype>
 #include <iostream>
 #include <limits>

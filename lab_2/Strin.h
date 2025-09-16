@@ -6,7 +6,7 @@
 class String {
 private:
   char *data;
-  int length;
+  int length = 0;
 
   void freeMemory() {
     delete[] data;
@@ -24,11 +24,9 @@ private:
   }
 
 public:
-  String() : data(new char[1]), length(0) {
-    data[0] = '\0';
-  }
+  String() : data(new char[1]) { data[0] = '\0'; }
 
-  String(const String &other) : data(nullptr), length(0) {
+  String(const String &other) : data(nullptr) {
     if (other.data) {
       copyFrom(other.data, other.length);
     } else {
@@ -56,7 +54,7 @@ public:
   String &operator+=(const String &other) {
     if (other.data && other.length > 0) {
       int newLength = length + other.length;
-      char *newData = new char[newLength + 1];
+      auto newData = new char[newLength + 1];
 
       for (int i = 0; i < length; i++) {
         newData[i] = data[i];

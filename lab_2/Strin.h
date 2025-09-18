@@ -1,7 +1,9 @@
 #ifndef STRING_H
 #define STRING_H
 
+#include <cstring>
 #include <iostream>
+#include <span>
 
 class String {
 private:
@@ -14,13 +16,13 @@ private:
     length = 0;
   }
 
-  void copyFrom(const char *str, int len) {
-    data = new char[len + 1];
-    for (int i = 0; i < len; i++) {
+  void copyFrom(std::span<const char> str) {
+    length = str.size();
+    data = new char[length + 1];
+    for (int i = 0; i < length; i++) {
       data[i] = str[i];
     }
-    data[len] = '\0';
-    length = len;
+    data[length] = '\0';
   }
 
 public:
@@ -28,7 +30,7 @@ public:
 
   String(const String &other) : data(nullptr) {
     if (other.data) {
-      copyFrom(other.data, other.length);
+      copyFrom(std::span<const char>(other.data, other.length));
     } else {
       data = new char[1];
       data[0] = '\0';
@@ -41,7 +43,7 @@ public:
     if (this != &other) {
       freeMemory();
       if (other.data) {
-        copyFrom(other.data, other.length);
+        copyFrom(std::span<const char>(other.data, other.length));
       } else {
         data = new char[1];
         data[0] = '\0';

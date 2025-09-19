@@ -21,7 +21,7 @@ public:
   void setValue(int row, int col, double value) const;
   double getValue(int row, int col) const;
   void print() const;
-  void fillFromInput();
+  void fillFromInput() const;
   void readAndSetElement(int i, int j) const;
 
   Matrix add(const Matrix &other) const;

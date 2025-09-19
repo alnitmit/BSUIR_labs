@@ -103,7 +103,7 @@ void Matrix::print() const {
   }
 }
 
-void Matrix::fillFromInput() {
+void Matrix::fillFromInput() const {
   if (!data)
     return;
 

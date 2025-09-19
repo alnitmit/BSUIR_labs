@@ -2,126 +2,177 @@
 #include <iostream>
 #include <limits>
 
-void fillMatrices(const Matrix &m1, const Matrix &m2) {
-  int choice;
-  bool validChoice = false;
-
-  while (!validChoice) {
-    std::cout << "Choose matrix input method:\n";
-    std::cout << "1. Manual input\n";
-
-    if (!(std::cin >> choice)) {
-      std::cout << "Invalid input. Please enter a number (1).\n";
-      std::cin.clear();
-      std::cin.ignore(10000, '\n');
-      continue;
+void Matrix::freeMemory() {
+  if (data) {
+    for (int i = 0; i < rows; ++i) {
+      delete[] data[i];
     }
-
-    if (choice == 1) {
-      validChoice = true;
-    } else {
-      std::cout << "Invalid choice. Please select 1.\n";
-    }
+    delete[] data;
   }
-
-  std::cout << "Enter values for matrix A:" << std::endl;
-  m1.fillFromInput();
-  std::cout << "Enter values for matrix B:" << std::endl;
-  m2.fillFromInput();
-
-  std::cout << "\nMatrix A:" << std::endl;
-  m1.print();
-  std::cout << "\nMatrix B:" << std::endl;
-  m2.print();
 }
 
-void performMatrixOperations(const Matrix &m1, const Matrix &m2) {
-  while (true) {
-    std::cout << "\nChoose operation:\n";
-    std::cout << "1. Addition\n";
-    std::cout << "2. Multiplication\n";
-    std::cout << "3. Exit\n";
-    std::cout << "Enter your choice: ";
-
-    int opChoice;
-    if (!(std::cin >> opChoice)) {
-      std::cout << "Invalid input. Please enter a number (1-3).\n";
-      std::cin.clear();
-      std::cin.ignore(10000, '\n');
-      continue;
+void Matrix::allocateAndCopyData(const Matrix &other) {
+  data = new double *[rows];
+  for (int i = 0; i < rows; ++i) {
+    data[i] = new double[cols];
+    for (int j = 0; j < cols; ++j) {
+      data[i][j] = other.data[i][j];
     }
+  }
+}
 
-    std::cin.ignore(10000, '\n');
+Matrix::Matrix(int rows, int cols) : rows(rows), cols(cols) {
+  if (rows <= 0 || cols <= 0) {
+    std::cout << "Error: Matrix dimensions must be positive" << std::endl;
+    this->rows = 0;
+    this->cols = 0;
+    data = nullptr;
+    return;
+  }
 
-    if (opChoice == 1) {
-      if (m1.getRows() == m2.getRows() && m1.getCols() == m2.getCols()) {
-        Matrix sum = Matrix::addMatrices(m1, m2);
-        std::cout << "\nSum of A and B:" << std::endl;
-        sum.print();
-      } else {
-        std::cout << "Cannot add matrices - dimensions don't match"
-                  << std::endl;
+  data = new double *[rows];
+  for (int i = 0; i < rows; ++i) {
+    data[i] = new double[cols]();
+  }
+}
+
+Matrix::Matrix(const Matrix &other)
+    : rows(other.rows), cols(other.cols), data(nullptr) {
+  if (rows > 0 && cols > 0) {
+    data = new double *[rows];
+    for (int i = 0; i < rows; ++i) {
+      data[i] = new double[cols];
+      for (int j = 0; j < cols; ++j) {
+        data[i][j] = other.data[i][j];
       }
-    } else if (opChoice == 2) {
-      if (m1.getCols() == m2.getRows()) {
-        Matrix product = Matrix::multiplyMatrices(m1, m2);
-        std::cout << "\nProduct of A and B:" << std::endl;
-        product.print();
-      } else {
-        std::cout << "Cannot multiply matrices - dimensions incompatible"
-                  << std::endl;
+    }
+  }
+}
+
+Matrix &Matrix::operator=(const Matrix &other) {
+  if (this == &other) {
+    return *this;
+  }
+  freeMemory();
+
+  rows = other.rows;
+  cols = other.cols;
+
+  if (rows > 0 && cols > 0) {
+    allocateAndCopyData(other);
+  } else {
+    data = nullptr;
+  }
+
+  return *this;
+}
+
+Matrix::~Matrix() { freeMemory(); }
+
+int Matrix::getRows() const { return rows; }
+
+int Matrix::getCols() const { return cols; }
+
+void Matrix::setValue(int row, int col, double value) {
+  if (row < 0 || row >= rows || col < 0 || col >= cols) {
+    std::cout << "Error: Matrix indices out of range" << std::endl;
+    return;
+  }
+  data[row][col] = value;
+}
+
+double Matrix::getValue(int row, int col) const {
+  if (row < 0 || row >= rows || col < 0 || col >= cols) {
+    std::cout << "Error: Matrix indices out of range" << std::endl;
+    return 0.0;
+  }
+  return data[row][col];
+}
+
+void Matrix::print() const {
+  if (!data) {
+    std::cout << "Matrix is not initialized" << std::endl;
+    return;
+  }
+
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      std::cout << data[i][j] << "\t";
+    }
+    std::cout << std::endl;
+  }
+}
+
+void Matrix::fillFromInput() {
+  if (!data)
+    return;
+
+  std::cout << "Enter " << rows << "x" << cols << " matrix values:" << std::endl;
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      readAndSetElement(i, j);
+    }
+  }
+}
+
+void Matrix::readAndSetElement(int i, int j) {
+  double value;
+  bool validInput = false;
+
+  while (!validInput) {
+    std::cout << "Element [" << i << "][" << j << "]: ";
+
+    if (std::cin >> value) {
+      data[i][j] = value;
+      validInput = true;
+    } else {
+      std::cin.clear();
+      std::cin.ignore(10000, '\n');
+      std::cout << "Invalid input! Please enter a valid number." << std::endl;
+    }
+  }
+}
+
+Matrix Matrix::add(const Matrix &other) const {
+  if (rows != other.rows || cols != other.cols) {
+    std::cout << "Error: Matrices dimensions do not match for addition"
+              << std::endl;
+    return Matrix(0, 0);
+  }
+
+  Matrix result(rows, cols);
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < cols; ++j) {
+      result.data[i][j] = data[i][j] + other.data[i][j];
+    }
+  }
+  return result;
+}
+
+Matrix Matrix::multiply(const Matrix &other) const {
+  if (cols != other.rows) {
+    std::cout << "Error: Matrices dimensions do not match for multiplication"
+              << std::endl;
+    return Matrix(0, 0);
+  }
+
+  Matrix result(rows, other.cols);
+  for (int i = 0; i < rows; ++i) {
+    for (int j = 0; j < other.cols; ++j) {
+      double sum = 0;
+      for (int k = 0; k < cols; ++k) {
+        sum += data[i][k] * other.data[k][j];
       }
-    } else if (opChoice == 3) {
-      std::cout << "Exiting program." << std::endl;
-      break;
-    } else {
-      std::cout << "Invalid choice. Please enter 1, 2 or 3." << std::endl;
+      result.data[i][j] = sum;
     }
   }
+  return result;
 }
 
-void matrixOperations() {
-  int rows1;
-  int cols1;
-  int rows2;
-  int cols2;
-  bool validDimensions = false;
-
-  while (!validDimensions) {
-    std::cout << "Enter dimensions for first matrix (rows columns): ";
-
-    if (!(std::cin >> rows1 >> cols1)) {
-      std::cout << "Invalid input. Please enter two numbers.\n";
-      std::cin.clear();
-      std::cin.ignore(10000, '\n');
-      continue;
-    }
-
-    std::cout << "Enter dimensions for second matrix (rows columns): ";
-
-    if (!(std::cin >> rows2 >> cols2)) {
-      std::cout << "Invalid input. Please enter two numbers.\n";
-      std::cin.clear();
-      std::cin.ignore(10000, '\n');
-      continue;
-    }
-
-    if (rows1 <= 0 || cols1 <= 0 || rows2 <= 0 || cols2 <= 0) {
-      std::cout
-          << "Error: Matrix dimensions must be positive. Please try again.\n";
-    } else {
-      validDimensions = true;
-    }
-  }
-
-  Matrix m1(rows1, cols1);
-  Matrix m2(rows2, cols2);
-
-  fillMatrices(m1, m2);
-  performMatrixOperations(m1, m2);
+Matrix Matrix::addMatrices(const Matrix &a, const Matrix &b) {
+  return a.add(b);
 }
 
-int main() {
-  matrixOperations();
-  return 0;
+Matrix Matrix::multiplyMatrices(const Matrix &a, const Matrix &b) {
+  return a.multiply(b);
 }

@@ -73,7 +73,7 @@ int Matrix::getRows() const { return rows; }
 
 int Matrix::getCols() const { return cols; }
 
-void Matrix::setValue(int row, int col, double value) {
+void Matrix::setValue(int row, int col, double value) const {
   if (row < 0 || row >= rows || col < 0 || col >= cols) {
     std::cout << "Error: Matrix indices out of range" << std::endl;
     return;
@@ -115,7 +115,7 @@ void Matrix::fillFromInput() {
   }
 }
 
-void Matrix::readAndSetElement(int i, int j) {
+void Matrix::readAndSetElement(int i, int j) const {
   double value;
   bool validInput = false;
 

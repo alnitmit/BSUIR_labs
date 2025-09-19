@@ -35,7 +35,7 @@ void fillMatrices(Matrix &m1, Matrix &m2) {
   m2.print();
 }
 
-void performMatrixOperations(Matrix &m1, Matrix &m2) {
+void performMatrixOperations(const Matrix &m1, const Matrix &m2) {
   while (true) {
     std::cout << "\nChoose operation:\n";
     std::cout << "1. Addition\n";

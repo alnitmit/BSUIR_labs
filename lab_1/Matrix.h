@@ -18,11 +18,11 @@ public:
 
   int getRows() const;
   int getCols() const;
-  void setValue(int row, int col, double value);
+  void setValue(int row, int col, double value) const;
   double getValue(int row, int col) const;
   void print() const;
   void fillFromInput();
-  void readAndSetElement(int i, int j);
+  void readAndSetElement(int i, int j) const;
 
   Matrix add(const Matrix &other) const;
   Matrix multiply(const Matrix &other) const;

@@ -1,6 +1,5 @@
 #include "../заголовочный файл/Matrix.h"
 #include <iostream>
-#include <limits>
 
 void Matrix::freeMemory() {
   if (data) {
@@ -107,7 +106,8 @@ void Matrix::fillFromInput() const {
   if (!data)
     return;
 
-  std::cout << "Enter " << rows << "x" << cols << " matrix values:" << std::endl;
+  std::cout << "Enter " << rows << "x" << cols
+            << " matrix values:" << std::endl;
   for (int i = 0; i < rows; ++i) {
     for (int j = 0; j < cols; ++j) {
       readAndSetElement(i, j);

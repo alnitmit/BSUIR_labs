@@ -1,7 +1,6 @@
 #ifndef STRING_H
 #define STRING_H
 
-#include <cstring>
 #include <iostream>
 #include <span>
 

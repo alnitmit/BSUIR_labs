@@ -1,5 +1,6 @@
 #include "../include/String.h"
 #include <iostream>
+#include <span>  
 
 void String::freeMemory() {
   delete[] data;

@@ -9,7 +9,7 @@ set(SOURCES
 )
 
 set(HEADERS
-    include/string.h
+    include/String.h
 )
 
-add_executable(lab_2 ${SOURCES} ${HEADERS})
+add_executable(lab2 ${SOURCES} ${HEADERS})

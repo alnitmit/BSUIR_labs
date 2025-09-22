@@ -32,7 +32,7 @@ jobs:
       - name: SonarCloud scan lab_1
         uses: SonarSource/sonarqube-scan-action@v4
         env:
-          SONAR_TOKEN1: ${{ secrets.SONAR_TOKEN1 }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN1 }}
         with:
           args: >
             -Dsonar.projectKey=lab__1

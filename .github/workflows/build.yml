@@ -50,13 +50,13 @@ jobs:
           cmake -S lab_2 -B lab_2/build 
           build-wrapper-linux-x86-64 --out-dir lab_2/build_wrapper cmake --build lab_2/build --config Release
 
-          - name: SonarCloud scan lab_2
+      - name: SonarCloud scan lab_2
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN1 }}
         with:
           args: >
-            -Dsonar.projectKey=ekuzm_cpp-lab_2
+            -Dsonar.projectKey=lab__2
             -Dsonar.organization=${{ env.SONAR_ORG }}
             -Dsonar.sources=lab_2
             -Dsonar.cfamily.compile-commands=lab_2/build_wrapper/compile_commands.json

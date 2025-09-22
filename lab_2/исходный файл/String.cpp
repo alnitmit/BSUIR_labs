@@ -1,7 +1,5 @@
 #include "../заголовочный файл/String.h"
-#include <cctype>
 #include <iostream>
-#include <limits>
 
 void String::freeMemory() {
   delete[] data;

@@ -1,4 +1,4 @@
-#include "../заголовочный файл/String.h"
+#include "../include/String.h"
 #include <iostream>
 
 void String::freeMemory() {

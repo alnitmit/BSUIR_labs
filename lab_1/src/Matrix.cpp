@@ -1,4 +1,4 @@
-#include "../заголовочный файл/Matrix.h"
+#include "../include/Matrix.h"
 #include <iostream>
 
 void Matrix::freeMemory() {

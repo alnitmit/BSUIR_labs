@@ -1,4 +1,4 @@
-#include "../заголовочный файл/Matrix.h"
+#include "../include/Matrix.h"
 #include <iostream>
 
 void fillMatrices(const Matrix &m1,const Matrix &m2) {

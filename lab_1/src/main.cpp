@@ -91,11 +91,7 @@ bool readMatrixDimensions(int &rows, int &cols) {
   return true;
 }
 
-int main() {
-  int rows1;
-  int cols1;
-  int rows2;
-  int cols2;
+void getValidMatrix(int &rows1, int &cols1, int &rows2, int &cols2) {
   bool validDimensions = false;
 
   while (!validDimensions) {
@@ -116,6 +112,15 @@ int main() {
       validDimensions = true;
     }
   }
+}
+
+int main() {
+  int rows1;
+  int cols1;
+  int rows2;
+  int cols2;
+
+  getValidMatrix(rows1, cols1, rows2, cols2);
 
   Matrix m1(rows1, cols1);
   Matrix m2(rows2, cols2);

@@ -1,7 +1,7 @@
 #include "../include/Matrix.h"
 #include <iostream>
 
-void fillMatrices(const Matrix &m1,const Matrix &m2) {
+void fillMatrices(const Matrix &m1, const Matrix &m2) {
   int choice;
   bool validChoice = false;
 
@@ -79,7 +79,19 @@ void performMatrixOperations(const Matrix &m1, const Matrix &m2) {
   }
 }
 
-void matrixOperations() {
+bool readMatrixDimensions(int &rows, int &cols) {
+
+  if (!(std::cin >> rows >> cols)) {
+    std::cout << "Invalid input. Please enter two numbers.\n";
+    std::cin.clear();
+    std::cin.ignore(10000, '\n');
+    return false;
+  }
+
+  return true;
+}
+
+int main() {
   int rows1;
   int cols1;
   int rows2;
@@ -88,20 +100,12 @@ void matrixOperations() {
 
   while (!validDimensions) {
     std::cout << "Enter dimensions for first matrix (rows columns): ";
-
-    if (!(std::cin >> rows1 >> cols1)) {
-      std::cout << "Invalid input. Please enter two numbers.\n";
-      std::cin.clear();
-      std::cin.ignore(10000, '\n');
+    if (!readMatrixDimensions(rows1, cols1)) {
       continue;
     }
 
     std::cout << "Enter dimensions for second matrix (rows columns): ";
-
-    if (!(std::cin >> rows2 >> cols2)) {
-      std::cout << "Invalid input. Please enter two numbers.\n";
-      std::cin.clear();
-      std::cin.ignore(10000, '\n');
+    if (!readMatrixDimensions(rows2, cols2)) {
       continue;
     }
 
@@ -118,9 +122,4 @@ void matrixOperations() {
 
   fillMatrices(m1, m2);
   performMatrixOperations(m1, m2);
-}
-
-int main() {
-  matrixOperations();
-  return 0;
 }

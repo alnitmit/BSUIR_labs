@@ -7,7 +7,7 @@ void clearInputBuffer() {
 }
 
 void displayMenu() {
-  std::cout << "\n=== STRING CLASS DEMONSTRATION ===\n";
+  std::cout << "\n   STRING CLASS DEMONSTRATION    \n";
   std::cout << "1. Input first string\n";
   std::cout << "2. Display first string\n";
   std::cout << "3. Display second string\n";

@@ -65,6 +65,8 @@ void CollectionOfArticlesCard::resize() {
   delete[] articles;
   articles = newArticles;
   capacity = newCapacity;
+
+  std::cout << "Массив расширен до " << capacity << " элементов\n";
 }
 
 void CollectionOfArticlesCard::addArticle(Article *article) {

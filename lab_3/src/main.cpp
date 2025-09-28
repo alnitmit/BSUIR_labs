@@ -240,23 +240,22 @@ void searchAlphabeticalCatalog(AlphabeticalCatalog &catalog) {
   delete[] results;
 }
 
-void showBookInfo(BookCard *book) {
-  if (book) {
-    std::cout << "\n=== Book Information ===\n"
-              << "Alphabetical search: " << book->getAlphabeticalSearch()
-              << "\n"
-              << "Author mark: " << book->getAuthorMark() << "\n"
-              << "Inventory number: " << book->getInventoryNumber() << "\n"
-              << "Publisher: " << book->getPublisher() << "\n"
-              << "Year: " << book->getYear() << "\n"
-              << "Article: " << book->getArticle()->getAuthor() << " - "
-              << book->getArticle()->getTitle() << std::endl;
-  } else {
-    std::cout << "First create a book card!\n";
-  }
+void showBookInfo(const BookCard* book) {
+    if (book) {
+        std::cout << "\n=== Book Information ===\n"
+                  << "Alphabetical search: " << book->getAlphabeticalSearch() << "\n"
+                  << "Author mark: " << book->getAuthorMark() << "\n"
+                  << "Inventory number: " << book->getInventoryNumber() << "\n"
+                  << "Publisher: " << book->getPublisher() << "\n"
+                  << "Year: " << book->getYear() << "\n"
+                  << "Article: " << book->getArticle()->getAuthor() 
+                  << " - " << book->getArticle()->getTitle() << std::endl;
+    } else {
+        std::cout << "First create a book card!\n";
+    }
 }
 
-void showCollectionInfo(CollectionOfArticlesCard* collection) {
+void showCollectionInfo(const CollectionOfArticlesCard* collection) {
     if (collection) {
         std::cout << "\n=== Collection Information ===\n"
                   << "Alphabetical search: " << collection->getAlphabeticalSearch() << "\n"

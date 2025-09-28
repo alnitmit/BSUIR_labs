@@ -65,7 +65,7 @@ jobs:
 
 
 
-                  - name: Build lab_3
+      - name: Build lab_3
         run: |
           rm -rf lab_3/build
           mkdir lab_3/build

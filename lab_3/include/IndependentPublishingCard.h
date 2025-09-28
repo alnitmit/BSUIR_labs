@@ -20,7 +20,7 @@ public:
     IndependentPublishingCard(IndependentPublishingCard&& other) noexcept;
     IndependentPublishingCard& operator=(IndependentPublishingCard&& other) noexcept;
 
-    ~IndependentPublishingCard() override = default;
+        ~IndependentPublishingCard() override;
 
     std::string getPublisher() const;
     int getYear() const;

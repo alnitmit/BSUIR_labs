@@ -3,5 +3,5 @@
 
 class AlphabeticalCatalog : public Catalog {
 public:
-    LibraryCard** search(const std::string& query, int& resultCount) override;
+  LibraryCard **search(const std::string &query, int &resultCount) override;
 };

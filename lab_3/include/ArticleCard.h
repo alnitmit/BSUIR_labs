@@ -4,13 +4,14 @@
 
 class ArticleCard {
 private:
-    Article* article;
-    LibraryCard* publication; // ссылка на издание, в котором статья опубликована
+  Article *article;
+  LibraryCard *publication;
+
 public:
-    ArticleCard(Article* art, LibraryCard* pub);
-    ~ArticleCard();
-    
-    std::string getAuthor() const;
-    Article* getArticle() const;
-    LibraryCard* getPublication() const;
+  ArticleCard(Article *art, LibraryCard *pub);
+  ~ArticleCard();
+
+  std::string getAuthor() const;
+  Article *getArticle() const;
+  LibraryCard *getPublication() const;
 };

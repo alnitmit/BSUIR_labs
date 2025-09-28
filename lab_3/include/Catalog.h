@@ -3,11 +3,11 @@
 
 class Catalog {
 protected:
-    LibraryCard** cards;          // Динамический массив указателей на карточки
-    int count;                    // Текущее количество карточек
-    int capacity;                 // Текущая вместимость массива
+    LibraryCard** cards;
+    int count;
+    int capacity;
     
-    void resize();                // Метод для расширения массива
+    void resize();
 
 public:
     Catalog();

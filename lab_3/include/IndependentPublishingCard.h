@@ -2,7 +2,7 @@
 #include "../include/LibraryCard.h"
 
 class IndependentPublishingCard : public LibraryCard {
-protected:
+private:
   std::string publisher;
   int year;
   int circulation;

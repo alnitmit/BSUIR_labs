@@ -2,7 +2,7 @@
 #include <string>
 
 class LibraryCard {
-protected:
+private:
   std::string author;
   std::string title;
   std::string authorMark;

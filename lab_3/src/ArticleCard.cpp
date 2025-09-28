@@ -1,20 +1,12 @@
 #include "../include/ArticleCard.h"
 
-ArticleCard::ArticleCard(Article* art, LibraryCard* pub)
+ArticleCard::ArticleCard(Article *art, LibraryCard *pub)
     : article(art), publication(pub) {}
 
-ArticleCard::~ArticleCard() {
-    // Не удаляем article и publication, так как они управляются другими классами
-}
+ArticleCard::~ArticleCard() = default;
 
-std::string ArticleCard::getAuthor() const {
-    return article->getAuthor();
-}
+std::string ArticleCard::getAuthor() const { return article->getAuthor(); }
 
-Article* ArticleCard::getArticle() const {
-    return article;
-}
+Article *ArticleCard::getArticle() const { return article; }
 
-LibraryCard* ArticleCard::getPublication() const {
-    return publication;
-}
+LibraryCard *ArticleCard::getPublication() const { return publication; }

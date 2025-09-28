@@ -2,20 +2,23 @@
 #include "Article.h"
 #include "IndependentPublishingCard.h"
 
-
 class CollectionOfArticlesCard : public IndependentPublishingCard {
 private:
-  Article **articles; 
-  int articleCount; 
-  int capacity;
+  Article **articles;
+  int articleCount = 0;
+  int capacity = 2;
 
-  void resize(); 
+  void resize();
 
 public:
   CollectionOfArticlesCard(const std::string &a, const std::string &t,
                            const std::string &am, const std::string &in,
                            const std::string &tcc, const std::string &p, int y,
                            int c, int pg);
+
+  CollectionOfArticlesCard(CollectionOfArticlesCard &&other) noexcept;
+  CollectionOfArticlesCard &
+  operator=(CollectionOfArticlesCard &&other) noexcept;
 
   CollectionOfArticlesCard(const CollectionOfArticlesCard &) = delete;
   CollectionOfArticlesCard &

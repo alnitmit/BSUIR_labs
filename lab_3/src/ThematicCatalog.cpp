@@ -3,12 +3,13 @@
 
 LibraryCard **ThematicCatalog::search(const std::string &code,
                                       int &resultCount) {
-  auto results = new LibraryCard *[count];
+  auto results = new LibraryCard *[getInternalCount()];
   resultCount = 0;
 
-  for (int i = 0; i < count; ++i) {
-    if (cards[i] && cards[i]->getThematicCatalogCode() == code) {
-      results[resultCount++] = cards[i];
+  for (int i = 0; i < getInternalCount(); ++i) {
+    LibraryCard *card = getCard(i);
+    if (card && card->getThematicCatalogCode() == code) {
+      results[resultCount++] = card;
     }
   }
 

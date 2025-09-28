@@ -3,7 +3,7 @@
 #include <iostream>
 
 
-Catalog::Catalog() : count(0), capacity(2) {
+Catalog::Catalog() {
   cards = new LibraryCard *[capacity];
   for (int i = 0; i < capacity; ++i) {
     cards[i] = nullptr;

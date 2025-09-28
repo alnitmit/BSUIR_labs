@@ -24,7 +24,7 @@ public:
   CollectionOfArticlesCard &
   operator=(const CollectionOfArticlesCard &) = delete;
 
-  ~CollectionOfArticlesCard();
+  ~CollectionOfArticlesCard() override;
 
   void addArticle(Article *article);
   Article *getArticle(int index) const;

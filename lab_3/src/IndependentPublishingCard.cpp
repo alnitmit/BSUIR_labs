@@ -7,6 +7,23 @@ IndependentPublishingCard::IndependentPublishingCard(
     : LibraryCard(a, t, am, in, tcc), publisher(p), year(y), circulation(c),
       pages(pg) {}
 
+IndependentPublishingCard::IndependentPublishingCard(
+    IndependentPublishingCard &&other) noexcept
+    : LibraryCard(std::move(other)), publisher(std::move(other.publisher)),
+      year(other.year), circulation(other.circulation), pages(other.pages) {}
+
+IndependentPublishingCard &IndependentPublishingCard::operator=(
+    IndependentPublishingCard &&other) noexcept {
+  if (this != &other) {
+    LibraryCard::operator=(std::move(other));
+    publisher = std::move(other.publisher);
+    year = other.year;
+    circulation = other.circulation;
+    pages = other.pages;
+  }
+  return *this;
+}
+
 std::string IndependentPublishingCard::getPublisher() const {
   return publisher;
 }

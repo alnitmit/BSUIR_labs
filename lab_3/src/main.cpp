@@ -18,8 +18,8 @@ void addToAlphabeticalCatalog(AlphabeticalCatalog &catalog, BookCard *book,
                               CollectionOfArticlesCard *collection);
 void searchThematicCatalog(ThematicCatalog &catalog);
 void searchAlphabeticalCatalog(AlphabeticalCatalog &catalog);
-void showBookInfo(BookCard *book);
-void showCollectionInfo(CollectionOfArticlesCard *collection);
+void showBookInfo(const BookCard *book);
+void showCollectionInfo(const CollectionOfArticlesCard *collection);
 void cleanup(BookCard *&book, CollectionOfArticlesCard *&collection,
              ArticleCard *&articleCard);
 
@@ -39,123 +39,150 @@ void showMenu() {
             << "Choice: ";
 }
 
-void createBookCard(BookCard*& book) {
-    if (book) {
-        delete book;
-        book = nullptr;
-    }
-    
-    std::string author;
-    std::string title;
-    std::string authMark;
-    std::string invNum;
-    std::string catCode;
-    std::string publisher;
-    int year;
-    int circulation;
-    int pages;
-    
-    std::cout << "Author: "; std::getline(std::cin, author);
-    std::cout << "Title: "; std::getline(std::cin, title);
-    std::cout << "Author mark: "; std::getline(std::cin, authMark);
-    std::cout << "Inventory number: "; std::getline(std::cin, invNum);
-    std::cout << "Catalog code: "; std::getline(std::cin, catCode);
-    std::cout << "Publisher: "; std::getline(std::cin, publisher);
-    std::cout << "Year: "; std::cin >> year;
-    std::cout << "Circulation: "; std::cin >> circulation;
-    std::cout << "Pages: "; std::cin >> pages;
-    std::cin.ignore();
+void createBookCard(BookCard *&book) {
+  if (book) {
+    delete book;
+    book = nullptr;
+  }
 
-    book = new BookCard(author, title, authMark, invNum, catCode, publisher, year, circulation, pages);
-    std::cout << "Book card created!\n";
+  std::string author;
+  std::string title;
+  std::string authMark;
+  std::string invNum;
+  std::string catCode;
+  std::string publisher;
+  int year;
+  int circulation;
+  int pages;
+
+  std::cout << "Author: ";
+  std::getline(std::cin, author);
+  std::cout << "Title: ";
+  std::getline(std::cin, title);
+  std::cout << "Author mark: ";
+  std::getline(std::cin, authMark);
+  std::cout << "Inventory number: ";
+  std::getline(std::cin, invNum);
+  std::cout << "Catalog code: ";
+  std::getline(std::cin, catCode);
+  std::cout << "Publisher: ";
+  std::getline(std::cin, publisher);
+  std::cout << "Year: ";
+  std::cin >> year;
+  std::cout << "Circulation: ";
+  std::cin >> circulation;
+  std::cout << "Pages: ";
+  std::cin >> pages;
+  std::cin.ignore();
+
+  book = new BookCard(author, title, authMark, invNum, catCode, publisher, year,
+                      circulation, pages);
+  std::cout << "Book card created!\n";
 }
 
-void createCollectionCard(CollectionOfArticlesCard*& collection) {
-    if (collection) {
-        delete collection;
-        collection = nullptr;
-    }
-    
-    std::string author;
-    std::string title;
-    std::string authMark;
-    std::string invNum;
-    std::string catCode;
-    std::string publisher;
-    int year;
-    int circulation;
-    int pages;
-    
-    std::cout << "Collection author: "; std::getline(std::cin, author);
-    std::cout << "Collection title: "; std::getline(std::cin, title);
-    std::cout << "Author mark: "; std::getline(std::cin, authMark);
-    std::cout << "Inventory number: "; std::getline(std::cin, invNum);
-    std::cout << "Catalog code: "; std::getline(std::cin, catCode);
-    std::cout << "Publisher: "; std::getline(std::cin, publisher);
-    std::cout << "Year: "; std::cin >> year;
-    std::cout << "Circulation: "; std::cin >> circulation;
-    std::cout << "Pages: "; std::cin >> pages;
-    std::cin.ignore();
+void createCollectionCard(CollectionOfArticlesCard *&collection) {
+  if (collection) {
+    delete collection;
+    collection = nullptr;
+  }
 
-    collection = new CollectionOfArticlesCard(author, title, authMark, invNum, catCode, publisher, year, circulation, pages);
-    std::cout << "Collection card created!\n";
+  std::string author;
+  std::string title;
+  std::string authMark;
+  std::string invNum;
+  std::string catCode;
+  std::string publisher;
+  int year;
+  int circulation;
+  int pages;
+
+  std::cout << "Collection author: ";
+  std::getline(std::cin, author);
+  std::cout << "Collection title: ";
+  std::getline(std::cin, title);
+  std::cout << "Author mark: ";
+  std::getline(std::cin, authMark);
+  std::cout << "Inventory number: ";
+  std::getline(std::cin, invNum);
+  std::cout << "Catalog code: ";
+  std::getline(std::cin, catCode);
+  std::cout << "Publisher: ";
+  std::getline(std::cin, publisher);
+  std::cout << "Year: ";
+  std::cin >> year;
+  std::cout << "Circulation: ";
+  std::cin >> circulation;
+  std::cout << "Pages: ";
+  std::cin >> pages;
+  std::cin.ignore();
+
+  collection =
+      new CollectionOfArticlesCard(author, title, authMark, invNum, catCode,
+                                   publisher, year, circulation, pages);
+  std::cout << "Collection card created!\n";
 }
 
-void addArticleToCollection(CollectionOfArticlesCard* collection) {
-    if (!collection) {
-        std::cout << "First create a collection card!\n";
-        return;
-    }
-    
-    std::string author;
-    std::string title;
-    
-    std::cout << "Article author: "; std::getline(std::cin, author);
-    std::cout << "Article title: "; std::getline(std::cin, title);
-    
-    collection->addArticle(new Article(title, author));
-    std::cout << "Article added to collection!\n";
+void addArticleToCollection(CollectionOfArticlesCard *collection) {
+  if (!collection) {
+    std::cout << "First create a collection card!\n";
+    return;
+  }
+
+  std::string author;
+  std::string title;
+
+  std::cout << "Article author: ";
+  std::getline(std::cin, author);
+  std::cout << "Article title: ";
+  std::getline(std::cin, title);
+
+  collection->addArticle(new Article(title, author));
+  std::cout << "Article added to collection!\n";
 }
 
-void createArticleCard(ArticleCard*& articleCard, BookCard* book, CollectionOfArticlesCard* collection) {
-    if (articleCard) {
-        delete articleCard;
-        articleCard = nullptr;
-    }
-    
-    if (!book && !collection) {
-        std::cout << "First create a book or collection!\n";
-        return;
-    }
-    
-    std::string author;
-    std::string title;
-    
-    std::cout << "Article author: "; std::getline(std::cin, author);
-    std::cout << "Article title: "; std::getline(std::cin, title);
-    
-    auto article = new Article(title, author);
-    
-    LibraryCard* publication = nullptr;
-    int pubChoice;
-    std::cout << "Select publication:\n";
-    std::cout << "1. Book\n";
-    std::cout << "2. Collection\n";
-    std::cout << "Choice: "; std::cin >> pubChoice;
-    std::cin.ignore();
-    
-    if (pubChoice == 1 && book) {
-        publication = book;
-    } else if (pubChoice == 2 && collection) {
-        publication = collection;
-    } else {
-        std::cout << "Invalid choice or publication not available!\n";
-        delete article;
-        return;
-    }
-    
-    articleCard = new ArticleCard(article, publication);
-    std::cout << "Article card created!\n";
+void createArticleCard(ArticleCard *&articleCard, BookCard *book,
+                       CollectionOfArticlesCard *collection) {
+  if (articleCard) {
+    delete articleCard;
+    articleCard = nullptr;
+  }
+
+  if (!book && !collection) {
+    std::cout << "First create a book or collection!\n";
+    return;
+  }
+
+  std::string author;
+  std::string title;
+
+  std::cout << "Article author: ";
+  std::getline(std::cin, author);
+  std::cout << "Article title: ";
+  std::getline(std::cin, title);
+
+  auto article = new Article(title, author);
+
+  LibraryCard *publication = nullptr;
+  int pubChoice;
+  std::cout << "Select publication:\n";
+  std::cout << "1. Book\n";
+  std::cout << "2. Collection\n";
+  std::cout << "Choice: ";
+  std::cin >> pubChoice;
+  std::cin.ignore();
+
+  if (pubChoice == 1 && book) {
+    publication = book;
+  } else if (pubChoice == 2 && collection) {
+    publication = collection;
+  } else {
+    std::cout << "Invalid choice or publication not available!\n";
+    delete article;
+    return;
+  }
+
+  articleCard = new ArticleCard(article, publication);
+  std::cout << "Article card created!\n";
 }
 
 void addToThematicCatalog(ThematicCatalog &catalog, BookCard *book,
@@ -240,43 +267,47 @@ void searchAlphabeticalCatalog(AlphabeticalCatalog &catalog) {
   delete[] results;
 }
 
-void showBookInfo(const BookCard* book) {
-    if (book) {
-        std::cout << "\n=== Book Information ===\n"
-                  << "Alphabetical search: " << book->getAlphabeticalSearch() << "\n"
-                  << "Author mark: " << book->getAuthorMark() << "\n"
-                  << "Inventory number: " << book->getInventoryNumber() << "\n"
-                  << "Publisher: " << book->getPublisher() << "\n"
-                  << "Year: " << book->getYear() << "\n"
-                  << "Article: " << book->getArticle()->getAuthor() 
-                  << " - " << book->getArticle()->getTitle() << std::endl;
-    } else {
-        std::cout << "First create a book card!\n";
-    }
+void showBookInfo(const BookCard *book) {
+  if (book) {
+    std::cout << "\n=== Book Information ===\n"
+              << "Alphabetical search: " << book->getAlphabeticalSearch()
+              << "\n"
+              << "Author mark: " << book->getAuthorMark() << "\n"
+              << "Inventory number: " << book->getInventoryNumber() << "\n"
+              << "Publisher: " << book->getPublisher() << "\n"
+              << "Year: " << book->getYear() << "\n"
+              << "Article: " << book->getArticle()->getAuthor() << " - "
+              << book->getArticle()->getTitle() << std::endl;
+  } else {
+    std::cout << "First create a book card!\n";
+  }
 }
 
-void showCollectionInfo(const CollectionOfArticlesCard* collection) {
-    if (collection) {
-        std::cout << "\n=== Collection Information ===\n"
-                  << "Alphabetical search: " << collection->getAlphabeticalSearch() << "\n"
-                  << "Author mark: " << collection->getAuthorMark() << "\n"
-                  << "Inventory number: " << collection->getInventoryNumber() << "\n"
-                  << "Publisher: " << collection->getPublisher() << "\n"
-                  << "Year: " << collection->getYear() << "\n"
-                  << "Articles count: " << collection->getArticleCount() << std::endl;
-        
-        for (int i = 0; i < collection->getArticleCount(); ++i) {
-            const Article* article = collection->getArticle(i);
-            if (article) {
-                std::cout << "  Article " << (i + 1) << ": " 
-                          << article->getAuthor() << " - " 
-                          << article->getTitle() << std::endl;
-            }
-        }
-    } else {
-        std::cout << "First create a collection card!\n";
+void showCollectionInfo(const CollectionOfArticlesCard *collection) {
+  if (collection) {
+    std::cout << "\n=== Collection Information ===\n"
+              << "Alphabetical search: " << collection->getAlphabeticalSearch()
+              << "\n"
+              << "Author mark: " << collection->getAuthorMark() << "\n"
+              << "Inventory number: " << collection->getInventoryNumber()
+              << "\n"
+              << "Publisher: " << collection->getPublisher() << "\n"
+              << "Year: " << collection->getYear() << "\n"
+              << "Articles count: " << collection->getArticleCount()
+              << std::endl;
+
+    for (int i = 0; i < collection->getArticleCount(); ++i) {
+      const Article *article = collection->getArticle(i);
+      if (article) {
+        std::cout << "  Article " << (i + 1) << ": " << article->getAuthor()
+                  << " - " << article->getTitle() << std::endl;
+      }
     }
+  } else {
+    std::cout << "First create a collection card!\n";
+  }
 }
+
 void cleanup(BookCard *&book, CollectionOfArticlesCard *&collection,
              ArticleCard *&articleCard) {
   delete book;

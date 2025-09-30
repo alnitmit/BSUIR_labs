@@ -7,7 +7,7 @@ private:
   Article *article;
 
 public:
-  BookCard(const IndependentPublishingParams& params);
+  explicit BookCard(const IndependentPublishingParams& params);
 
   BookCard(const BookCard &) = delete;
   BookCard &operator=(const BookCard &) = delete;

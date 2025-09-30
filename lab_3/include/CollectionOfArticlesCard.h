@@ -11,7 +11,7 @@ private:
   void resize();
 
 public:
-  CollectionOfArticlesCard(const IndependentPublishingParams& params);
+  explicit CollectionOfArticlesCard(const IndependentPublishingParams& params);
 
   CollectionOfArticlesCard(CollectionOfArticlesCard &&other) noexcept;
   CollectionOfArticlesCard &operator=(CollectionOfArticlesCard &&other) noexcept;

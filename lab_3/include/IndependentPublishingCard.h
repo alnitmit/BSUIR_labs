@@ -9,7 +9,7 @@ private:
     int pages;
 
 public:
-    IndependentPublishingCard(const IndependentPublishingParams& params);
+    explicit IndependentPublishingCard(const IndependentPublishingParams& params);
 
     IndependentPublishingCard(const IndependentPublishingCard&) = delete;
     IndependentPublishingCard& operator=(const IndependentPublishingCard&) = delete;

@@ -46,7 +46,7 @@ private:
     std::string thematicCatalogCode;
 
 public:
-    LibraryCard(const LibraryCardParams& params);
+    explicit LibraryCard(const LibraryCardParams& params);
     
     LibraryCard(const LibraryCard&) = delete;
     LibraryCard& operator=(const LibraryCard&) = delete;

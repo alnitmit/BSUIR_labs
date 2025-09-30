@@ -19,7 +19,7 @@ public:
     LibraryCard(LibraryCard&& other) noexcept;
     LibraryCard& operator=(LibraryCard&& other) noexcept;
     
-    virtual ~LibraryCard() = default;
+    virtual ~LibraryCard();
 
     std::string getAuthor() const;
     std::string getTitle() const;

@@ -23,6 +23,14 @@ LibraryCard &LibraryCard::operator=(LibraryCard &&other) noexcept {
   return *this;
 }
 
+LibraryCard::~LibraryCard() {
+    author.clear();
+    title.clear();
+    authorMark.clear();
+    inventoryNumber.clear();
+    thematicCatalogCode.clear();
+}
+
 std::string LibraryCard::getAuthor() const { return author; }
 
 std::string LibraryCard::getTitle() const { return title; }

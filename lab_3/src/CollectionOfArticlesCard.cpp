@@ -1,12 +1,9 @@
 #include "../include/CollectionOfArticlesCard.h"
 #include <iostream>
 
-CollectionOfArticlesCard::CollectionOfArticlesCard(
-    const std::string& a, const std::string& t,
-    const std::string& am, const std::string& in,
-    const std::string& tcc, const std::string& p,
-    int y, int c, int pg)
-    : IndependentPublishingCard(a, t, am, in, tcc, p, y, c, pg) {
+// Конструктор теперь принимает только 1 параметр
+CollectionOfArticlesCard::CollectionOfArticlesCard(const IndependentPublishingParams& params)
+    : IndependentPublishingCard(params) {
     
     articles = new Article*[capacity];
     for (int i = 0; i < capacity; ++i) {
@@ -49,6 +46,9 @@ CollectionOfArticlesCard::~CollectionOfArticlesCard() {
         delete articles[i];
     }
     delete[] articles;
+    articles = nullptr;
+    articleCount = 0;
+    capacity = 0;
 }
 
 void CollectionOfArticlesCard::resize() {

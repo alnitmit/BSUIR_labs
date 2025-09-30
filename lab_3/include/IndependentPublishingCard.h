@@ -9,10 +9,8 @@ private:
     int pages;
 
 public:
-    IndependentPublishingCard(const std::string& a, const std::string& t,
-                            const std::string& am, const std::string& in,
-                            const std::string& tcc, const std::string& p, int y,
-                            int c, int pg);
+    // Конструктор с 1 параметром вместо 9
+    IndependentPublishingCard(const IndependentPublishingParams& params);
 
     IndependentPublishingCard(const IndependentPublishingCard&) = delete;
     IndependentPublishingCard& operator=(const IndependentPublishingCard&) = delete;
@@ -20,7 +18,7 @@ public:
     IndependentPublishingCard(IndependentPublishingCard&& other) noexcept;
     IndependentPublishingCard& operator=(IndependentPublishingCard&& other) noexcept;
 
-        ~IndependentPublishingCard() override;
+    ~IndependentPublishingCard() override;
 
     std::string getPublisher() const;
     int getYear() const;

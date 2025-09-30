@@ -11,18 +11,14 @@ private:
   void resize();
 
 public:
-  CollectionOfArticlesCard(const std::string &a, const std::string &t,
-                           const std::string &am, const std::string &in,
-                           const std::string &tcc, const std::string &p, int y,
-                           int c, int pg);
+  // Конструктор с 1 параметром вместо 9
+  CollectionOfArticlesCard(const IndependentPublishingParams& params);
 
   CollectionOfArticlesCard(CollectionOfArticlesCard &&other) noexcept;
-  CollectionOfArticlesCard &
-  operator=(CollectionOfArticlesCard &&other) noexcept;
+  CollectionOfArticlesCard &operator=(CollectionOfArticlesCard &&other) noexcept;
 
   CollectionOfArticlesCard(const CollectionOfArticlesCard &) = delete;
-  CollectionOfArticlesCard &
-  operator=(const CollectionOfArticlesCard &) = delete;
+  CollectionOfArticlesCard &operator=(const CollectionOfArticlesCard &) = delete;
 
   ~CollectionOfArticlesCard() override;
 

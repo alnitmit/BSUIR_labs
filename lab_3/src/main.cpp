@@ -5,7 +5,6 @@
 #include "../include/ThematicCatalog.h"
 #include <iostream>
 
-
 void showMenu();
 void createBookCard(BookCard *&book);
 void createCollectionCard(CollectionOfArticlesCard *&collection);
@@ -35,7 +34,7 @@ void showMenu() {
             << "8. Search in alphabetical catalog\n"
             << "9. Show book information\n"
             << "10. Show collection information\n"
-            << "11. Exit\n"
+            << "0. Exit\n"
             << "Choice: ";
 }
 
@@ -75,8 +74,10 @@ void createBookCard(BookCard *&book) {
   std::cin >> pages;
   std::cin.ignore();
 
-  book = new BookCard(author, title, authMark, invNum, catCode, publisher, year,
-                      circulation, pages);
+  // Исправлено: создаем структуру параметров
+  IndependentPublishingParams params(author, title, authMark, invNum, catCode,
+                                     publisher, year, circulation, pages);
+  book = new BookCard(params);
   std::cout << "Book card created!\n";
 }
 
@@ -116,9 +117,10 @@ void createCollectionCard(CollectionOfArticlesCard *&collection) {
   std::cin >> pages;
   std::cin.ignore();
 
-  collection =
-      new CollectionOfArticlesCard(author, title, authMark, invNum, catCode,
-                                   publisher, year, circulation, pages);
+  // Исправлено: создаем структуру параметров
+  IndependentPublishingParams params(author, title, authMark, invNum, catCode,
+                                     publisher, year, circulation, pages);
+  collection = new CollectionOfArticlesCard(params);
   std::cout << "Collection card created!\n";
 }
 
@@ -363,9 +365,8 @@ int main() {
     case 10:
       showCollectionInfo(collection);
       break;
-    case 11:
+    case 0:
       cleanup(book, collection, articleCard);
-      std::cout << "Goodbye!\n";
       return 0;
     default:
       std::cout << "Invalid choice!\n";

@@ -1,18 +1,17 @@
 #include "../include/LibraryCard.h"
 
-LibraryCard::LibraryCard(const std::string &a, const std::string &t,
-                         const std::string &am, const std::string &in,
-                         const std::string &tcc)
-    : author(a), title(t), authorMark(am), inventoryNumber(in),
-      thematicCatalogCode(tcc) {}
+// Конструктор теперь принимает только 1 параметр
+LibraryCard::LibraryCard(const LibraryCardParams& params)
+    : author(params.author), title(params.title), authorMark(params.authorMark),
+      inventoryNumber(params.inventoryNumber), thematicCatalogCode(params.thematicCatalogCode) {}
 
-LibraryCard::LibraryCard(LibraryCard &&other) noexcept
+LibraryCard::LibraryCard(LibraryCard&& other) noexcept
     : author(std::move(other.author)), title(std::move(other.title)),
       authorMark(std::move(other.authorMark)),
       inventoryNumber(std::move(other.inventoryNumber)),
       thematicCatalogCode(std::move(other.thematicCatalogCode)) {}
 
-LibraryCard &LibraryCard::operator=(LibraryCard &&other) noexcept {
+LibraryCard& LibraryCard::operator=(LibraryCard&& other) noexcept {
   if (this != &other) {
     author = std::move(other.author);
     title = std::move(other.title);

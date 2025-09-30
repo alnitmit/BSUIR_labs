@@ -34,4 +34,8 @@ int IndependentPublishingCard::getCirculation() const { return circulation; }
 
 int IndependentPublishingCard::getPages() const { return pages; }
 
-IndependentPublishingCard::~IndependentPublishingCard() = default;
+IndependentPublishingCard::~IndependentPublishingCard() {
+    year = 0;
+    circulation = 0;
+    pages = 0;
+}

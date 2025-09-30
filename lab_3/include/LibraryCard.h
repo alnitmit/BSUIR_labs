@@ -1,38 +1,40 @@
 #pragma once
 #include <string>
 
-struct LibraryCardParams {
+struct BasicCardParams {
     std::string author;
     std::string title;
     std::string authorMark;
+    
+    BasicCardParams(const std::string& a, const std::string& t, const std::string& am)
+        : author(a), title(t), authorMark(am) {}
+};
+
+struct LibraryCardParams : BasicCardParams {
     std::string inventoryNumber;
     std::string thematicCatalogCode;
     
-    // Конструктор для удобства
-    LibraryCardParams(const std::string& a, const std::string& t, 
-                     const std::string& am, const std::string& in, 
-                     const std::string& tcc)
-        : author(a), title(t), authorMark(am), inventoryNumber(in), thematicCatalogCode(tcc) {}
+    LibraryCardParams(const std::string& a, const std::string& t, const std::string& am,
+                     const std::string& in, const std::string& tcc)
+        : BasicCardParams(a, t, am), inventoryNumber(in), thematicCatalogCode(tcc) {}
 };
 
-struct IndependentPublishingParams {
-    std::string author;
-    std::string title;
-    std::string authorMark;
-    std::string inventoryNumber;
-    std::string thematicCatalogCode;
+struct PublishingDetails {
     std::string publisher;
     int year;
     int circulation;
     int pages;
     
-    // Конструктор для удобства
-    IndependentPublishingParams(const std::string& a, const std::string& t, 
-                               const std::string& am, const std::string& in, 
-                               const std::string& tcc, const std::string& p, 
-                               int y, int c, int pg)
-        : author(a), title(t), authorMark(am), inventoryNumber(in), 
-          thematicCatalogCode(tcc), publisher(p), year(y), circulation(c), pages(pg) {}
+    PublishingDetails(const std::string& p, int y, int c, int pg)
+        : publisher(p), year(y), circulation(c), pages(pg) {}
+};
+
+struct IndependentPublishingParams {
+    LibraryCardParams libraryParams;
+    PublishingDetails publishingDetails;
+    
+    IndependentPublishingParams(const LibraryCardParams& libParams, const PublishingDetails& pubDetails)
+        : libraryParams(libParams), publishingDetails(pubDetails) {}
 };
 
 class LibraryCard {
@@ -44,7 +46,6 @@ private:
     std::string thematicCatalogCode;
 
 public:
-    // Конструктор с 1 параметром вместо 5
     LibraryCard(const LibraryCardParams& params);
     
     LibraryCard(const LibraryCard&) = delete;

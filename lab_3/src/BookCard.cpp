@@ -1,9 +1,8 @@
 #include "../include/BookCard.h"
 
-// Конструктор теперь принимает только 1 параметр
 BookCard::BookCard(const IndependentPublishingParams& params)
     : IndependentPublishingCard(params),
-      article(new Article(params.title, params.author)) {}
+      article(new Article(params.libraryParams.title, params.libraryParams.author)) {}
 
 BookCard::BookCard(BookCard&& other) noexcept
     : IndependentPublishingCard(std::move(other)),

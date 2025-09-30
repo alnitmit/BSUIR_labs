@@ -1,7 +1,6 @@
 #include "../include/CollectionOfArticlesCard.h"
 #include <iostream>
 
-// Конструктор теперь принимает только 1 параметр
 CollectionOfArticlesCard::CollectionOfArticlesCard(const IndependentPublishingParams& params)
     : IndependentPublishingCard(params) {
     

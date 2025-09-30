@@ -11,7 +11,6 @@ private:
   void resize();
 
 public:
-  // Конструктор с 1 параметром вместо 9
   CollectionOfArticlesCard(const IndependentPublishingParams& params);
 
   CollectionOfArticlesCard(CollectionOfArticlesCard &&other) noexcept;

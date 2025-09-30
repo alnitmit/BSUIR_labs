@@ -9,7 +9,6 @@ private:
     int pages;
 
 public:
-    // Конструктор с 1 параметром вместо 9
     IndependentPublishingCard(const IndependentPublishingParams& params);
 
     IndependentPublishingCard(const IndependentPublishingCard&) = delete;

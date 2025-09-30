@@ -7,7 +7,6 @@ private:
   Article *article;
 
 public:
-  // Конструктор с 1 параметром вместо 9
   BookCard(const IndependentPublishingParams& params);
 
   BookCard(const BookCard &) = delete;

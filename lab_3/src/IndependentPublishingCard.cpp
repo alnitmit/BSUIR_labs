@@ -1,11 +1,11 @@
 #include "../include/IndependentPublishingCard.h"
 
-// Конструктор теперь принимает только 1 параметр
 IndependentPublishingCard::IndependentPublishingCard(const IndependentPublishingParams& params)
-    : LibraryCard(LibraryCardParams(params.author, params.title, params.authorMark, 
-                                   params.inventoryNumber, params.thematicCatalogCode)),
-      publisher(params.publisher), year(params.year), 
-      circulation(params.circulation), pages(params.pages) {}
+    : LibraryCard(params.libraryParams), 
+      publisher(params.publishingDetails.publisher), 
+      year(params.publishingDetails.year), 
+      circulation(params.publishingDetails.circulation), 
+      pages(params.publishingDetails.pages) {}
 
 IndependentPublishingCard::IndependentPublishingCard(IndependentPublishingCard&& other) noexcept
     : LibraryCard(std::move(other)), publisher(std::move(other.publisher)),

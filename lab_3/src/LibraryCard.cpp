@@ -1,6 +1,5 @@
 #include "../include/LibraryCard.h"
 
-// Конструктор теперь принимает только 1 параметр
 LibraryCard::LibraryCard(const LibraryCardParams& params)
     : author(params.author), title(params.title), authorMark(params.authorMark),
       inventoryNumber(params.inventoryNumber), thematicCatalogCode(params.thematicCatalogCode) {}

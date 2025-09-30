@@ -34,7 +34,7 @@ void showMenu() {
             << "8. Search in alphabetical catalog\n"
             << "9. Show book information\n"
             << "10. Show collection information\n"
-            << "0. Exit\n"
+            << "11. Exit\n"
             << "Choice: ";
 }
 
@@ -74,9 +74,11 @@ void createBookCard(BookCard *&book) {
   std::cin >> pages;
   std::cin.ignore();
 
-  // Исправлено: создаем структуру параметров
-  IndependentPublishingParams params(author, title, authMark, invNum, catCode,
-                                     publisher, year, circulation, pages);
+  // Создаем параметры через вложенные структуры
+  LibraryCardParams libraryParams(author, title, authMark, invNum, catCode);
+  PublishingDetails pubDetails(publisher, year, circulation, pages);
+  IndependentPublishingParams params(libraryParams, pubDetails);
+  
   book = new BookCard(params);
   std::cout << "Book card created!\n";
 }
@@ -117,13 +119,16 @@ void createCollectionCard(CollectionOfArticlesCard *&collection) {
   std::cin >> pages;
   std::cin.ignore();
 
-  // Исправлено: создаем структуру параметров
-  IndependentPublishingParams params(author, title, authMark, invNum, catCode,
-                                     publisher, year, circulation, pages);
+  // Создаем параметры через вложенные структуры
+  LibraryCardParams libraryParams(author, title, authMark, invNum, catCode);
+  PublishingDetails pubDetails(publisher, year, circulation, pages);
+  IndependentPublishingParams params(libraryParams, pubDetails);
+  
   collection = new CollectionOfArticlesCard(params);
   std::cout << "Collection card created!\n";
 }
 
+// Остальные функции остаются без изменений...
 void addArticleToCollection(CollectionOfArticlesCard *collection) {
   if (!collection) {
     std::cout << "First create a collection card!\n";
@@ -365,8 +370,9 @@ int main() {
     case 10:
       showCollectionInfo(collection);
       break;
-    case 0:
+    case 11:
       cleanup(book, collection, articleCard);
+      std::cout << "Goodbye!\n";
       return 0;
     default:
       std::cout << "Invalid choice!\n";

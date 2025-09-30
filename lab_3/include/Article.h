@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <string_view>
 
 class Article {
 private:
@@ -7,32 +8,19 @@ private:
     std::string author;
 
 public:
-    // Конструктор
-    Article(const std::string& t, const std::string& a);
+    explicit Article(const std::string& t, const std::string& a);
     
-    // Правило пяти: деструктор, копирование, перемещение
-    ~Article();
-    
-    // Конструктор копирования
-    Article(const Article& other);
-    
-    // Оператор присваивания копированием
-    Article& operator=(const Article& other);
-    
-    // Конструктор перемещения
-    Article(Article&& other) noexcept;
-    
-    // Оператор присваивания перемещением
-    Article& operator=(Article&& other) noexcept;
-    
-    // Геттеры
+    // Правило пяти с = default
+    ~Article() = default;
+    Article(const Article& other) = default;
+    Article& operator=(const Article& other) = default;
+    Article(Article&& other) = default;
+    Article& operator=(Article&& other) = default;
+
     std::string getTitle() const;
     std::string getAuthor() const;
     
-    // Сеттеры
-    void setTitle(const std::string& t);
-    void setAuthor(const std::string& a);
-    
-    // Метод обмена
-    void swap(Article& other) noexcept;
+    // Сеттеры с std::string_view
+    void setTitle(std::string_view t);
+    void setAuthor(std::string_view a);
 };

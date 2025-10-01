@@ -14,6 +14,12 @@ public:
               const std::string &authorMark, const std::string &inventoryNumber,
               const std::string &thematicCatalogCode);
 
+  LibraryCard(const LibraryCard& other);
+  LibraryCard& operator=(const LibraryCard& other);
+  
+  LibraryCard(LibraryCard&& other) noexcept;
+  LibraryCard& operator=(LibraryCard&& other) noexcept;
+
   std::string getAuthor() const;
   std::string getTitle() const;
   std::string getAuthorMark() const;

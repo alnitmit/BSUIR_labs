@@ -1,6 +1,6 @@
 #include "../include/ArticleCard.h"
 #include "../include/IndependentPublishingCard.h"
-#include <utility> 
+#include <utility>
 
 ArticleCard::ArticleCard(const std::string& author, 
                          const std::string& title, 

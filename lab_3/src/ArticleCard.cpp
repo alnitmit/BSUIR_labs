@@ -21,26 +21,28 @@ ArticleCard::ArticleCard(const ArticleCard& other)
     copyFrom(other);
 }
 
+ArticleCard& ArticleCard::operator=(const ArticleCard& other) {
+    if (this != &other) {
+        LibraryCard::operator=(other);
+        cleanup();
+        copyFrom(other);
+    }
+    return *this;
+}
+
 ArticleCard::ArticleCard(ArticleCard&& other) noexcept
     : LibraryCard(std::move(other)),
-      article(other.article),
-      publication(other.publication)
+      article(nullptr),
+      publication(nullptr)
 {
-    other.article = nullptr;
-    other.publication = nullptr;
+    moveFrom(std::move(other));
 }
 
 ArticleCard& ArticleCard::operator=(ArticleCard&& other) noexcept {
     if (this != &other) {
-        cleanup();
-        
         LibraryCard::operator=(std::move(other));
-        
-        article = other.article;
-        publication = other.publication;
-        
-        other.article = nullptr;
-        other.publication = nullptr;
+        cleanup();
+        moveFrom(std::move(other));
     }
     return *this;
 }
@@ -53,14 +55,19 @@ void ArticleCard::copyFrom(const ArticleCard& other) {
     if (other.article) {
         article = new Article(*other.article);
     }
-    if (other.publication) {
-        publication = new IndependentPublishingCard(*other.publication);
-    }
+    publication = other.publication;
+}
+
+void ArticleCard::moveFrom(ArticleCard&& other) noexcept {
+    article = other.article;
+    publication = other.publication;
+    
+    other.article = nullptr;
+    other.publication = nullptr;
 }
 
 void ArticleCard::cleanup() {
     delete article;
-    delete publication;
     article = nullptr;
     publication = nullptr;
 }

@@ -18,10 +18,12 @@ public:
                 IndependentPublishingCard* publication);
 
     ArticleCard(const ArticleCard& other);
-    ArticleCard& operator=(const ArticleCard& other) = delete;
+    ArticleCard& operator=(const ArticleCard& other);
+    
     ArticleCard(ArticleCard&& other) noexcept;
     ArticleCard& operator=(ArticleCard&& other) noexcept;
-    ~ArticleCard() override;
+
+    ~ArticleCard();
 
     Article* getArticle() const;
     IndependentPublishingCard* getPublication() const;
@@ -30,4 +32,5 @@ public:
 private:
     void copyFrom(const ArticleCard& other);
     void cleanup();
+    void moveFrom(ArticleCard&& other) noexcept;
 };

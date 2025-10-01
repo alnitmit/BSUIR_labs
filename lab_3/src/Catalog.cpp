@@ -1,9 +1,9 @@
 #include "../include/Catalog.h"
 #include <iostream>
 
-Catalog::Catalog() 
-    : cards(new LibraryCard*[2]), count(0), capacity(2) 
+Catalog::Catalog() : capacity(2)
 {
+    cards = new LibraryCard*[capacity];
     for (int i = 0; i < capacity; ++i) {
         cards[i] = nullptr;
     }
@@ -15,7 +15,7 @@ Catalog::~Catalog() {
 
 void Catalog::resize() {
     int newCapacity = capacity * 2;
-    LibraryCard** newCards = new LibraryCard*[newCapacity];
+    auto newCards = new LibraryCard*[newCapacity];
     
     for (int i = 0; i < count; ++i) {
         newCards[i] = cards[i];

@@ -1,5 +1,6 @@
 #include "../include/ArticleCard.h"
 #include "../include/IndependentPublishingCard.h"
+#include <utility> // для std::move
 
 ArticleCard::ArticleCard(const std::string& author, 
                          const std::string& title, 
@@ -29,14 +30,14 @@ ArticleCard& ArticleCard::operator=(const ArticleCard& other) {
 }
 
 ArticleCard::ArticleCard(ArticleCard&& other) noexcept
-    : LibraryCard(other)
+    : LibraryCard(std::move(other)) // исправлено: убрано const
 {
     moveFrom(std::move(other));
 }
 
 ArticleCard& ArticleCard::operator=(ArticleCard&& other) noexcept {
     if (this != &other) {
-        LibraryCard::operator=(other);
+        LibraryCard::operator=(std::move(other)); // исправлено: убрано const
         cleanup();
         moveFrom(std::move(other));
     }
@@ -55,6 +56,7 @@ void ArticleCard::copyFrom(const ArticleCard& other) {
 }
 
 void ArticleCard::moveFrom(ArticleCard&& other) noexcept {
+    // Используем std::move для полей, которые поддерживают перемещение
     article = other.article;
     publication = other.publication;
     

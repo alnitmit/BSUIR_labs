@@ -9,9 +9,8 @@ CollectionOfArticlesCard::CollectionOfArticlesCard(
     const std::string& thematicCatalogCode,
     const PublishingDetails& pubDetails)
     : IndependentPublishingCard(author, title, authorMark, inventoryNumber, 
-                               thematicCatalogCode, pubDetails)
+                               thematicCatalogCode, pubDetails), capacity(2)
 {
-    capacity = 2;
     articles = new Article*[capacity];
     for (int i = 0; i < capacity; ++i) {
         articles[i] = nullptr;

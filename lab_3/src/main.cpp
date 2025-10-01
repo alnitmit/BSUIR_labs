@@ -2,318 +2,235 @@
 #include "../include/ArticleCard.h"
 #include "../include/BookCard.h"
 #include "../include/CollectionOfArticlesCard.h"
+#include "../include/IndependentPublishingCard.h"
+#include "../include/LibraryCard.h"
 #include "../include/ThematicCatalog.h"
 #include <iostream>
-#include <string_view>
+#include <limits>
+#include <string>
 
-void showMenu();
-IndependentPublishingParams getPublicationParams(bool isCollection = false);
-LibraryCardParams getArticleCardParams();
-void createPublicationCard(BookCard *&book, CollectionOfArticlesCard *&collection, bool isBook);
-void addArticleToCollection(CollectionOfArticlesCard *collection);
-void createArticleCard(ArticleCard *&articleCard);
-void addToCatalog(Catalog &catalog, BookCard *book, CollectionOfArticlesCard *collection, 
-                  ArticleCard *articleCard, std::string_view catalogType);
-void searchInCatalog(Catalog &catalog, std::string_view searchType);
-void showBookInfo(const BookCard *book);
-void showCollectionInfo(const CollectionOfArticlesCard *collection);
-void showArticleInfo(const ArticleCard *articleCard);
-void cleanup(BookCard *&book, CollectionOfArticlesCard *&collection, ArticleCard *&articleCard);
+using namespace std;
 
-void showMenu() {
-  std::cout << "\n=== Library System ===\n"
-            << "1. Create book card\n"
-            << "2. Create collection of articles card\n"
-            << "3. Add article to collection\n"
-            << "4. Create article card\n"
-            << "5. Add card to thematic catalog\n"
-            << "6. Add card to alphabetical catalog\n"
-            << "7. Search in thematic catalog\n"
-            << "8. Search in alphabetical catalog\n"
-            << "9. Show book information\n"
-            << "10. Show collection information\n"
-            << "11. Show article information\n"
-            << "12. Exit\n"
-            << "Choice: ";
+int inputInt(const string &prompt, int min = 0, int max = 1000000) {
+  int value;
+  while (true) {
+    cout << prompt;
+    cin >> value;
+    if (cin.fail() || value < min || value > max) {
+      cin.clear();
+      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+      cout << "Error! Please enter an integer from " << min << " to " << max
+           << endl;
+    } else {
+      cin.ignore();
+      return value;
+    }
+  }
 }
 
-IndependentPublishingParams getPublicationParams(bool isCollection) {
-  std::string author;
-  std::string title;
-  std::string authMark;
-  std::string invNum;
-  std::string catCode;
-  std::string publisher;
-  int year;
-  int circulation;
-  int pages;
-
-  std::cout << (isCollection ? "Collection author: " : "Author: ");
-  std::getline(std::cin, author);
-  std::cout << (isCollection ? "Collection title: " : "Title: ");
-  std::getline(std::cin, title);
-  std::cout << "Author mark: ";
-  std::getline(std::cin, authMark);
-  std::cout << "Inventory number: ";
-  std::getline(std::cin, invNum);
-  std::cout << "Catalog code: ";
-  std::getline(std::cin, catCode);
-  std::cout << "Publisher: ";
-  std::getline(std::cin, publisher);
-  std::cout << "Year: ";
-  std::cin >> year;
-  std::cout << "Circulation: ";
-  std::cin >> circulation;
-  std::cout << "Pages: ";
-  std::cin >> pages;
-  std::cin.ignore();
-
-  LibraryCardParams libraryParams(author, title, authMark, invNum, catCode);
-  PublishingDetails pubDetails(publisher, year, circulation, pages);
-  return IndependentPublishingParams(libraryParams, pubDetails);
+string inputString(const string &prompt) {
+  string value;
+  cout << prompt;
+  getline(cin, value);
+  while (value.empty()) {
+    cout << "Error! Field cannot be empty. " << prompt;
+    getline(cin, value);
+  }
+  return value;
 }
 
-LibraryCardParams getArticleCardParams() {
-  std::string author;
-  std::string title;
-  std::string authMark;
-  std::string invNum;
-  std::string catCode;
+PublishingDetails inputPublishingDetails() {
+  cout << "\n\tPUBLISHING DETAILS" << endl;
+  string publisher = inputString("Enter publisher: ");
+  int year = inputInt("Enter publication year: ", 1000, 2100);
+  int circulation = inputInt("Enter circulation: ", 1);
+  int pages = inputInt("Enter number of pages: ", 1);
 
-  std::cout << "Article author: ";
-  std::getline(std::cin, author);
-  std::cout << "Article title: ";
-  std::getline(std::cin, title);
-  std::cout << "Author mark for article: ";
-  std::getline(std::cin, authMark);
-  std::cout << "Inventory number for article: ";
-  std::getline(std::cin, invNum);
-  std::cout << "Catalog code for article: ";
-  std::getline(std::cin, catCode);
-
-  return LibraryCardParams(author, title, authMark, invNum, catCode);
+  return PublishingDetails(publisher, year, circulation, pages);
 }
 
-void addArticleToCollection(CollectionOfArticlesCard *collection) {
-  if (!collection) {
-    std::cout << "First create a collection card!\n";
+void createBookCard(ThematicCatalog &thematicCatalog,
+                    AlphabeticalCatalog &alphabeticalCatalog) {
+  cout << "\n\t CREATE BOOK CARD" << endl;
+
+  string author = inputString("Enter book author: ");
+  string title = inputString("Enter book title: ");
+  string authorMark = inputString("Enter author mark: ");
+  string inventoryNumber = inputString("Enter inventory number: ");
+  string catalogCode = inputString("Enter thematic catalog code: ");
+
+  PublishingDetails pubDetails = inputPublishingDetails();
+
+  BookCard *book = new BookCard(author, title, authorMark, inventoryNumber,
+                                catalogCode, pubDetails);
+
+  thematicCatalog.addCard(book);
+  alphabeticalCatalog.addCard(book);
+
+  cout << "Book card created and added to catalogs!" << endl;
+  cout << "Author: " << book->getAuthor() << endl;
+  cout << "Title: " << book->getTitle() << endl;
+  cout << "Publisher: " << book->getPublisher() << endl;
+}
+
+void createCollectionCard(ThematicCatalog &thematicCatalog,
+                          AlphabeticalCatalog &alphabeticalCatalog) {
+  cout << "\n\tCREATE COLLECTION CARD" << endl;
+
+  string author = inputString("Enter collection author/editor: ");
+  string title = inputString("Enter collection title: ");
+  string authorMark = inputString("Enter author mark: ");
+  string inventoryNumber = inputString("Enter inventory number: ");
+  string catalogCode = inputString("Enter thematic catalog code: ");
+
+  PublishingDetails pubDetails = inputPublishingDetails();
+
+  CollectionOfArticlesCard *collection = new CollectionOfArticlesCard(
+      author, title, authorMark, inventoryNumber, catalogCode, pubDetails);
+
+  cout << "\n\tADD ARTICLES TO COLLECTION" << endl;
+  char addMore;
+  do {
+    string articleAuthor = inputString("Enter article author: ");
+    string articleTitle = inputString("Enter article title: ");
+
+    collection->addArticle(articleTitle, articleAuthor);
+    cout << "Article added to collection!" << endl;
+
+    cout << "Add another article? (y/n): ";
+    cin >> addMore;
+    cin.ignore();
+  } while (addMore == 'y' || addMore == 'Y');
+
+  thematicCatalog.addCard(collection);
+  alphabeticalCatalog.addCard(collection);
+
+  cout << "Collection card created and added to catalogs!" << endl;
+  cout << "Articles in collection: " << collection->getArticleCount() << endl;
+}
+
+void searchInThematicCatalog(ThematicCatalog &catalog) {
+  cout << "\n\tSEARCH IN THEMATIC CATALOG" << endl;
+
+  if (catalog.getCount() == 0) {
+    cout << "Catalog is empty! Please add cards first." << endl;
     return;
   }
 
-  std::string author;
-  std::string title;
+  string code = inputString("Enter thematic catalog code to search: ");
 
-  std::cout << "Article author: ";
-  std::getline(std::cin, author);
-  std::cout << "Article title: ";
-  std::getline(std::cin, title);
-
-  collection->addArticle(new Article(title, author));
-  std::cout << "Article added to collection!\n";
-}
-
-void createArticleCard(ArticleCard *&articleCard) {
-  if (articleCard) {
-    delete articleCard;
-    articleCard = nullptr;
-  }
-
-  LibraryCardParams params = getArticleCardParams();
-
-  auto article = new Article(params.title, params.author);
-
-  articleCard = new ArticleCard(params, article);
-  std::cout << "Article card created!\n";
-}
-
-void addToCatalog(Catalog &catalog, BookCard *book, CollectionOfArticlesCard *collection, 
-                  ArticleCard *articleCard, std::string_view catalogType) {
-  LibraryCard *cardToAdd = nullptr;
-  int cardChoice;
-  std::cout << "Select card to add to " << catalogType << " catalog:\n";
-  std::cout << "1. Book\n";
-  std::cout << "2. Collection\n";
-  std::cout << "3. Article Card\n";
-  std::cout << "Choice: ";
-  std::cin >> cardChoice;
-  std::cin.ignore();
-
-  if (cardChoice == 1 && book) {
-    cardToAdd = book;
-  } else if (cardChoice == 2 && collection) {
-    cardToAdd = collection;
-  } else if (cardChoice == 3 && articleCard) {
-    cardToAdd = articleCard;
-  } else {
-    std::cout << "Invalid choice or card not available!\n";
-    return;
-  }
-
-  catalog.addCard(cardToAdd);
-  std::cout << "Card added to " << catalogType << " catalog!\n";
-}
-
-void searchInCatalog(Catalog &catalog, std::string_view searchType) {
-  std::string query;
   int resultCount;
-  LibraryCard **results;
+  LibraryCard **results = catalog.search(code, resultCount);
 
-  if (searchType == "thematic") {
-    std::cout << "Enter thematic catalog code: ";
-    std::getline(std::cin, query);
+  if (resultCount == 0) {
+    cout << "No results found for code '" << code << "'" << endl;
   } else {
-    std::cout << "Enter search query (author or title): ";
-    std::getline(std::cin, query);
-  }
-
-  results = catalog.search(query, resultCount);
-
-  std::cout << "Found " << resultCount << " results:\n";
-  for (int i = 0; i < resultCount; ++i) {
-    std::cout << i + 1 << ". " << results[i]->getAlphabeticalSearch() << std::endl;
+    cout << "Found " << resultCount << " results:" << endl;
+    for (int i = 0; i < resultCount; ++i) {
+      cout << "  " << (i + 1) << ". " << results[i]->getAuthor() << " - "
+           << results[i]->getTitle() << endl;
+    }
   }
 
   delete[] results;
 }
 
-void showBookInfo(const BookCard *book) {
-  if (book) {
-    std::cout << "\n=== Book Information ===\n"
-              << "Alphabetical search: " << book->getAlphabeticalSearch() << "\n"
-              << "Author mark: " << book->getAuthorMark() << "\n"
-              << "Inventory number: " << book->getInventoryNumber() << "\n"
-              << "Publisher: " << book->getPublisher() << "\n"
-              << "Year: " << book->getYear() << "\n"
-              << "Circulation: " << book->getCirculation() << "\n"
-              << "Pages: " << book->getPages() << "\n"
-              << "Article: " << book->getArticle()->getAuthor() << " - "
-              << book->getArticle()->getTitle() << std::endl;
-  } else {
-    std::cout << "First create a book card!\n";
+void searchInAlphabeticalCatalog(AlphabeticalCatalog &catalog) {
+  cout << "\n\tSEARCH IN ALPHABETICAL CATALOG" << endl;
+
+  if (catalog.getCount() == 0) {
+    cout << "Catalog is empty! Please add cards first." << endl;
+    return;
   }
-}
 
-void showCollectionInfo(const CollectionOfArticlesCard *collection) {
-  if (collection) {
-    std::cout << "\n=== Collection Information ===\n"
-              << "Alphabetical search: " << collection->getAlphabeticalSearch() << "\n"
-              << "Author mark: " << collection->getAuthorMark() << "\n"
-              << "Inventory number: " << collection->getInventoryNumber() << "\n"
-              << "Publisher: " << collection->getPublisher() << "\n"
-              << "Year: " << collection->getYear() << "\n"
-              << "Circulation: " << collection->getCirculation() << "\n"
-              << "Pages: " << collection->getPages() << "\n"
-              << "Articles count: " << collection->getArticleCount() << std::endl;
+  string query = inputString("Enter author or title to search: ");
 
-    for (int i = 0; i < collection->getArticleCount(); ++i) {
-      const Article *article = collection->getArticle(i);
-      if (article) {
-        std::cout << "  Article " << (i + 1) << ": " << article->getAuthor()
-                  << " - " << article->getTitle() << std::endl;
-      }
+  int resultCount;
+  LibraryCard **results = catalog.search(query, resultCount);
+
+  if (resultCount == 0) {
+    cout << "No results found for '" << query << "'" << endl;
+  } else {
+    cout << "Found " << resultCount << " results:" << endl;
+    for (int i = 0; i < resultCount; ++i) {
+      cout << "  " << (i + 1) << ". " << results[i]->getAuthor() << " - "
+           << results[i]->getTitle() << endl;
     }
-  } else {
-    std::cout << "First create a collection card!\n";
+  }
+
+  delete[] results;
+}
+
+void showCatalogInfo(Catalog &catalog, const string &catalogType) {
+  cout << "\n\t" << catalogType << " CATALOG INFO" << endl;
+  cout << "Number of cards: " << catalog.getCount() << endl;
+
+  if (catalog.getCount() > 0) {
+    cout << "Catalog contents:" << endl;
+    for (int i = 0; i < catalog.getCount(); ++i) {
+      LibraryCard *card = catalog.getCard(i);
+      cout << "  " << (i + 1) << ". " << card->getAuthor() << " - "
+           << card->getTitle() << endl;
+    }
   }
 }
 
-void showArticleInfo(const ArticleCard *articleCard) {
-  if (articleCard) {
-    std::cout << "\n=== Article Card Information ===\n"
-              << "Alphabetical search: " << articleCard->getAlphabeticalSearch() << "\n"
-              << "Author mark: " << articleCard->getAuthorMark() << "\n"
-              << "Inventory number: " << articleCard->getInventoryNumber() << "\n"
-              << "Thematic catalog code: " << articleCard->getThematicCatalogCode() << "\n"
-              << "Article: " << articleCard->getArticle()->getAuthor() << " - "
-              << articleCard->getArticle()->getTitle() << std::endl;
-  } else {
-    std::cout << "First create an article card!\n";
-  }
-}
-
-void cleanup(BookCard *&book, CollectionOfArticlesCard *&collection, ArticleCard *&articleCard) {
-  delete book;
-  delete collection;
-  delete articleCard;
-  book = nullptr;
-  collection = nullptr;
-  articleCard = nullptr;
-}
-
-void createPublicationCard(BookCard *&book, CollectionOfArticlesCard *&collection, bool isBook) {
-  if (isBook && book) {
-    delete book;
-    book = nullptr;
-  } else if (!isBook && collection) {
-    delete collection;
-    collection = nullptr;
-  }
-
-  IndependentPublishingParams params = getPublicationParams(!isBook);
-  
-  if (isBook) {
-    book = new BookCard(params);
-    std::cout << "Book card created!\n";
-  } else {
-    collection = new CollectionOfArticlesCard(params);
-    std::cout << "Collection card created!\n";
-  }
+void showMenu() {
+  cout << "\n=== LIBRARY SYSTEM ===" << endl;
+  cout << "1. Create book card and add to catalogs" << endl;
+  cout << "2. Create collection card and add to catalogs" << endl;
+  cout << "3. Search in thematic catalog" << endl;
+  cout << "4. Search in alphabetical catalog" << endl;
+  cout << "5. Show thematic catalog info" << endl;
+  cout << "6. Show alphabetical catalog info" << endl;
+  cout << "7. Exit" << endl;
+  cout << "Enter your choice: ";
 }
 
 int main() {
-  BookCard *book = nullptr;
-  CollectionOfArticlesCard *collection = nullptr;
-  ArticleCard *articleCard = nullptr;
   ThematicCatalog thematicCatalog;
   AlphabeticalCatalog alphabeticalCatalog;
 
-  int choice;
+  cout << "Welcome to Library System!" << endl;
 
-  while (true) {
+  int choice;
+  bool running = true;
+
+  while (running) {
     showMenu();
-    std::cin >> choice;
-    std::cin.ignore();
+    choice = inputInt("", 1, 7);
 
     switch (choice) {
-    case 1:
-      createPublicationCard(book, collection, true);
+    case 1: {
+      createBookCard(thematicCatalog, alphabeticalCatalog);
       break;
-    case 2:
-      createPublicationCard(book, collection, false);
+    }
+    case 2: {
+      createCollectionCard(thematicCatalog, alphabeticalCatalog);
       break;
-    case 3:
-      addArticleToCollection(collection);
+    }
+    case 3: {
+      searchInThematicCatalog(thematicCatalog);
       break;
-    case 4:
-      createArticleCard(articleCard);
+    }
+    case 4: {
+      searchInAlphabeticalCatalog(alphabeticalCatalog);
       break;
-    case 5:
-      addToCatalog(thematicCatalog, book, collection, articleCard, "thematic");
+    }
+    case 5: {
+      showCatalogInfo(thematicCatalog, "THEMATIC");
       break;
-    case 6:
-      addToCatalog(alphabeticalCatalog, book, collection, articleCard, "alphabetical");
+    }
+    case 6: {
+      showCatalogInfo(alphabeticalCatalog, "ALPHABETICAL");
       break;
-    case 7:
-      searchInCatalog(thematicCatalog, "thematic");
+    }
+    case 7: {
+      running = false;
       break;
-    case 8:
-      searchInCatalog(alphabeticalCatalog, "alphabetical");
-      break;
-    case 9:
-      showBookInfo(book);
-      break;
-    case 10:
-      showCollectionInfo(collection);
-      break;
-    case 11:
-      showArticleInfo(articleCard);
-      break;
-    case 12:
-      cleanup(book, collection, articleCard);
-      std::cout << "Goodbye!\n";
-      return 0;
-    default:
-      std::cout << "Invalid choice!\n";
+    }
     }
   }
+
+  return 0;
 }

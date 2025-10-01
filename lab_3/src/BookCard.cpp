@@ -1,31 +1,14 @@
 #include "../include/BookCard.h"
 
-BookCard::BookCard(const IndependentPublishingParams& params)
-    : IndependentPublishingCard(params),
-      article(new Article(params.libraryParams.title, params.libraryParams.author)) {}
+BookCard::BookCard(const std::string &author, const std::string &title,
+                   const std::string &authorMark,
+                   const std::string &inventoryNumber,
+                   const std::string &thematicCatalogCode,
+                   const PublishingDetails &pubDetails)
+    : IndependentPublishingCard(author, title, authorMark, inventoryNumber,
+                                thematicCatalogCode, pubDetails),
+      article(new Article(title, author)) {}
 
-BookCard::BookCard(BookCard&& other) noexcept
-    : IndependentPublishingCard(std::move(other)),
-      article(other.article) {
-    other.article = nullptr;
-}
+BookCard::~BookCard() { delete article; }
 
-BookCard& BookCard::operator=(BookCard&& other) noexcept {
-    if (this != &other) {
-        IndependentPublishingCard::operator=(std::move(other));
-        
-        delete article;
-        article = other.article;
-        other.article = nullptr;
-    }
-    return *this;
-}
-
-BookCard::~BookCard() {
-    delete article;
-    article = nullptr;
-}
-
-Article* BookCard::getArticle() const { 
-    return article; 
-}
+Article *BookCard::getArticle() const { return article; }

@@ -4,18 +4,17 @@
 
 class BookCard : public IndependentPublishingCard {
 private:
-  Article *article;
+    Article* article;
 
 public:
-  explicit BookCard(const IndependentPublishingParams& params);
+    BookCard(const std::string& author, 
+             const std::string& title, 
+             const std::string& authorMark,
+             const std::string& inventoryNumber,
+             const std::string& thematicCatalogCode,
+             const PublishingDetails& pubDetails);
 
-  BookCard(const BookCard &) = delete;
-  BookCard &operator=(const BookCard &) = delete;
+    ~BookCard();
 
-  BookCard(BookCard &&other) noexcept;
-  BookCard &operator=(BookCard &&other) noexcept;
-
-  ~BookCard() override;
-
-  Article *getArticle() const;
+    Article* getArticle() const;
 };

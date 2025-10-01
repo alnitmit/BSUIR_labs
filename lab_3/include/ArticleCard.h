@@ -1,19 +1,27 @@
 #pragma once
-#include "../include/Article.h"
 #include "../include/LibraryCard.h"
+#include "../include/Article.h"
 
-class ArticleCard : public LibraryCard {  // ← ДОБАВЛЕНО НАСЛЕДОВАНИЕ
+class IndependentPublishingCard;
+
+class ArticleCard : public LibraryCard {
 private:
     Article* article;
-    // publication удален, так как теперь ArticleCard сам является LibraryCard
+    IndependentPublishingCard* publication;
 
 public:
-    // Конструктор теперь принимает параметры для LibraryCard
-    ArticleCard(const LibraryCardParams& params, Article* art);
-    ~ArticleCard() override;
+    ArticleCard(const std::string& author, 
+                const std::string& title, 
+                const std::string& authorMark,
+                const std::string& inventoryNumber,
+                const std::string& thematicCatalogCode,
+                Article* article,
+                IndependentPublishingCard* publication);
 
-    // Методы из LibraryCard уже унаследованы
+    ~ArticleCard();
+
     Article* getArticle() const;
-    
-    // getPublication() больше не нужен, так как ArticleCard теперь сам является карточкой
+    IndependentPublishingCard* getPublication() const;
+
+    std::string getAuthor() const;
 };

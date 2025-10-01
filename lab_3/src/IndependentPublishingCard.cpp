@@ -1,41 +1,31 @@
 #include "../include/IndependentPublishingCard.h"
 
-IndependentPublishingCard::IndependentPublishingCard(const IndependentPublishingParams& params)
-    : LibraryCard(params.libraryParams), 
-      publisher(params.publishingDetails.publisher), 
-      year(params.publishingDetails.year), 
-      circulation(params.publishingDetails.circulation), 
-      pages(params.publishingDetails.pages) {}
-
-IndependentPublishingCard::IndependentPublishingCard(IndependentPublishingCard&& other) noexcept
-    : LibraryCard(std::move(other)), publisher(std::move(other.publisher)),
-      year(other.year), circulation(other.circulation), pages(other.pages) {}
-
-IndependentPublishingCard& IndependentPublishingCard::operator=(
-    IndependentPublishingCard&& other) noexcept {
-  if (this != &other) {
-    LibraryCard::operator=(std::move(other));
-    publisher = std::move(other.publisher);
-    year = other.year;
-    circulation = other.circulation;
-    pages = other.pages;
-  }
-  return *this;
+IndependentPublishingCard::IndependentPublishingCard(
+    const std::string& author, 
+    const std::string& title, 
+    const std::string& authorMark,
+    const std::string& inventoryNumber,
+    const std::string& thematicCatalogCode,
+    const PublishingDetails& pubDetails)
+    : LibraryCard(author, title, authorMark, inventoryNumber, thematicCatalogCode),
+      publisher(pubDetails.publisher), 
+      year(pubDetails.year), 
+      circulation(pubDetails.circulation), 
+      pages(pubDetails.pages) {
 }
 
 std::string IndependentPublishingCard::getPublisher() const {
-  return publisher;
+    return publisher;
 }
 
-int IndependentPublishingCard::getYear() const { return year; }
+int IndependentPublishingCard::getYear() const {
+    return year;
+}
 
-int IndependentPublishingCard::getCirculation() const { return circulation; }
+int IndependentPublishingCard::getCirculation() const {
+    return circulation;
+}
 
-int IndependentPublishingCard::getPages() const { return pages; }
-
-IndependentPublishingCard::~IndependentPublishingCard() {
-    publisher.clear();
-    year = 0;
-    circulation = 0;
-    pages = 0;
+int IndependentPublishingCard::getPages() const {
+    return pages;
 }

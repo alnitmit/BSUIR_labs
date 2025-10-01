@@ -176,7 +176,7 @@ void showCatalogInfo(const Catalog &catalog, const string &catalogType) {
 }
 
 void showMenu() {
-  cout << "\n=== LIBRARY SYSTEM ===" << endl;
+  cout << "\n\tLIBRARY SYSTEM" << endl;
   cout << "1. Create book card and add to catalogs" << endl;
   cout << "2. Create collection card and add to catalogs" << endl;
   cout << "3. Search in thematic catalog" << endl;
@@ -190,8 +190,6 @@ void showMenu() {
 int main() {
   ThematicCatalog thematicCatalog;
   AlphabeticalCatalog alphabeticalCatalog;
-
-  cout << "Welcome to Library System!" << endl;
 
   int choice;
   bool running = true;

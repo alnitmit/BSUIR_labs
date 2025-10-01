@@ -5,8 +5,8 @@
 
 class ArticleCard : public LibraryCard {
 private:
-    Article* article;
-    IndependentPublishingCard* publication;
+    Article* article = nullptr;
+    IndependentPublishingCard* publication = nullptr;
 
 public:
     ArticleCard(const std::string& author, 

@@ -14,9 +14,7 @@ ArticleCard::ArticleCard(const std::string& author,
 {}
 
 ArticleCard::ArticleCard(const ArticleCard& other)
-    : LibraryCard(other),
-      article(nullptr),
-      publication(nullptr)
+    : LibraryCard(other)
 {
     copyFrom(other);
 }
@@ -31,16 +29,14 @@ ArticleCard& ArticleCard::operator=(const ArticleCard& other) {
 }
 
 ArticleCard::ArticleCard(ArticleCard&& other) noexcept
-    : LibraryCard(std::move(other)),
-      article(nullptr),
-      publication(nullptr)
+    : LibraryCard(other)
 {
     moveFrom(std::move(other));
 }
 
 ArticleCard& ArticleCard::operator=(ArticleCard&& other) noexcept {
     if (this != &other) {
-        LibraryCard::operator=(std::move(other));
+        LibraryCard::operator=(other);
         cleanup();
         moveFrom(std::move(other));
     }

@@ -4,9 +4,9 @@
 
 class CollectionOfArticlesCard : public IndependentPublishingCard {
 private:
-    Article** articles;
-    int articleCount;
-    int capacity;
+    Article** articles = nullptr;
+    int articleCount = 0;
+    int capacity = 0;
     void resize();
 
 public:
@@ -17,7 +17,13 @@ public:
                             const std::string& thematicCatalogCode,
                             const PublishingDetails& pubDetails);
 
-    ~CollectionOfArticlesCard();
+    CollectionOfArticlesCard(const CollectionOfArticlesCard& other) = delete;
+    CollectionOfArticlesCard& operator=(const CollectionOfArticlesCard& other) = delete;
+    
+    CollectionOfArticlesCard(CollectionOfArticlesCard&& other) = delete;
+    CollectionOfArticlesCard& operator=(CollectionOfArticlesCard&& other) = delete;
+
+    ~CollectionOfArticlesCard() override;
 
     Article* getArticle(int index) const; 
 

@@ -9,11 +9,10 @@ CollectionOfArticlesCard::CollectionOfArticlesCard(
     const std::string& thematicCatalogCode,
     const PublishingDetails& pubDetails)
     : IndependentPublishingCard(author, title, authorMark, inventoryNumber, 
-                               thematicCatalogCode, pubDetails),
-      articles(new Article*[2]),
-      articleCount(0),
-      capacity(2) 
+                               thematicCatalogCode, pubDetails)
 {
+    capacity = 2;
+    articles = new Article*[capacity];
     for (int i = 0; i < capacity; ++i) {
         articles[i] = nullptr;
     }
@@ -28,7 +27,7 @@ CollectionOfArticlesCard::~CollectionOfArticlesCard() {
 
 void CollectionOfArticlesCard::resize() {
     int newCapacity = capacity * 2;
-    Article** newArticles = new Article*[newCapacity];
+    auto newArticles = new Article*[newCapacity];
     
     for (int i = 0; i < articleCount; ++i) {
         newArticles[i] = articles[i];

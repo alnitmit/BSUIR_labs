@@ -14,7 +14,13 @@ public:
              const std::string& thematicCatalogCode,
              const PublishingDetails& pubDetails);
 
-    ~BookCard();
+    BookCard(const BookCard& other) = delete;
+    BookCard& operator=(const BookCard& other) = delete;
+    
+    BookCard(BookCard&& other) = delete;
+    BookCard& operator=(BookCard&& other) = delete;
+
+    ~BookCard() override;
 
     Article* getArticle() const;
 };

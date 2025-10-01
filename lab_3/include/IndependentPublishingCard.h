@@ -32,5 +32,5 @@ public:
     int getCirculation() const;
     int getPages() const;
 
-    virtual ~IndependentPublishingCard() = default;
+    ~IndependentPublishingCard() override = default;
 };

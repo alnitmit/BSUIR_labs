@@ -61,7 +61,7 @@ void createBookCard(ThematicCatalog &thematicCatalog,
 
   PublishingDetails pubDetails = inputPublishingDetails();
 
-  BookCard *book = new BookCard(author, title, authorMark, inventoryNumber,
+  auto book = new BookCard(author, title, authorMark, inventoryNumber,
                                 catalogCode, pubDetails);
 
   thematicCatalog.addCard(book);
@@ -85,7 +85,7 @@ void createCollectionCard(ThematicCatalog &thematicCatalog,
 
   PublishingDetails pubDetails = inputPublishingDetails();
 
-  CollectionOfArticlesCard *collection = new CollectionOfArticlesCard(
+  auto collection = new CollectionOfArticlesCard(
       author, title, authorMark, inventoryNumber, catalogCode, pubDetails);
 
   cout << "\n\tADD ARTICLES TO COLLECTION" << endl;
@@ -161,14 +161,14 @@ void searchInAlphabeticalCatalog(AlphabeticalCatalog &catalog) {
   delete[] results;
 }
 
-void showCatalogInfo(Catalog &catalog, const string &catalogType) {
+void showCatalogInfo(const Catalog &catalog, const string &catalogType) {
   cout << "\n\t" << catalogType << " CATALOG INFO" << endl;
   cout << "Number of cards: " << catalog.getCount() << endl;
 
   if (catalog.getCount() > 0) {
     cout << "Catalog contents:" << endl;
     for (int i = 0; i < catalog.getCount(); ++i) {
-      LibraryCard *card = catalog.getCard(i);
+      const LibraryCard *card = catalog.getCard(i);
       cout << "  " << (i + 1) << ". " << card->getAuthor() << " - "
            << card->getTitle() << endl;
     }
@@ -227,6 +227,10 @@ int main() {
     }
     case 7: {
       running = false;
+      break;
+    }
+    default: {
+      cout << "Invalid choice! Please try again." << endl;
       break;
     }
     }

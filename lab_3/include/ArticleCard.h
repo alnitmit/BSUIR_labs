@@ -10,7 +10,7 @@ private:
 public:
     // Конструктор теперь принимает параметры для LibraryCard
     ArticleCard(const LibraryCardParams& params, Article* art);
-    ~ArticleCard();
+    ~ArticleCard() override;
 
     // Методы из LibraryCard уже унаследованы
     Article* getArticle() const;

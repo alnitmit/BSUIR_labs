@@ -1,8 +1,7 @@
 #pragma once
 #include "../include/LibraryCard.h"
 #include "../include/Article.h"
-
-class IndependentPublishingCard;
+#include "../include/IndependentPublishingCard.h" 
 
 class ArticleCard : public LibraryCard {
 private:
@@ -18,10 +17,17 @@ public:
                 Article* article,
                 IndependentPublishingCard* publication);
 
-    ~ArticleCard();
+    ArticleCard(const ArticleCard& other);
+    ArticleCard& operator=(const ArticleCard& other) = delete;
+    ArticleCard(ArticleCard&& other) noexcept;
+    ArticleCard& operator=(ArticleCard&& other) noexcept;
+    ~ArticleCard() override;
 
     Article* getArticle() const;
     IndependentPublishingCard* getPublication() const;
-
     std::string getAuthor() const;
+
+private:
+    void copyFrom(const ArticleCard& other);
+    void cleanup();
 };

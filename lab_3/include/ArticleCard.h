@@ -23,11 +23,12 @@ public:
     ArticleCard(ArticleCard&& other) noexcept;
     ArticleCard& operator=(ArticleCard&& other) noexcept;
 
-    ~ArticleCard();
+    ~ArticleCard() override = default;
 
     Article* getArticle() const;
     IndependentPublishingCard* getPublication() const;
-    std::string getAuthor() const;
+    
+    std::string getArticleAuthor() const;
 
 private:
     void copyFrom(const ArticleCard& other);

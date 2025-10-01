@@ -47,10 +47,6 @@ ArticleCard& ArticleCard::operator=(ArticleCard&& other) noexcept {
     return *this;
 }
 
-ArticleCard::~ArticleCard() {
-    cleanup();
-}
-
 void ArticleCard::copyFrom(const ArticleCard& other) {
     if (other.article) {
         article = new Article(*other.article);
@@ -80,7 +76,7 @@ IndependentPublishingCard* ArticleCard::getPublication() const {
     return publication;
 }
 
-std::string ArticleCard::getAuthor() const {
+std::string ArticleCard::getArticleAuthor() const {
     if (article) {
         return article->getAuthor();
     }

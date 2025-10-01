@@ -6,7 +6,6 @@
 #include <iostream>
 #include <string_view>
 
-// Прототипы функций
 void showMenu();
 IndependentPublishingParams getPublicationParams(bool isCollection = false);
 LibraryCardParams getArticleCardParams();
@@ -38,7 +37,6 @@ void showMenu() {
             << "Choice: ";
 }
 
-// Общая функция для получения параметров публикации
 IndependentPublishingParams getPublicationParams(bool isCollection) {
   std::string author;
   std::string title;
@@ -75,7 +73,6 @@ IndependentPublishingParams getPublicationParams(bool isCollection) {
   return IndependentPublishingParams(libraryParams, pubDetails);
 }
 
-// Функция для получения параметров карточки статьи
 LibraryCardParams getArticleCardParams() {
   std::string author;
   std::string title;
@@ -95,27 +92,6 @@ LibraryCardParams getArticleCardParams() {
   std::getline(std::cin, catCode);
 
   return LibraryCardParams(author, title, authMark, invNum, catCode);
-}
-
-// Общая функция для создания карточки
-void createPublicationCard(BookCard *&book, CollectionOfArticlesCard *&collection, bool isBook) {
-  if (isBook && book) {
-    delete book;
-    book = nullptr;
-  } else if (!isBook && collection) {
-    delete collection;
-    collection = nullptr;
-  }
-
-  IndependentPublishingParams params = getPublicationParams(!isBook);
-  
-  if (isBook) {
-    book = new BookCard(params);
-    std::cout << "Book card created!\n";
-  } else {
-    collection = new CollectionOfArticlesCard(params);
-    std::cout << "Collection card created!\n";
-  }
 }
 
 void addArticleToCollection(CollectionOfArticlesCard *collection) {
@@ -142,18 +118,14 @@ void createArticleCard(ArticleCard *&articleCard) {
     articleCard = nullptr;
   }
 
-  // Получаем параметры для карточки статьи
   LibraryCardParams params = getArticleCardParams();
-  
-  // Создаем статью с теми же автором и названием
+
   auto article = new Article(params.title, params.author);
-  
-  // Создаем карточку статьи
+
   articleCard = new ArticleCard(params, article);
   std::cout << "Article card created!\n";
 }
 
-// Общая функция для добавления в каталог
 void addToCatalog(Catalog &catalog, BookCard *book, CollectionOfArticlesCard *collection, 
                   ArticleCard *articleCard, std::string_view catalogType) {
   LibraryCard *cardToAdd = nullptr;
@@ -171,7 +143,7 @@ void addToCatalog(Catalog &catalog, BookCard *book, CollectionOfArticlesCard *co
   } else if (cardChoice == 2 && collection) {
     cardToAdd = collection;
   } else if (cardChoice == 3 && articleCard) {
-    cardToAdd = articleCard;  // Теперь ArticleCard можно добавлять в каталоги
+    cardToAdd = articleCard;
   } else {
     std::cout << "Invalid choice or card not available!\n";
     return;
@@ -181,7 +153,6 @@ void addToCatalog(Catalog &catalog, BookCard *book, CollectionOfArticlesCard *co
   std::cout << "Card added to " << catalogType << " catalog!\n";
 }
 
-// Общая функция для поиска в каталоге
 void searchInCatalog(Catalog &catalog, std::string_view searchType) {
   std::string query;
   int resultCount;
@@ -267,6 +238,26 @@ void cleanup(BookCard *&book, CollectionOfArticlesCard *&collection, ArticleCard
   book = nullptr;
   collection = nullptr;
   articleCard = nullptr;
+}
+
+void createPublicationCard(BookCard *&book, CollectionOfArticlesCard *&collection, bool isBook) {
+  if (isBook && book) {
+    delete book;
+    book = nullptr;
+  } else if (!isBook && collection) {
+    delete collection;
+    collection = nullptr;
+  }
+
+  IndependentPublishingParams params = getPublicationParams(!isBook);
+  
+  if (isBook) {
+    book = new BookCard(params);
+    std::cout << "Book card created!\n";
+  } else {
+    collection = new CollectionOfArticlesCard(params);
+    std::cout << "Collection card created!\n";
+  }
 }
 
 int main() {

@@ -47,6 +47,10 @@ ArticleCard& ArticleCard::operator=(ArticleCard&& other) noexcept {
     return *this;
 }
 
+ArticleCard::~ArticleCard() {
+    cleanup();
+}
+
 void ArticleCard::copyFrom(const ArticleCard& other) {
     if (other.article) {
         article = new Article(*other.article);

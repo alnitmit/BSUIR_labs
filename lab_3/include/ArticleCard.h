@@ -23,7 +23,7 @@ public:
     ArticleCard(ArticleCard&& other) noexcept;
     ArticleCard& operator=(ArticleCard&& other) noexcept;
 
-    ~ArticleCard() override = default;
+   ~ArticleCard() override;
 
     Article* getArticle() const;
     IndependentPublishingCard* getPublication() const;

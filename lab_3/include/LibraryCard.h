@@ -14,11 +14,13 @@ public:
               const std::string &authorMark, const std::string &inventoryNumber,
               const std::string &thematicCatalogCode);
 
-  LibraryCard(const LibraryCard& other);
-  LibraryCard& operator=(const LibraryCard& other);
+  LibraryCard(const LibraryCard& other) = default;
+  LibraryCard& operator=(const LibraryCard& other) = default;
   
-  LibraryCard(LibraryCard&& other) noexcept;
-  LibraryCard& operator=(LibraryCard&& other) noexcept;
+  LibraryCard(LibraryCard&& other) noexcept = default;
+  LibraryCard& operator=(LibraryCard&& other) noexcept = default;
+
+  virtual ~LibraryCard() = default;
 
   std::string getAuthor() const;
   std::string getTitle() const;
@@ -27,6 +29,5 @@ public:
   std::string getThematicCatalogCode() const;
 
   bool alphabeticalSearch(const std::string &query) const;
-  virtual ~LibraryCard() = default;
   std::string getSearchString() const;
 };

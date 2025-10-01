@@ -56,11 +56,8 @@ void ArticleCard::copyFrom(const ArticleCard& other) {
 }
 
 void ArticleCard::moveFrom(ArticleCard&& other) noexcept {
-    article = other.article;
-    publication = other.publication;
-    
-    other.article = nullptr;
-    other.publication = nullptr;
+    article = std::exchange(other.article, nullptr);
+    publication = std::exchange(other.publication, nullptr);
 }
 
 void ArticleCard::cleanup() {

@@ -4,15 +4,17 @@
 #include "../include/CollectionOfArticlesCard.h"
 #include "../include/ThematicCatalog.h"
 #include <iostream>
+#include <string_view>
 
+// Прототипы функций
 void showMenu();
 IndependentPublishingParams getPublicationParams(bool isCollection = false);
 void createPublicationCard(BookCard *&book, CollectionOfArticlesCard *&collection, bool isBook);
 void addArticleToCollection(CollectionOfArticlesCard *collection);
 void createArticleCard(ArticleCard *&articleCard, BookCard *book,
                        CollectionOfArticlesCard *collection);
-void addToCatalog(Catalog &catalog, BookCard *book, CollectionOfArticlesCard *collection, const std::string& catalogType);
-void searchInCatalog(Catalog &catalog, const std::string& searchType);
+void addToCatalog(Catalog &catalog, BookCard *book, CollectionOfArticlesCard *collection, std::string_view catalogType);
+void searchInCatalog(Catalog &catalog, std::string_view searchType);
 void showBookInfo(const BookCard *book);
 void showCollectionInfo(const CollectionOfArticlesCard *collection);
 void cleanup(BookCard *&book, CollectionOfArticlesCard *&collection,
@@ -34,6 +36,7 @@ void showMenu() {
             << "Choice: ";
 }
 
+// Общая функция для получения параметров публикации
 IndependentPublishingParams getPublicationParams(bool isCollection) {
   std::string author;
   std::string title;
@@ -70,6 +73,7 @@ IndependentPublishingParams getPublicationParams(bool isCollection) {
   return IndependentPublishingParams(libraryParams, pubDetails);
 }
 
+// Общая функция для создания карточки
 void createPublicationCard(BookCard *&book, CollectionOfArticlesCard *&collection, bool isBook) {
   if (isBook && book) {
     delete book;
@@ -153,7 +157,8 @@ void createArticleCard(ArticleCard *&articleCard, BookCard *book,
   std::cout << "Article card created!\n";
 }
 
-void addToCatalog(Catalog &catalog, BookCard *book, CollectionOfArticlesCard *collection, const std::string& catalogType) {
+// Общая функция для добавления в каталог
+void addToCatalog(Catalog &catalog, BookCard *book, CollectionOfArticlesCard *collection, std::string_view catalogType) {
   LibraryCard *cardToAdd = nullptr;
   int cardChoice;
   std::cout << "Select card to add to " << catalogType << " catalog:\n";
@@ -176,7 +181,8 @@ void addToCatalog(Catalog &catalog, BookCard *book, CollectionOfArticlesCard *co
   std::cout << "Card added to " << catalogType << " catalog!\n";
 }
 
-void searchInCatalog(Catalog &catalog, const std::string& searchType) {
+// Общая функция для поиска в каталоге
+void searchInCatalog(Catalog &catalog, std::string_view searchType) {
   std::string query;
   int resultCount;
   LibraryCard **results;

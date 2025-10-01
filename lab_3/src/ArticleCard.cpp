@@ -1,12 +1,13 @@
 #include "../include/ArticleCard.h"
 
-ArticleCard::ArticleCard(Article *art, LibraryCard *pub)
-    : article(art), publication(pub) {}
+// Конструктор теперь инициализирует LibraryCard
+ArticleCard::ArticleCard(const LibraryCardParams& params, Article* art)
+    : LibraryCard(params), article(art) {}
 
-ArticleCard::~ArticleCard() = default;
+ArticleCard::~ArticleCard() {
+    delete article;  // удаляем статью
+}
 
-std::string ArticleCard::getAuthor() const { return article->getAuthor(); }
-
-Article *ArticleCard::getArticle() const { return article; }
-
-LibraryCard *ArticleCard::getPublication() const { return publication; }
+Article* ArticleCard::getArticle() const { 
+    return article; 
+}

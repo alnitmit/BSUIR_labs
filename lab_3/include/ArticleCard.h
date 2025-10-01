@@ -2,16 +2,18 @@
 #include "../include/Article.h"
 #include "../include/LibraryCard.h"
 
-class ArticleCard {
+class ArticleCard : public LibraryCard {  // ← ДОБАВЛЕНО НАСЛЕДОВАНИЕ
 private:
-  Article *article;
-  LibraryCard *publication;
+    Article* article;
+    // publication удален, так как теперь ArticleCard сам является LibraryCard
 
 public:
-  ArticleCard(Article *art, LibraryCard *pub);
-  ~ArticleCard();
+    // Конструктор теперь принимает параметры для LibraryCard
+    ArticleCard(const LibraryCardParams& params, Article* art);
+    ~ArticleCard();
 
-  std::string getAuthor() const;
-  Article *getArticle() const;
-  LibraryCard *getPublication() const;
+    // Методы из LibraryCard уже унаследованы
+    Article* getArticle() const;
+    
+    // getPublication() больше не нужен, так как ArticleCard теперь сам является карточкой
 };

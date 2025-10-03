@@ -1,0 +1,17 @@
+#ifndef RECTANGLE_H
+#define RECTANGLE_H
+
+#include "Shape.h"
+
+class RectangleShape : public TwoDShape {
+private:
+    double width, height;
+    
+public:
+    RectangleShape(double w, double h);
+    void print() const override;
+    double area() const override;
+    void draw() const override;
+};
+
+#endif

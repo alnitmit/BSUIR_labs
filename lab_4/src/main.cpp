@@ -186,9 +186,9 @@ void deleteAllShapes(Shape**& shapes, int& count, int& capacity) {
     }
     delete[] shapes;
     
-    shapes = nullptr;
+    capacity = 5;
+    shapes = new Shape*[capacity];
     count = 0;
-    capacity = 0;
     cout << "All shapes deleted!" << endl;
 }
 
@@ -241,8 +241,10 @@ int main() {
                 deleteAllShapes(shapes, shapeCount, capacity);
                 break;
             case 0:
-                cout << "Exiting program..." << endl;
-                deleteAllShapes(shapes, shapeCount, capacity);
+                for (int i = 0; i < shapeCount; ++i) {
+                    delete shapes[i];
+                }
+                delete[] shapes;
                 return 0;
             default:
                 cout << "Invalid choice! Please try again." << endl;

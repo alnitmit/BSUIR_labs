@@ -186,9 +186,9 @@ void deleteAllShapes(Shape**& shapes, int& count, int& capacity) {
     }
     delete[] shapes;
     
-    capacity = 5;
-    shapes = new Shape*[capacity];
+    shapes = nullptr;
     count = 0;
+    capacity = 0;
     cout << "All shapes deleted!" << endl;
 }
 

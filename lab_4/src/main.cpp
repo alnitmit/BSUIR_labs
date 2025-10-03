@@ -48,7 +48,7 @@ void displayMenu() {
 
 void resizeShapeArray(Shape**& shapes, int& capacity, int count) {
     int newCapacity = capacity * 2;
-    Shape** newShapes = new Shape*[newCapacity];
+    auto newShapes = new Shape*[newCapacity];
     
     for (int i = 0; i < count; ++i) {
         newShapes[i] = shapes[i];
@@ -193,7 +193,7 @@ void deleteAllShapes(Shape**& shapes, int& count, int& capacity) {
 }
 
 int main() {
-    Shape** shapes = new Shape*[5];
+    auto shapes = new Shape*[5];
     int shapeCount = 0;
     int capacity = 5;
     int choice;

@@ -1,10 +1,12 @@
+cmake_minimum_required(VERSION 3.10)
+project(GeometricShapes)
 
-cmake_minimum_required(VERSION 3.10.0)
-project(lab_4 VERSION 0.1.0 LANGUAGES C CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(include)
 
-set(SOURCES 
+set(SOURCES
     src/main.cpp
     src/Circle.cpp
     src/Rectangle.cpp
@@ -14,14 +16,8 @@ set(SOURCES
     src/Cylinder.cpp
 )
 
-set(HEADERS
-    include/Shape.h
-    include/Circle.h
-    include/Rectangle.h
-    include/Triangle.h
-    include/Sphere.h
-    include/Cube.h
-    include/Cylinder.h
-)
+add_executable(GeometricShapes ${SOURCES})
 
-add_executable(lab4 ${SOURCES} ${HEADERS})
+if(WIN32)
+    target_compile_definitions(GeometricShapes PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()

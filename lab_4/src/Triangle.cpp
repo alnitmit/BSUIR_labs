@@ -1,4 +1,4 @@
-#include "..\include\Triangle.h"
+#include "../include/Triangle.h"
 
 Triangle::Triangle(double b, double h) : base(b), height(h) {}
 

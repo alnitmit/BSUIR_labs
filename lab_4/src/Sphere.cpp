@@ -1,4 +1,4 @@
-#include "..\include\Sphere.h"
+#include "../include/Sphere.h"
 
 Sphere::Sphere(double r) : radius(r) {}
 

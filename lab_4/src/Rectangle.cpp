@@ -1,4 +1,4 @@
-#include "..\include\Rectangle.h"
+#include "../include/Rectangle.h"
 #include <iostream>
 
 RectangleShape::RectangleShape(double w, double h) : width(w), height(h) {}

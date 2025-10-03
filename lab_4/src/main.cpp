@@ -1,10 +1,10 @@
-#include "..\include\Shape.h"
-#include "..\include\Circle.h"
-#include "..\include\Rectangle.h"
-#include "..\include\Triangle.h"
-#include "..\include\Sphere.h"
-#include "..\include\Cube.h"
-#include "..\include\Cylinder.h"
+#include "../include/Shape.h"
+#include "../include/Circle.h"
+#include "../include/Rectangle.h"
+#include "../include/Triangle.h"
+#include "../include/Sphere.h"
+#include "../include/Cube.h"
+#include "../include/Cylinder.h"
 #include <iostream>
 #include <limits>
 

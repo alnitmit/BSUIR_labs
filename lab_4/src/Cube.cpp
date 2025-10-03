@@ -1,4 +1,4 @@
-#include "..\include\Cube.h"
+#include "../include/Cube.h"
 
 Cube::Cube(double s) : side(s) {}
 

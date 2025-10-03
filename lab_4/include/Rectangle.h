@@ -5,8 +5,9 @@
 
 class RectangleShape : public TwoDShape {
 private:
-    double width, height;
-    
+    double width;
+    double height;
+
 public:
     RectangleShape(double w, double h);
     void print() const override;

@@ -5,7 +5,8 @@
 
 class Triangle : public TwoDShape {
 private:
-    double base, height;
+    double base;
+    double height;
     
 public:
     Triangle(double b, double h);

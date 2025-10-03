@@ -5,7 +5,8 @@
 
 class Cylinder : public ThreeDShape {
 private:
-    double radius, height;
+    double radius;
+    double height;
     
 public:
     Cylinder(double r, double h);

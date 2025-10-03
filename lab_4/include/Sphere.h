@@ -8,7 +8,7 @@ private:
     double radius;
     
 public:
-    Sphere(double r);
+    explicit Sphere(double r);
     void print() const override;
     double area() const override;
     double volume() const override;

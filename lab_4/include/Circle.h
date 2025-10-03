@@ -8,7 +8,7 @@ private:
   double radius;
 
 public:
-  Circle(double r);
+  explicit Circle(double r);
   void print() const override;
   double area() const override;
   void draw() const override;

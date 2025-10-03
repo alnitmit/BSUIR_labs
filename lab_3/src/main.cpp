@@ -62,7 +62,7 @@ void createBookCard(ThematicCatalog &thematicCatalog,
   PublishingDetails pubDetails = inputPublishingDetails();
 
   auto book = new BookCard(author, title, authorMark, inventoryNumber,
-                                catalogCode, pubDetails);
+                           catalogCode, pubDetails);
 
   thematicCatalog.addCard(book);
   alphabeticalCatalog.addCard(book);
@@ -87,20 +87,6 @@ void createCollectionCard(ThematicCatalog &thematicCatalog,
 
   auto collection = new CollectionOfArticlesCard(
       author, title, authorMark, inventoryNumber, catalogCode, pubDetails);
-
-  cout << "\n\tADD ARTICLES TO COLLECTION" << endl;
-  char addMore;
-  do {
-    string articleAuthor = inputString("Enter article author: ");
-    string articleTitle = inputString("Enter article title: ");
-
-    collection->addArticle(articleTitle, articleAuthor);
-    cout << "Article added to collection!" << endl;
-
-    cout << "Add another article? (y/n): ";
-    cin >> addMore;
-    cin.ignore();
-  } while (addMore == 'y' || addMore == 'Y');
 
   thematicCatalog.addCard(collection);
   alphabeticalCatalog.addCard(collection);

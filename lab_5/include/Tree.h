@@ -79,6 +79,7 @@ private:
   }
 
 public:
+  public:
   Tree() = default;
 
   Tree(const Tree& other) : root(clone(other.root)) {}
@@ -88,16 +89,12 @@ public:
     return *this;
   }
 
-  Tree(Tree&& other) noexcept : root(nullptr) {
+  Tree(Tree&& other) noexcept {
     swap(*this, other);
   }
 
   Tree& operator=(Tree&& other) noexcept {
-    if (this != &other) {
-      clear(root);
-      root = other.root;
-      other.root = nullptr;
-    }
+    swap(*this, other);
     return *this;
   }
 

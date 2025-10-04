@@ -6,7 +6,6 @@
 #include <iostream>
 #include <utility>
 
-
 template <typename T> class Tree {
 private:
   TreeNode<T> *root = nullptr;

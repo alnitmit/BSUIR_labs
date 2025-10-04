@@ -18,8 +18,8 @@ private:
     int capacity = 0;
 
     TokenList();
-    TokenList(const TokenList& other);
-    TokenList& operator=(const TokenList& other);
+    TokenList(const TokenList &other);
+    TokenList &operator=(const TokenList &other);
     ~TokenList();
     void addToken(const std::string &token);
   };
@@ -28,12 +28,14 @@ private:
   int getPriority(const std::string &op) const;
   double evaluate(TreeNode<std::string> *node) const;
   void infixToPostfix(const TokenList &infix, TokenList &postfix) const;
-  double parseNumber(const std::string& numStr) const;
-  double processIntegerPart(const char* str, int& index, bool& hasFraction) const;
-  double processFractionalPart(const char* str, int& index, double& divisor) const;
-  double evaluateOperator(TreeNode<std::string>* node) const;
+  double parseNumber(const std::string &numStr) const;
+  double processIntegerPart(const char *str, int &index,
+                            bool &hasFraction) const;
+  double processFractionalPart(const char *str, int &index,
+                               double &divisor) const;
+  double evaluateOperator(TreeNode<std::string> *node) const;
   double handleDivision(double left, double right) const;
-  bool buildTreeFromPostfix(const TokenList& postfix);
+  bool buildTreeFromPostfix(const TokenList &postfix);
 
 public:
   bool buildFromExpression(const std::string &expression);

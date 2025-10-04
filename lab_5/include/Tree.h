@@ -2,9 +2,10 @@
 #define TREE_H
 
 #include "TreeNode.h"
+#include <functional>
 #include <iostream>
 #include <utility>
-#include <functional>
+
 
 template <typename T> class Tree {
 private:
@@ -18,16 +19,17 @@ private:
     }
   }
 
-  TreeNode<T>* clone(TreeNode<T>* node) const {
-    if (!node) return nullptr;
+  TreeNode<T> *clone(TreeNode<T> *node) const {
+    if (!node)
+      return nullptr;
     auto newNode = new TreeNode<T>(node->data);
     newNode->left = clone(node->left);
     newNode->right = clone(node->right);
     return newNode;
   }
 
-  template<typename Callback>
-  void inorder(TreeNode<T> *node, Callback&& callback) const {
+  template <typename Callback>
+  void inorder(TreeNode<T> *node, Callback &&callback) const {
     if (!node)
       return;
     inorder(node->left, std::forward<Callback>(callback));
@@ -79,28 +81,25 @@ private:
   }
 
 public:
-  public:
   Tree() = default;
 
-  Tree(const Tree& other) : root(clone(other.root)) {}
+  Tree(const Tree &other) : root(clone(other.root)) {}
 
-  Tree& operator=(Tree other) {
+  Tree &operator=(Tree other) {
     swap(*this, other);
     return *this;
   }
 
-  Tree(Tree&& other) noexcept {
-    swap(*this, other);
-  }
+  Tree(Tree &&other) noexcept { swap(*this, other); }
 
-  Tree& operator=(Tree&& other) noexcept {
+  Tree &operator=(Tree &&other) noexcept {
     swap(*this, other);
     return *this;
   }
 
   ~Tree() { clear(root); }
 
-  friend void swap(Tree& first, Tree& second) noexcept {
+  friend void swap(Tree &first, Tree &second) noexcept {
     using std::swap;
     swap(first.root, second.root);
   }
@@ -125,8 +124,8 @@ public:
     current->left = new TreeNode<T>(value);
   }
 
-  template<typename Callback>
-  void inorderTraversal(Callback&& callback) const {
+  template <typename Callback>
+  void inorderTraversal(Callback &&callback) const {
     inorder(root, std::forward<Callback>(callback));
   }
 
@@ -134,9 +133,9 @@ public:
 
   TreeNode<T> *getRoot() const { return root; }
 
-  void setRoot(TreeNode<T> *newRoot) { 
+  void setRoot(TreeNode<T> *newRoot) {
     clear(root);
-    root = newRoot; 
+    root = newRoot;
   }
 };
 

@@ -19,8 +19,40 @@ void printInt(const int& value) {
 
 ExpressionTree::TokenList::TokenList() : tokens(nullptr), count(0), capacity(0) {}
 
+ExpressionTree::TokenList::TokenList(const TokenList& other) {
+    count = other.count;
+    capacity = other.capacity;
+    if (capacity > 0) {
+        tokens = new std::string[capacity];
+        for (int i = 0; i < count; i++) {
+            tokens[i] = other.tokens[i];
+        }
+    } else {
+        tokens = nullptr;
+    }
+}
+
+ExpressionTree::TokenList& ExpressionTree::TokenList::operator=(const TokenList& other) {
+    if (this != &other) {
+        delete[] tokens;
+        
+        count = other.count;
+        capacity = other.capacity;
+        if (capacity > 0) {
+            tokens = new std::string[capacity];
+            for (int i = 0; i < count; i++) {
+                tokens[i] = other.tokens[i];
+            }
+        } else {
+            tokens = nullptr;
+        }
+    }
+    return *this;
+}
+
 ExpressionTree::TokenList::~TokenList() {
     delete[] tokens;
+    tokens = nullptr;
 }
 
 void ExpressionTree::TokenList::addToken(const std::string& token) {

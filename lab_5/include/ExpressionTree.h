@@ -18,6 +18,8 @@ private:
     int capacity;
 
     TokenList();
+    TokenList(const TokenList& other);
+    TokenList& operator=(const TokenList& other);
     ~TokenList();
     void addToken(const std::string &token);
   };

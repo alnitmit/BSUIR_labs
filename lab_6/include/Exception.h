@@ -5,11 +5,11 @@
 #include <iostream>
 
 class Exception {
-protected:
+private:
     std::string message;
     
 public:
-    Exception(const std::string& msg = "General exception") : message(msg) {}
+    explicit Exception(const std::string& msg = "General exception") : message(msg) {}
     virtual ~Exception() = default;
     
     virtual const std::string& what() const { return message; }
@@ -18,81 +18,81 @@ public:
 
 class MemoryException : public Exception {
 public:
-    MemoryException(const std::string& msg = "Memory exception") 
+    explicit MemoryException(const std::string& msg = "Memory exception") 
         : Exception(msg) {}
     
     void print() const override { 
-        std::cout << "MemoryException: " << message << std::endl; 
+        std::cout << "MemoryException: " << what() << std::endl; 
     }
 };
 
 class MemoryAllocationException : public MemoryException {
 public:
-    MemoryAllocationException(const std::string& msg = "Memory allocation failed") 
+    explicit MemoryAllocationException(const std::string& msg = "Memory allocation failed") 
         : MemoryException(msg) {}
     
     void print() const override { 
-        std::cout << "MemoryAllocationException: " << message << std::endl; 
+        std::cout << "MemoryAllocationException: " << what() << std::endl; 
     }
 };
 
 class RangeException : public Exception {
 public:
-    RangeException(const std::string& msg = "Range exception") 
+    explicit RangeException(const std::string& msg = "Range exception") 
         : Exception(msg) {}
     
     void print() const override { 
-        std::cout << "RangeException: " << message << std::endl; 
+        std::cout << "RangeException: " << what() << std::endl; 
     }
 };
 
 class IndexOutOfBoundsException : public RangeException {
 public:
-    IndexOutOfBoundsException(const std::string& msg = "Index out of bounds") 
+    explicit IndexOutOfBoundsException(const std::string& msg = "Index out of bounds") 
         : RangeException(msg) {}
     
     void print() const override { 
-        std::cout << "IndexOutOfBoundsException: " << message << std::endl; 
+        std::cout << "IndexOutOfBoundsException: " << what() << std::endl; 
     }
 };
 
 class ArgumentException : public Exception {
 public:
-    ArgumentException(const std::string& msg = "Argument exception") 
+    explicit ArgumentException(const std::string& msg = "Argument exception") 
         : Exception(msg) {}
     
     void print() const override { 
-        std::cout << "ArgumentException: " << message << std::endl; 
+        std::cout << "ArgumentException: " << what() << std::endl; 
     }
 };
 
 class InvalidArgumentException : public ArgumentException {
 public:
-    InvalidArgumentException(const std::string& msg = "Invalid argument") 
+    explicit InvalidArgumentException(const std::string& msg = "Invalid argument") 
         : ArgumentException(msg) {}
     
     void print() const override { 
-        std::cout << "InvalidArgumentException: " << message << std::endl; 
+        std::cout << "InvalidArgumentException: " << what() << std::endl; 
     }
 };
 
 class OverflowException : public Exception {
 public:
-    OverflowException(const std::string& msg = "Overflow occurred") 
+    explicit OverflowException(const std::string& msg = "Overflow occurred") 
         : Exception(msg) {}
     
     void print() const override { 
-        std::cout << "OverflowException: " << message << std::endl; 
+        std::cout << "OverflowException: " << what() << std::endl; 
     }
 };
 
 class UnderflowException : public Exception {
 public:
-    UnderflowException(const std::string& msg = "Underflow occurred") 
+    explicit UnderflowException(const std::string& msg = "Underflow occurred") 
         : Exception(msg) {}
     
     void print() const override { 
-        std::cout << "UnderflowException: " << message << std::endl; 
+        std::cout << "UnderflowException: " << what() << std::endl; 
     }
 };
 

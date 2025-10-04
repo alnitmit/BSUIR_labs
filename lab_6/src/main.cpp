@@ -70,6 +70,103 @@ void demonstrateExceptionOrder() {
     }
 }
 
+void handleInputOperation(String& currentString) {
+    input(currentString);
+    std::cout << "String input successful!" << std::endl;
+}
+
+void handleDisplayOperation(const String& string, const std::string& label) {
+    std::cout << label << ": ";
+    print(string);
+}
+
+void handleCopyOperation(String& dest, const String& src) {
+    dest = src;
+    std::cout << "String copied successfully!" << std::endl;
+}
+
+void handleConcatenateOperation(String& currentString, const String& secondString) {
+    std::cout << "Concatenating strings..." << std::endl;
+    currentString += secondString;
+    std::cout << "Result: ";
+    print(currentString);
+}
+
+void handleCompareOperation(const String& currentString, const String& secondString) {
+    std::cout << "Comparing strings: ";
+    if (currentString == secondString) {
+        std::cout << "Strings are equal.\n";
+    } else {
+        std::cout << "Strings are not equal.\n";
+    }
+}
+
+void handleAccessCharacterOperation(const String& currentString) {
+    std::cout << "Enter index to access: ";
+    if (int index; std::cin >> index) {
+        char ch = currentString[index];
+        std::cout << "Character at index " << index << ": '" << ch << "'\n";
+    }
+    clearInputBuffer();
+}
+
+void handleAccessCharacterSafe(const String& currentString) {
+    try {
+        handleAccessCharacterOperation(currentString);
+    } catch (const IndexOutOfBoundsException& e) {
+        std::cout << "Error: " << e.what() << std::endl;
+    }
+}
+
+void processMenuChoice(int choice, String& currentString, String& secondString) {
+    switch (choice) {
+    case 1: {
+        handleInputOperation(currentString);
+        break;
+    }
+    case 2: {
+        handleDisplayOperation(currentString, "First string");
+        break;
+    }
+    case 3: {
+        handleDisplayOperation(secondString, "Second string");
+        break;
+    }
+    case 4: {
+        handleCopyOperation(secondString, currentString);
+        break;
+    }
+    case 5: {
+        handleConcatenateOperation(currentString, secondString);
+        break;
+    }
+    case 6: {
+        handleCompareOperation(currentString, secondString);
+        break;
+    }
+    case 7: {
+        handleAccessCharacterSafe(currentString);
+        break;
+    }
+    case 8: {
+        demonstrateExceptionHierarchy();
+        break;
+    }
+    case 9: {
+        demonstrateExceptionOrder();
+        break;
+    }
+    case 0: {
+        std::cout << "Exiting program.\n";
+        return;
+    }
+    default: {
+        std::cout << "Invalid choice. Try again!\n";
+        break;
+    }
+    }
+}
+
 void runStringDemoProgram() {
     String currentString;
     String secondString;
@@ -86,74 +183,8 @@ void runStringDemoProgram() {
         clearInputBuffer();
 
         try {
-            switch (choice) {
-            case 1: {
-                input(currentString);
-                std::cout << "String input successful!" << std::endl;
-                break;
-            }
-            case 2: {
-                std::cout << "First string: ";
-                print(currentString);
-                break;
-            }
-            case 3: {
-                std::cout << "Second string: ";
-                print(secondString);
-                break;
-            }
-            case 4: {
-                secondString = currentString;
-                std::cout << "String copied successfully!" << std::endl;
-                break;
-            }
-            case 5: {
-                std::cout << "Concatenating strings..." << std::endl;
-                currentString += secondString;
-                std::cout << "Result: ";
-                print(currentString);
-                break;
-            }
-            case 6: {
-                std::cout << "Comparing strings: ";
-                if (currentString == secondString) {
-                    std::cout << "Strings are equal.\n";
-                } else {
-                    std::cout << "Strings are not equal.\n";
-                }
-                break;
-            }
-            case 7: {
-                std::cout << "Enter index to access: ";
-                int index;
-                if (std::cin >> index) {
-                    try {
-                        char ch = currentString[index];
-                        std::cout << "Character at index " << index << ": '" << ch << "'\n";
-                    } catch (const IndexOutOfBoundsException& e) {
-                        std::cout << "Error: " << e.what() << std::endl;
-                    }
-                }
-                clearInputBuffer();
-                break;
-            }
-            case 8: {
-                demonstrateExceptionHierarchy();
-                break;
-            }
-            case 9: {
-                demonstrateExceptionOrder();
-                break;
-            }
-            case 0: {
-                std::cout << "Exiting program.\n";
-                return;
-            }
-            default: {
-                std::cout << "Invalid choice. Try again!\n";
-                break;
-            }
-            }
+            processMenuChoice(choice, currentString, secondString);
+            if (choice == 0) return;
         } catch (const MemoryAllocationException& e) {
             std::cout << "Memory Allocation Error: " << e.what() << std::endl;
         } catch (const OverflowException& e) {

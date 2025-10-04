@@ -16,13 +16,13 @@ private:
 
 public:
     String();
-    String(const char* str);
+    explicit String(const char* str);
     String(const String &other);
     ~String();
 
     String &operator=(const String &other);
     String &operator+=(const String &other);
-    bool operator==(const String &other) const;
+    friend bool operator==(const String &lhs, const String &rhs);
     char& operator[](int index);
     const char& operator[](int index) const;
     
@@ -32,5 +32,7 @@ public:
     friend void print(const String &);
     friend void input(String &);
 };
+
+bool operator==(const String &lhs, const String &rhs);
 
 #endif

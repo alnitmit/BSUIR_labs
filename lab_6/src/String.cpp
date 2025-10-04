@@ -36,7 +36,7 @@ String::String(const char* str) : data(nullptr) {
     if (!str) {
         throw InvalidArgumentException("Null pointer passed to constructor");
     }
-    copyFrom(str, strlen(str));
+    copyFrom(str, static_cast<int>(strlen(str)));
 }
 
 String::String(const String &other) : data(nullptr) {
@@ -99,13 +99,13 @@ String &String::operator+=(const String &other) {
     return *this;
 }
 
-bool String::operator==(const String &other) const {
-    if (this == &other)
+bool operator==(const String &lhs, const String &rhs) {
+    if (&lhs == &rhs)
         return true;
-    if (length != other.length)
+    if (lhs.length != rhs.length)
         return false;
-    for (int i = 0; i < length; i++) {
-        if (data[i] != other.data[i])
+    for (int i = 0; i < lhs.length; i++) {
+        if (lhs.data[i] != rhs.data[i])
             return false;
     }
     return true;

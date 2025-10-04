@@ -4,10 +4,11 @@
 #include "TreeNode.h"
 #include <iostream>
 #include <utility>
+#include <functional>
 
 template <typename T> class Tree {
 private:
-  TreeNode<T> *root;
+  TreeNode<T> *root = nullptr;
 
   void clear(TreeNode<T> *node) {
     if (node) {
@@ -19,18 +20,19 @@ private:
 
   TreeNode<T>* clone(TreeNode<T>* node) const {
     if (!node) return nullptr;
-    TreeNode<T>* newNode = new TreeNode<T>(node->data);
+    auto newNode = new TreeNode<T>(node->data);
     newNode->left = clone(node->left);
     newNode->right = clone(node->right);
     return newNode;
   }
 
-  void inorder(TreeNode<T> *node, void (*callback)(const T &)) const {
+  template<typename Callback>
+  void inorder(TreeNode<T> *node, Callback&& callback) const {
     if (!node)
       return;
-    inorder(node->left, callback);
+    inorder(node->left, std::forward<Callback>(callback));
     callback(node->data);
-    inorder(node->right, callback);
+    inorder(node->right, std::forward<Callback>(callback));
   }
 
   TreeNode<T> *find(TreeNode<T> *node, const T &value) const {
@@ -77,7 +79,7 @@ private:
   }
 
 public:
-  Tree() : root(nullptr) {}
+  Tree() = default;
 
   Tree(const Tree& other) : root(clone(other.root)) {}
 
@@ -126,8 +128,9 @@ public:
     current->left = new TreeNode<T>(value);
   }
 
-  void inorderTraversal(void (*callback)(const T &)) const {
-    inorder(root, callback);
+  template<typename Callback>
+  void inorderTraversal(Callback&& callback) const {
+    inorder(root, std::forward<Callback>(callback));
   }
 
   bool contains(const T &value) const { return find(root, value) != nullptr; }

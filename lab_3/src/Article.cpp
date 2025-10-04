@@ -17,4 +17,4 @@ void Article::setTitle(std::string_view t) {
 
 void Article::setAuthor(std::string_view a) { 
     author = a; 
-}
+}       

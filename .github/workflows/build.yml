@@ -43,3 +43,26 @@ jobs:
             -Dsonar.cfamily.compile-commands=lab_4/build_wrapper/compile_commands.json
             -Dsonar.coverage.exclusions=**
             -Dsonar.cfamily.skipCoverage=true
+
+
+
+
+      - name: Build lab_5
+        run: |
+          rm -rf lab_5/build
+          mkdir lab_5/build
+          cmake -S lab_5 -B lab_5/build 
+          build-wrapper-linux-x86-64 --out-dir lab_5/build_wrapper cmake --build lab_5/build --config Release
+
+      - name: SonarCloud scan lab_5
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN1 }}
+        with:
+          args: >
+            -Dsonar.projectKey=lab_5
+            -Dsonar.organization=${{ env.SONAR_ORG }}
+            -Dsonar.sources=lab_5
+            -Dsonar.cfamily.compile-commands=lab_5/build_wrapper/compile_commands.json
+            -Dsonar.coverage.exclusions=**
+            -Dsonar.cfamily.skipCoverage=true

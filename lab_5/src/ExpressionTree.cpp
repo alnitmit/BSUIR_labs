@@ -18,18 +18,16 @@ void printInt(const int& value) {
     std::cout << value << " ";
 }
 
-ExpressionTree::TokenList::TokenList() : tokens(nullptr), count(0), capacity(0) {}
+ExpressionTree::TokenList::TokenList() = default;
 
 ExpressionTree::TokenList::TokenList(const TokenList& other) 
-    : capacity(other.capacity), count(other.count) {
+    : tokens(nullptr), count(other.count), capacity(other.capacity) {
     if (capacity > 0) {
         auto newTokens = new std::string[capacity];
         for (int i = 0; i < count; i++) {
             newTokens[i] = other.tokens[i];
         }
         tokens = newTokens;
-    } else {
-        tokens = nullptr;
     }
 }
 
@@ -311,6 +309,12 @@ bool ExpressionTree::buildTreeFromPostfix(const TokenList& postfix) {
         return node;
     };
 
+    auto cleanup = [&]() {
+        while (stackTop) {
+            clearTree(pop());
+        }
+    };
+
     for (int i = 0; i < postfix.count; i++) {
         const std::string& token = postfix.tokens[i];
         auto node = new TreeNode<std::string>(token);
@@ -322,9 +326,7 @@ bool ExpressionTree::buildTreeFromPostfix(const TokenList& postfix) {
             if (!node->left || !node->right) {
                 std::cout << "Error: Not enough operands for operator: " << token << std::endl;
                 clearTree(node);
-                while (stackTop) {
-                    clearTree(pop());
-                }
+                cleanup();
                 return false;
             }
         }
@@ -336,9 +338,7 @@ bool ExpressionTree::buildTreeFromPostfix(const TokenList& postfix) {
     if (stackTop != nullptr) {
         std::cout << "Error: Too many operands in expression!" << std::endl;
         clearTree(root);
-        while (stackTop) {
-            clearTree(pop());
-        }
+        cleanup();
         return false;
     }
     

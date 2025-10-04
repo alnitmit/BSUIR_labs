@@ -13,9 +13,9 @@ private:
   Tree<std::string> tree;
 
   struct TokenList {
-    std::string *tokens;
-    int count;
-    int capacity;
+    std::string *tokens = nullptr;
+    int count = 0;
+    int capacity = 0;
 
     TokenList();
     TokenList(const TokenList& other);
@@ -34,9 +34,6 @@ private:
   double evaluateOperator(TreeNode<std::string>* node) const;
   double handleDivision(double left, double right) const;
   bool buildTreeFromPostfix(const TokenList& postfix);
-  bool processTokenAsOperator(const std::string& token, TreeNode<std::string>* node, TreeNode<std::string>*(*pop)());
-  void cleanupStack(struct StackNode* stackTop, TreeNode<std::string>*(*pop)());
-  bool finalizeTree(struct StackNode* stackTop, TreeNode<std::string>*(*pop)());
 
 public:
   bool buildFromExpression(const std::string &expression);

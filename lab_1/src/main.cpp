@@ -113,7 +113,7 @@ void getValidMatrix(int &rows1, int &cols1, int &rows2, int &cols2) {
     }
   }
 }
-
+                    
 int main() {
   int rows1;
   int cols1;

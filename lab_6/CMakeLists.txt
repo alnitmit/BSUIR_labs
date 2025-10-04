@@ -11,8 +11,8 @@ endif()
 find_package(PkgConfig)
 
 add_executable(StringDemo
-    main.cpp
-    String.cpp
+    src/main.cpp
+    src/String.cpp
 )
 
 target_include_directories(StringDemo PRIVATE

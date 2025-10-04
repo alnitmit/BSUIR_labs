@@ -4,7 +4,7 @@
 void clearInputBuffer() {
   std::cin.clear();
   std::cin.ignore(10000, '\n');
-}
+}       
 
 void displayMenu() {
   std::cout << "\n   STRING CLASS DEMONSTRATION    \n";

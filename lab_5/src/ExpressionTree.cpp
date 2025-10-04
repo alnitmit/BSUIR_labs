@@ -1,6 +1,7 @@
 #include "../include/ExpressionTree.h"
 #include <iostream>
 #include <cctype>
+#include <functional>
 
 void clearTree(TreeNode<std::string>* node) {
     if (!node) return;
@@ -19,14 +20,14 @@ void printInt(const int& value) {
 
 ExpressionTree::TokenList::TokenList() : tokens(nullptr), count(0), capacity(0) {}
 
-ExpressionTree::TokenList::TokenList(const TokenList& other) {
-    count = other.count;
-    capacity = other.capacity;
+ExpressionTree::TokenList::TokenList(const TokenList& other) 
+    : capacity(other.capacity), count(other.count) {
     if (capacity > 0) {
-        tokens = new std::string[capacity];
+        auto newTokens = new std::string[capacity];
         for (int i = 0; i < count; i++) {
-            tokens[i] = other.tokens[i];
+            newTokens[i] = other.tokens[i];
         }
+        tokens = newTokens;
     } else {
         tokens = nullptr;
     }
@@ -35,7 +36,6 @@ ExpressionTree::TokenList::TokenList(const TokenList& other) {
 ExpressionTree::TokenList& ExpressionTree::TokenList::operator=(const TokenList& other) {
     if (this != &other) {
         delete[] tokens;
-        
         count = other.count;
         capacity = other.capacity;
         if (capacity > 0) {
@@ -58,7 +58,7 @@ ExpressionTree::TokenList::~TokenList() {
 void ExpressionTree::TokenList::addToken(const std::string& token) {
     if (count >= capacity) {
         int newCapacity = capacity == 0 ? 10 : capacity * 2;
-        std::string* newTokens = new std::string[newCapacity];
+        auto newTokens = new std::string[newCapacity];
         for (int i = 0; i < count; i++) {
             newTokens[i] = tokens[i];
         }
@@ -81,43 +81,70 @@ int ExpressionTree::getPriority(const std::string& op) const {
 
 double ExpressionTree::evaluate(TreeNode<std::string>* node) const {
     if (!node) return 0.0;
-    
     if (!isOperator(node->data)) {
-        const std::string& numStr = node->data;
-        double result = 0.0;
-        double fraction = 0.0;
-        bool negative = false;
-        bool hasFraction = false;
-        double divisor = 1.0;
-        
-        const char* str = numStr.c_str();
-        int i = 0;
+        return parseNumber(node->data);
+    }
+    return evaluateOperator(node);
+}
 
-        if (str[0] == '-') {
-            negative = true;
-            i++;
-        }
+double ExpressionTree::parseNumber(const std::string& numStr) const {
+    double result = 0.0;
+    double fraction = 0.0;
+    bool negative = false;
+    bool hasFraction = false;
+    double divisor = 1.0;
+    
+    const char* str = numStr.c_str();
+    int i = 0;
 
-        for (; str[i] != '\0'; i++) {
-            if (str[i] == '.') {
-                hasFraction = true;
-                continue;
-            }
-            
-            if (std::isdigit(str[i])) {
-                if (!hasFraction) {
-                    result = result * 10 + (str[i] - '0');
-                } else {
-                    fraction = fraction * 10 + (str[i] - '0');
-                    divisor *= 10;
-                }
-            }
-        }
-        
-        result += fraction / divisor;
-        return negative ? -result : result;
+    if (str[0] == '-') {
+        negative = true;
+        i++;
     }
 
+    result = processIntegerPart(str, i, hasFraction);
+    
+    if (hasFraction) {
+        fraction = processFractionalPart(str, i, divisor);
+    }
+    
+    result += fraction / divisor;
+    return negative ? -result : result;
+}
+
+double ExpressionTree::processIntegerPart(const char* str, int& index, bool& hasFraction) const {
+    double result = 0.0;
+    
+    while (str[index] != '\0' && str[index] != '.') {
+        if (std::isdigit(str[index])) {
+            result = result * 10 + (str[index] - '0');
+        }
+        index++;
+    }
+    
+    if (str[index] == '.') {
+        hasFraction = true;
+        index++;
+    }
+    
+    return result;
+}
+
+double ExpressionTree::processFractionalPart(const char* str, int& index, double& divisor) const {
+    double fraction = 0.0;
+    
+    while (str[index] != '\0') {
+        if (std::isdigit(str[index])) {
+            fraction = fraction * 10 + (str[index] - '0');
+            divisor *= 10;
+        }
+        index++;
+    }
+    
+    return fraction;
+}
+
+double ExpressionTree::evaluateOperator(TreeNode<std::string>* node) const {
     double left = evaluate(node->left);
     double right = evaluate(node->right);
 
@@ -125,28 +152,50 @@ double ExpressionTree::evaluate(TreeNode<std::string>* node) const {
     if (node->data == "-") return left - right;
     if (node->data == "*") return left * right;
     if (node->data == "/") {
-        if (right == 0) {
-            std::cout << "Error: Division by zero!" << std::endl;
-            return 0.0;
-        }
-        return left / right;
+        return handleDivision(left, right);
     }
     
     std::cout << "Error: Unknown operator: " << node->data << std::endl;
     return 0.0;
 }
 
+double ExpressionTree::handleDivision(double left, double right) const {
+    if (right == 0) {
+        std::cout << "Error: Division by zero!" << std::endl;
+        return 0.0;
+    }
+    return left / right;
+}
+
 class SimpleStack {
 private:
     struct Node {
         std::string data;
-        Node* next;
-        Node(const std::string& value) : data(value), next(nullptr) {}
+        Node* next = nullptr;
+        explicit Node(const std::string& value) : data(value) {}
     };
-    Node* topNode;
+    
+    Node* topNode = nullptr;
+    SimpleStack(const SimpleStack&) = delete;
+    SimpleStack& operator=(const SimpleStack&) = delete;
 
 public:
-    SimpleStack() : topNode(nullptr) {}
+    SimpleStack() = default;
+    
+    SimpleStack(SimpleStack&& other) noexcept : topNode(other.topNode) {
+        other.topNode = nullptr;
+    }
+    
+    SimpleStack& operator=(SimpleStack&& other) noexcept {
+        if (this != &other) {
+            while (!empty()) {
+                pop();
+            }
+            topNode = other.topNode;
+            other.topNode = nullptr;
+        }
+        return *this;
+    }
     
     ~SimpleStack() {
         while (!empty()) {
@@ -155,7 +204,7 @@ public:
     }
     
     void push(const std::string& value) {
-        Node* newNode = new Node(value);
+        auto newNode = new Node(value);
         newNode->next = topNode;
         topNode = newNode;
     }
@@ -235,10 +284,14 @@ bool ExpressionTree::buildFromExpression(const std::string& expression) {
         return false;
     }
 
+    return buildTreeFromPostfix(postfix);
+}
+
+bool ExpressionTree::buildTreeFromPostfix(const TokenList& postfix) {
     struct StackNode {
         TreeNode<std::string>* treeNode;
-        StackNode* next;
-        StackNode(TreeNode<std::string>* node) : treeNode(node), next(nullptr) {}
+        StackNode* next = nullptr;
+        explicit StackNode(TreeNode<std::string>* node) : treeNode(node) {}
     };
     
     StackNode* stackTop = nullptr;

@@ -67,8 +67,6 @@ int main() {
         break;
       }
       expressionBuilt = exprTree.buildFromExpression(expression);
-      if (expressionBuilt) {
-      }
       break;
     }
 

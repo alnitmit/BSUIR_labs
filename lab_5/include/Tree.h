@@ -3,6 +3,7 @@
 
 #include "TreeNode.h"
 #include <iostream>
+#include <utility>
 
 template <typename T> class Tree {
 private:
@@ -14,6 +15,14 @@ private:
       clear(node->right);
       delete node;
     }
+  }
+
+  TreeNode<T>* clone(TreeNode<T>* node) const {
+    if (!node) return nullptr;
+    TreeNode<T>* newNode = new TreeNode<T>(node->data);
+    newNode->left = clone(node->left);
+    newNode->right = clone(node->right);
+    return newNode;
   }
 
   void inorder(TreeNode<T> *node, void (*callback)(const T &)) const {
@@ -70,7 +79,32 @@ private:
 public:
   Tree() : root(nullptr) {}
 
+  Tree(const Tree& other) : root(clone(other.root)) {}
+
+  Tree& operator=(Tree other) {
+    swap(*this, other);
+    return *this;
+  }
+
+  Tree(Tree&& other) noexcept : root(nullptr) {
+    swap(*this, other);
+  }
+
+  Tree& operator=(Tree&& other) noexcept {
+    if (this != &other) {
+      clear(root);
+      root = other.root;
+      other.root = nullptr;
+    }
+    return *this;
+  }
+
   ~Tree() { clear(root); }
+
+  friend void swap(Tree& first, Tree& second) noexcept {
+    using std::swap;
+    swap(first.root, second.root);
+  }
 
   void add(const T &value) {
     if (!root) {
@@ -100,7 +134,10 @@ public:
 
   TreeNode<T> *getRoot() const { return root; }
 
-  void setRoot(TreeNode<T> *newRoot) { root = newRoot; }
+  void setRoot(TreeNode<T> *newRoot) { 
+    clear(root);
+    root = newRoot; 
+  }
 };
 
 #endif

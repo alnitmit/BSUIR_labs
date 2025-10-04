@@ -244,7 +244,7 @@ bool ExpressionTree::buildFromExpression(const std::string& expression) {
     StackNode* stackTop = nullptr;
 
     auto push = [&stackTop](TreeNode<std::string>* node) {
-        StackNode* newNode = new StackNode(node);
+        auto newNode = new StackNode(node);
         newNode->next = stackTop;
         stackTop = newNode;
     };
@@ -260,7 +260,7 @@ bool ExpressionTree::buildFromExpression(const std::string& expression) {
 
     for (int i = 0; i < postfix.count; i++) {
         const std::string& token = postfix.tokens[i];
-        TreeNode<std::string>* node = new TreeNode<std::string>(token);
+        auto node = new TreeNode<std::string>(token);
         
         if (isOperator(token)) {
             node->right = pop();

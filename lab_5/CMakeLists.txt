@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(ExpressionTreeCalculator
-    main.cpp
-    ExpressiomTree.cpp
+    src/main.cpp
+    src/ExpressionTree.cpp
 )
 
 target_include_directories(ExpressionTreeCalculator PRIVATE

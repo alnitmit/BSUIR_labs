@@ -22,7 +22,19 @@ public:
 
     String &operator=(const String &other);
     String &operator+=(const String &other);
-    friend bool operator==(const String &lhs, const String &rhs);
+    
+    friend bool operator==(const String &lhs, const String &rhs) {
+        if (&lhs == &rhs)
+            return true;
+        if (lhs.length != rhs.length)
+            return false;
+        for (int i = 0; i < lhs.length; i++) {
+            if (lhs.data[i] != rhs.data[i])
+                return false;
+        }
+        return true;
+    }
+    
     char& operator[](int index);
     const char& operator[](int index) const;
     
@@ -32,7 +44,5 @@ public:
     friend void print(const String &);
     friend void input(String &);
 };
-
-bool operator==(const String &lhs, const String &rhs);
 
 #endif

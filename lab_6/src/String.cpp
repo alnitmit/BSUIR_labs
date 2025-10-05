@@ -36,7 +36,13 @@ String::String(const char* str) : data(nullptr) {
     if (!str) {
         throw InvalidArgumentException("Null pointer passed to constructor");
     }
-    copyFrom(str, static_cast<int>(strlen(str)));
+    
+    size_t str_len = strlen(str);
+    if (str_len > static_cast<size_t>(std::numeric_limits<int>::max())) {
+        throw OverflowException("String length exceeds maximum integer value");
+    }
+    
+    copyFrom(str, static_cast<int>(str_len));
 }
 
 String::String(const String &other) : data(nullptr) {
@@ -97,18 +103,6 @@ String &String::operator+=(const String &other) {
         length = newLength;
     }
     return *this;
-}
-
-bool operator==(const String &lhs, const String &rhs) {
-    if (&lhs == &rhs)
-        return true;
-    if (lhs.length != rhs.length)
-        return false;
-    for (int i = 0; i < lhs.length; i++) {
-        if (lhs.data[i] != rhs.data[i])
-            return false;
-    }
-    return true;
 }
 
 char& String::operator[](int index) {

@@ -1,6 +1,7 @@
 #include "../include/String.h"
 #include <iostream>
 #include <cstring>
+#include <limits>
 
 void String::freeMemory() {
     delete[] data;

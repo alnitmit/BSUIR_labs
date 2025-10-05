@@ -1,6 +1,5 @@
 #include "../include/String.h"
 #include <iostream>
-#include <cstring>
 #include <limits>
 
 void String::freeMemory() {
@@ -38,12 +37,16 @@ String::String(const char* str) : data(nullptr) {
         throw InvalidArgumentException("Null pointer passed to constructor");
     }
     
-    size_t str_len = strlen(str);
-    if (str_len > static_cast<size_t>(std::numeric_limits<int>::max())) {
-        throw OverflowException("String length exceeds maximum integer value");
+    // Ручной подсчет длины строки без использования strlen
+    int str_len = 0;
+    while (str[str_len] != '\0') {
+        if (str_len > MAX_LENGTH) {
+            throw OverflowException("String length exceeds maximum allowed size");
+        }
+        str_len++;
     }
     
-    copyFrom(str, static_cast<int>(str_len));
+    copyFrom(str, str_len);
 }
 
 String::String(const String &other) : data(nullptr) {

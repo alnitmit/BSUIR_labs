@@ -16,58 +16,8 @@ void displayMenu() {
     std::cout << "5. Concatenate strings\n";
     std::cout << "6. Compare strings\n";
     std::cout << "7. Access character by index\n";
-    std::cout << "8. Demonstrate exception hierarchy\n";
-    std::cout << "9. Demonstrate exception order importance\n";
     std::cout << "0. Exit\n";
     std::cout << "Choose an option: ";
-}
-
-void demonstrateExceptionHierarchy() {
-    std::cout << "\n=== Demonstrating Exception Hierarchy ===\n";
-    
-    try {
-        throw MemoryAllocationException("Custom memory allocation error");
-    } catch (const MemoryAllocationException& e) {
-        std::cout << "Caught MemoryAllocationException: " << e.what() << std::endl;
-    } catch (const MemoryException& e) {
-        std::cout << "Caught MemoryException: " << e.what() << std::endl;
-    } catch (const Exception& e) {
-        std::cout << "Caught Exception: " << e.what() << std::endl;
-    }
-    
-    try {
-        throw IndexOutOfBoundsException("Custom index error");
-    } catch (const RangeException& e) {
-        std::cout << "Caught RangeException: " << e.what() << std::endl;
-    } catch (const Exception& e) {
-        std::cout << "Caught Exception: " << e.what() << std::endl;
-    }
-}
-
-void demonstrateExceptionOrder() {
-    std::cout << "\n=== Demonstrating Exception Order Importance ===\n";
-    
-    std::cout << "Correct order:\n";
-    try {
-        throw IndexOutOfBoundsException("Index 100 out of bounds");
-    } 
-    catch (const IndexOutOfBoundsException& e) {
-        std::cout << "  Caught IndexOutOfBoundsException: " << e.what() << std::endl;
-    }
-    catch (const RangeException& e) {
-        std::cout << "  Caught RangeException: " << e.what() << std::endl;
-    }
-    catch (const Exception& e) {
-        std::cout << "  Caught Exception: " << e.what() << std::endl;
-    }
-    
-    std::cout << "Incorrect order:\n";
-    try {
-        throw IndexOutOfBoundsException("Index 100 out of bounds");
-    } 
-    catch (const Exception& e) {
-        std::cout << "  Caught Exception: " << e.what() << std::endl;
-    }
 }
 
 void handleInputOperation(String& currentString) {
@@ -146,14 +96,6 @@ void processMenuChoice(int choice, String& currentString, String& secondString) 
     }
     case 7: {
         handleAccessCharacterSafe(currentString);
-        break;
-    }
-    case 8: {
-        demonstrateExceptionHierarchy();
-        break;
-    }
-    case 9: {
-        demonstrateExceptionOrder();
         break;
     }
     case 0: {

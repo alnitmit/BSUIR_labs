@@ -86,14 +86,4 @@ public:
     }
 };
 
-class UnderflowException : public Exception {
-public:
-    explicit UnderflowException(const std::string& msg = "Underflow occurred") 
-        : Exception(msg) {}
-    
-    void print() const override { 
-        std::cout << "UnderflowException: " << what() << std::endl; 
-    }
-};
-
 #endif

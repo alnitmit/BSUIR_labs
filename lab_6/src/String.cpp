@@ -36,8 +36,7 @@ String::String(const char* str) : data(nullptr) {
     if (!str) {
         throw InvalidArgumentException("Null pointer passed to constructor");
     }
-    
-    // Ручной подсчет длины строки без использования strlen
+
     int str_len = 0;
     while (str[str_len] != '\0') {
         if (str_len > MAX_LENGTH) {

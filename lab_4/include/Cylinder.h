@@ -2,6 +2,7 @@
 #define CYLINDER_H
 
 #include "ThreeDShape.h"
+#include "../include/constants.h"
 #include <iostream>
 
 class Cylinder : public ThreeDShape {

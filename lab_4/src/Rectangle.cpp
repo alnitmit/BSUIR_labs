@@ -1,5 +1,6 @@
 #include "../include/Rectangle.h"
 #include <iostream>
+#include "../include/constants.h"
 
 RectangleShape::RectangleShape(double w, double h) : width(w), height(h) {}
 

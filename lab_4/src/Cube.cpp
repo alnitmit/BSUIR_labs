@@ -1,4 +1,5 @@
 #include "../include/Cube.h"
+#include "../include/constants.h"
 
 Cube::Cube(double s) : side(s) {}
 

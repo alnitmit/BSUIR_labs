@@ -3,6 +3,7 @@
 
 #include "TwoDShape.h"
 #include <iostream>
+#include "../include/constants.h"
 
 class RectangleShape : public TwoDShape {
 private:

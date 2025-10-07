@@ -1,4 +1,5 @@
 #include "../include/Sphere.h"
+#include "../include/constants.h"
 
 Sphere::Sphere(double r) : radius(r) {}
 
@@ -7,11 +8,11 @@ void Sphere::print() const {
 }
 
 double Sphere::area() const {
-    return 4 * 3.14159 * radius * radius;
+    return 4 * constants::PI * radius * radius;
 }
 
 double Sphere::volume() const {
-    return (4.0 / 3.0) * 3.14159 * radius * radius * radius;
+    return (4.0 / 3.0) * constants::PI * radius * radius * radius;
 }
 
 void Sphere::draw() const {

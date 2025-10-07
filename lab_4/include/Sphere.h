@@ -3,6 +3,7 @@
 
 #include "ThreeDShape.h"
 #include <iostream>
+#include "../include/constants.h"
 
 class Sphere : public ThreeDShape {
 private:

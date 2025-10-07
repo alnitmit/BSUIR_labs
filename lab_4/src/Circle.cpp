@@ -1,4 +1,5 @@
 #include "../include/Circle.h"
+#include "../include/constants.h"
 
 Circle::Circle(double r) : radius(r) {}
 
@@ -7,7 +8,7 @@ void Circle::print() const {
 }
 
 double Circle::area() const {
-    return 3.14159 * radius * radius;
+    return constants::PI * radius * radius;
 }
 
 void Circle::draw() const {

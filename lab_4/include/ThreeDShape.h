@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "Shape.h"
+#include "../include/constants.h"
 
 class ThreeDShape : public Shape {};
 

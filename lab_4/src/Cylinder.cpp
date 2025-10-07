@@ -1,4 +1,5 @@
 #include "../include/Cylinder.h"
+#include "../include/constants.h"
 
 Cylinder::Cylinder(double r, double h) : radius(r), height(h) {}
 
@@ -7,11 +8,11 @@ void Cylinder::print() const {
 }
 
 double Cylinder::area() const {
-    return 2 * 3.14159 * radius * (radius + height);
+    return 2 * constants::PI * radius * (radius + height);
 }
 
 double Cylinder::volume() const {
-    return 3.14159 * radius * radius * height;
+    return constants::PI * radius * radius * height;
 }
 
 void Cylinder::draw() const {

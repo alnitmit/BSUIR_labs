@@ -2,6 +2,7 @@
 #define CUBE_H
 
 #include "ThreeDShape.h"
+#include "../include/constants.h"
 #include <iostream>
 
 class Cube : public ThreeDShape {

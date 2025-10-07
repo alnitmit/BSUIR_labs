@@ -1,7 +1,8 @@
 #ifndef CYLINDER_H
 #define CYLINDER_H
 
-#include "Shape.h"
+#include "ThreeDShape.h"
+#include <iostream>
 
 class Cylinder : public ThreeDShape {
 private:

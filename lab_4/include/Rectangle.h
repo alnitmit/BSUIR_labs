@@ -1,7 +1,8 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-#include "Shape.h"
+#include "TwoDShape.h"
+#include <iostream>
 
 class RectangleShape : public TwoDShape {
 private:

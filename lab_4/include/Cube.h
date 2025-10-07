@@ -1,7 +1,8 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-#include "Shape.h"
+#include "ThreeDShape.h"
+#include <iostream>
 
 class Cube : public ThreeDShape {
 private:

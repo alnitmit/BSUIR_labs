@@ -5,6 +5,8 @@
 #include "../include/Sphere.h"
 #include "../include/Cube.h"
 #include "../include/Cylinder.h"
+#include "../include/TwoDShape.h"
+#include "../include/ThreeDShape.h"
 #include <iostream>
 #include <limits>
 

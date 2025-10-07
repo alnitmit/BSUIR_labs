@@ -1,7 +1,8 @@
 #ifndef CIRCLE_H
 #define CIRCLE_H
 
-#include "Shape.h"
+#include "TwoDShape.h"
+#include <iostream>
 
 class Circle : public TwoDShape {
 private:

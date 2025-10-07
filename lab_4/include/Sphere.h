@@ -1,7 +1,8 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "Shape.h"
+#include "ThreeDShape.h"
+#include <iostream>
 
 class Sphere : public ThreeDShape {
 private:

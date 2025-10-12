@@ -146,7 +146,7 @@ double ExpressionTree::evaluateOperator(TreeNode<std::string> *node) const {
 
 void ExpressionTree::infixToPostfix(const TokenList &infix,
                                     TokenList &postfix) const {
-  std::string *operators = new std::string[infix.count];
+  auto operators = new std::string[infix.count];
   int opTop = -1;
 
   for (int i = 0; i < infix.count; i++) {
@@ -207,8 +207,14 @@ bool ExpressionTree::buildFromExpression(const std::string &expression) {
   return buildTreeFromPostfix(postfix);
 }
 
+void cleanupStack(TreeNode<std::string> **stack, int stackTop) {
+  for (int j = 0; j <= stackTop; j++) {
+    clearTree(stack[j]);
+  }
+}
+
 bool ExpressionTree::buildTreeFromPostfix(const TokenList &postfix) {
-  TreeNode<std::string> **stack = new TreeNode<std::string>*[postfix.count];
+  auto stack = new TreeNode<std::string>*[postfix.count];
   int stackTop = -1;
 
   for (int i = 0; i < postfix.count; i++) {
@@ -220,9 +226,7 @@ bool ExpressionTree::buildTreeFromPostfix(const TokenList &postfix) {
         std::cout << "Error: Not enough operands for operator: " << token
                   << std::endl;
         clearTree(node);
-        for (int j = 0; j <= stackTop; j++) {
-          clearTree(stack[j]);
-        }
+        cleanupStack(stack, stackTop);
         delete[] stack;
         return false;
       }
@@ -238,9 +242,7 @@ bool ExpressionTree::buildTreeFromPostfix(const TokenList &postfix) {
   if (stackTop != 0) {
     std::cout << "Error: Too many operands in expression!" << std::endl;
     clearTree(root);
-    for (int j = 0; j <= stackTop; j++) {
-      if (j != stackTop) clearTree(stack[j]);
-    }
+    cleanupStack(stack, stackTop - 1);
     delete[] stack;
     return false;
   }

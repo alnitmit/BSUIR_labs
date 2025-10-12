@@ -108,13 +108,6 @@ String &String::operator+=(const String &other) {
     return *this;
 }
 
-char& String::operator[](int index) {
-    if (index < 0 || index >= length) {
-        throw IndexOutOfBoundsException("String index out of bounds: " + std::to_string(index));
-    }
-    return data[index];
-}
-
 const char& String::operator[](int index) const {
     if (index < 0 || index >= length) {
         throw IndexOutOfBoundsException("String index out of bounds: " + std::to_string(index));

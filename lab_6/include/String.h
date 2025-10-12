@@ -3,7 +3,6 @@
 
 #include "Exception.h"
 #include <iostream>
-#include <cstring>
 
 class String {
 private:
@@ -35,11 +34,9 @@ public:
         return true;
     }
     
-    char& operator[](int index);
     const char& operator[](int index) const;
     
     int getLength() const { return length; }
-    const char* c_str() const { return data ? data : ""; }
 
     friend void print(const String &);
     friend void input(String &);

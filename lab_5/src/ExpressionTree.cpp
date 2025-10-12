@@ -1,8 +1,6 @@
 #include "../include/ExpressionTree.h"
 #include <cctype>
-#include <functional>
 #include <iostream>
-
 
 void clearTree(TreeNode<std::string> *node) {
   if (!node)
@@ -11,10 +9,6 @@ void clearTree(TreeNode<std::string> *node) {
   clearTree(node->right);
   delete node;
 }
-
-void printString(const std::string &str) { std::cout << str << " "; }
-
-void printInt(const int &value) { std::cout << value << " "; }
 
 ExpressionTree::TokenList::TokenList() = default;
 
@@ -102,48 +96,30 @@ double ExpressionTree::parseNumber(const std::string &numStr) const {
     i++;
   }
 
-  result = processIntegerPart(str, i, hasFraction);
+  while (str[i] != '\0' && str[i] != '.') {
+    if (std::isdigit(str[i])) {
+      result = result * 10 + (str[i] - '0');
+    }
+    i++;
+  }
+
+  if (str[i] == '.') {
+    hasFraction = true;
+    i++;
+  }
 
   if (hasFraction) {
-    fraction = processFractionalPart(str, i, divisor);
+    while (str[i] != '\0') {
+      if (std::isdigit(str[i])) {
+        fraction = fraction * 10 + (str[i] - '0');
+        divisor *= 10;
+      }
+      i++;
+    }
   }
 
   result += fraction / divisor;
   return negative ? -result : result;
-}
-
-double ExpressionTree::processIntegerPart(const char *str, int &index,
-                                          bool &hasFraction) const {
-  double result = 0.0;
-
-  while (str[index] != '\0' && str[index] != '.') {
-    if (std::isdigit(str[index])) {
-      result = result * 10 + (str[index] - '0');
-    }
-    index++;
-  }
-
-  if (str[index] == '.') {
-    hasFraction = true;
-    index++;
-  }
-
-  return result;
-}
-
-double ExpressionTree::processFractionalPart(const char *str, int &index,
-                                             double &divisor) const {
-  double fraction = 0.0;
-
-  while (str[index] != '\0') {
-    if (std::isdigit(str[index])) {
-      fraction = fraction * 10 + (str[index] - '0');
-      divisor *= 10;
-    }
-    index++;
-  }
-
-  return fraction;
 }
 
 double ExpressionTree::evaluateOperator(TreeNode<std::string> *node) const {
@@ -157,116 +133,60 @@ double ExpressionTree::evaluateOperator(TreeNode<std::string> *node) const {
   if (node->data == "*")
     return left * right;
   if (node->data == "/") {
-    return handleDivision(left, right);
+    if (right == 0) {
+      std::cout << "Error: Division by zero!" << std::endl;
+      return 0.0;
+    }
+    return left / right;
   }
 
   std::cout << "Error: Unknown operator: " << node->data << std::endl;
   return 0.0;
 }
 
-double ExpressionTree::handleDivision(double left, double right) const {
-  if (right == 0) {
-    std::cout << "Error: Division by zero!" << std::endl;
-    return 0.0;
-  }
-  return left / right;
-}
-
-class SimpleStack {
-private:
-  struct Node {
-    std::string data;
-    Node *next = nullptr;
-    explicit Node(const std::string &value) : data(value) {}
-  };
-
-  Node *topNode = nullptr;
-  SimpleStack(const SimpleStack &) = delete;
-  SimpleStack &operator=(const SimpleStack &) = delete;
-
-public:
-  SimpleStack() = default;
-
-  SimpleStack(SimpleStack &&other) noexcept : topNode(other.topNode) {
-    other.topNode = nullptr;
-  }
-
-  SimpleStack &operator=(SimpleStack &&other) noexcept {
-    if (this != &other) {
-      while (!empty()) {
-        pop();
-      }
-      topNode = other.topNode;
-      other.topNode = nullptr;
-    }
-    return *this;
-  }
-
-  ~SimpleStack() {
-    while (!empty()) {
-      pop();
-    }
-  }
-
-  void push(const std::string &value) {
-    auto newNode = new Node(value);
-    newNode->next = topNode;
-    topNode = newNode;
-  }
-
-  void pop() {
-    if (topNode) {
-      Node *temp = topNode;
-      topNode = topNode->next;
-      delete temp;
-    }
-  }
-
-  std::string &top() { return topNode->data; }
-
-  const std::string &top() const { return topNode->data; }
-
-  bool empty() const { return topNode == nullptr; }
-};
-
 void ExpressionTree::infixToPostfix(const TokenList &infix,
                                     TokenList &postfix) const {
-  SimpleStack operators;
+  std::string *operators = new std::string[infix.count];
+  int opTop = -1;
 
   for (int i = 0; i < infix.count; i++) {
     const std::string &token = infix.tokens[i];
     if (token == "(") {
-      operators.push(token);
+      operators[++opTop] = token;
     } else if (token == ")") {
-      while (!operators.empty() && operators.top() != "(") {
-        postfix.addToken(operators.top());
-        operators.pop();
+      while (opTop >= 0 && operators[opTop] != "(") {
+        postfix.addToken(operators[opTop]);
+        opTop--;
       }
-      if (operators.empty()) {
+      if (opTop < 0) {
         std::cout << "Error: Mismatched parentheses!" << std::endl;
+        delete[] operators;
         return;
       }
-      operators.pop();
+      opTop--;
     } else if (isOperator(token)) {
-      while (!operators.empty() && operators.top() != "(" &&
-             getPriority(operators.top()) >= getPriority(token)) {
-        postfix.addToken(operators.top());
-        operators.pop();
+      while (opTop >= 0 && operators[opTop] != "(" &&
+             getPriority(operators[opTop]) >= getPriority(token)) {
+        postfix.addToken(operators[opTop]);
+        opTop--;
       }
-      operators.push(token);
+      operators[++opTop] = token;
     } else {
       postfix.addToken(token);
     }
   }
 
-  while (!operators.empty()) {
-    if (operators.top() == "(") {
+  while (opTop >= 0) {
+    if (operators[opTop] == "(") {
       std::cout << "Error: Mismatched parentheses!" << std::endl;
+      delete[] operators;
       return;
     }
-    postfix.addToken(operators.top());
-    operators.pop();
+    postfix.addToken(operators[opTop]);
+    opTop--;
   }
+
+  delete[] operators;
 }
 
 bool ExpressionTree::buildFromExpression(const std::string &expression) {
@@ -288,64 +208,44 @@ bool ExpressionTree::buildFromExpression(const std::string &expression) {
 }
 
 bool ExpressionTree::buildTreeFromPostfix(const TokenList &postfix) {
-  struct StackNode {
-    TreeNode<std::string> *treeNode;
-    StackNode *next = nullptr;
-    explicit StackNode(TreeNode<std::string> *node) : treeNode(node) {}
-  };
-
-  StackNode *stackTop = nullptr;
-
-  auto push = [&stackTop](TreeNode<std::string> *node) {
-    auto newNode = new StackNode(node);
-    newNode->next = stackTop;
-    stackTop = newNode;
-  };
-
-  auto pop = [&stackTop]() -> TreeNode<std::string> * {
-    if (!stackTop)
-      return nullptr;
-    StackNode *temp = stackTop;
-    TreeNode<std::string> *node = temp->treeNode;
-    stackTop = stackTop->next;
-    delete temp;
-    return node;
-  };
-
-  auto cleanup = [&]() {
-    while (stackTop) {
-      clearTree(pop());
-    }
-  };
+  TreeNode<std::string> **stack = new TreeNode<std::string>*[postfix.count];
+  int stackTop = -1;
 
   for (int i = 0; i < postfix.count; i++) {
     const std::string &token = postfix.tokens[i];
     auto node = new TreeNode<std::string>(token);
 
     if (isOperator(token)) {
-      node->right = pop();
-      node->left = pop();
-
-      if (!node->left || !node->right) {
+      if (stackTop < 1) {
         std::cout << "Error: Not enough operands for operator: " << token
                   << std::endl;
         clearTree(node);
-        cleanup();
+        for (int j = 0; j <= stackTop; j++) {
+          clearTree(stack[j]);
+        }
+        delete[] stack;
         return false;
       }
+      node->right = stack[stackTop--];
+      node->left = stack[stackTop--];
     }
 
-    push(node);
+    stack[++stackTop] = node;
   }
 
-  TreeNode<std::string> *root = pop();
-  if (stackTop != nullptr) {
+  TreeNode<std::string> *root = stackTop >= 0 ? stack[stackTop] : nullptr;
+  
+  if (stackTop != 0) {
     std::cout << "Error: Too many operands in expression!" << std::endl;
     clearTree(root);
-    cleanup();
+    for (int j = 0; j <= stackTop; j++) {
+      if (j != stackTop) clearTree(stack[j]);
+    }
+    delete[] stack;
     return false;
   }
 
+  delete[] stack;
   tree.setRoot(root);
   return true;
 }
@@ -388,6 +288,6 @@ void ExpressionTree::printTree() const {
   }
 
   std::cout << "Expression tree: ";
-  tree.inorderTraversal(printString);
+  tree.inorderTraversal();
   std::cout << std::endl;
 }

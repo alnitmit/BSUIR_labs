@@ -2,9 +2,7 @@
 #define TREE_H
 
 #include "TreeNode.h"
-#include <functional>
 #include <iostream>
-#include <utility>
 
 template <typename T> class Tree {
 private:
@@ -27,13 +25,12 @@ private:
     return newNode;
   }
 
-  template <typename Callback>
-  void inorder(TreeNode<T> *node, Callback &&callback) const {
+  void inorderPrint(TreeNode<T> *node) const {
     if (!node)
       return;
-    inorder(node->left, std::forward<Callback>(callback));
-    callback(node->data);
-    inorder(node->right, std::forward<Callback>(callback));
+    inorderPrint(node->left);
+    std::cout << node->data << " ";
+    inorderPrint(node->right);
   }
 
   TreeNode<T> *find(TreeNode<T> *node, const T &value) const {
@@ -84,23 +81,33 @@ public:
 
   Tree(const Tree &other) : root(clone(other.root)) {}
 
-  Tree &operator=(Tree other) {
-    swap(*this, other);
+  Tree &operator=(const Tree &other) {
+    if (this != &other) {
+      clear(root);
+      root = clone(other.root);
+    }
     return *this;
   }
 
-  Tree(Tree &&other) noexcept { swap(*this, other); }
+  Tree(Tree &&other) noexcept : root(other.root) {
+    other.root = nullptr;
+  }
 
   Tree &operator=(Tree &&other) noexcept {
-    swap(*this, other);
+    if (this != &other) {
+      clear(root);
+      root = other.root;
+      other.root = nullptr;
+    }
     return *this;
   }
 
   ~Tree() { clear(root); }
 
-  friend void swap(Tree &first, Tree &second) noexcept {
-    using std::swap;
-    swap(first.root, second.root);
+  void swap(Tree &other) noexcept {
+    TreeNode<T> *temp = root;
+    root = other.root;
+    other.root = temp;
   }
 
   void add(const T &value) {
@@ -123,9 +130,8 @@ public:
     current->left = new TreeNode<T>(value);
   }
 
-  template <typename Callback>
-  void inorderTraversal(Callback &&callback) const {
-    inorder(root, std::forward<Callback>(callback));
+  void inorderTraversal() const {
+    inorderPrint(root);
   }
 
   bool contains(const T &value) const { return find(root, value) != nullptr; }

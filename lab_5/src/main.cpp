@@ -33,7 +33,7 @@ void demoIntTree() {
   intTree.add(8);
 
   cout << "Inorder traversal: ";
-  intTree.inorderTraversal(printInt);
+  intTree.inorderTraversal();
   cout << endl;
 
   cout << "Search for 5: " << (intTree.contains(5) ? "found" : "not found")

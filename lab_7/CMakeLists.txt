@@ -4,11 +4,13 @@ project(WarehouseManagementSystem)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(warehouse
+set(SOURCES
     main.cpp
     Product.cpp
     FileOperations.cpp
     Menu.cpp
 )
 
-target_include_directories(warehouse PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+add_executable(WarehouseManagement ${SOURCES})
+
+target_include_directories(WarehouseManagement PRIVATE .)

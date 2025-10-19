@@ -9,7 +9,7 @@ int main() {
     std::fstream file(FILENAME, std::ios::binary | std::ios::app);
     file.close();
 
-    std::cout << "Metal Products Warehouse Management System\n";
+    std::cout << "Welcome to the Metal Products Warehouse Management System!\n";
 
     do {
         displayMenu();

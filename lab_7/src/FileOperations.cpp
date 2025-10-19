@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "FileOperations.h"
 #include "Product.h"
 
@@ -35,14 +36,10 @@ void addProduct() {
     std::cin.ignore();
     std::cout << "Enter product name: ";
     
-    char tempName[NAME_LENGTH];
-    int i = 0;
-    char ch;
-    while (std::cin.get(ch) && ch != '\n' && i < NAME_LENGTH - 1) {
-        tempName[i++] = ch;
+    std::getline(std::cin, product.name);
+    if (product.name.length() > NAME_LENGTH) {
+        product.name.resize(NAME_LENGTH);
     }
-    tempName[i] = '\0';
-    copyString(product.name, tempName, NAME_LENGTH);
     
     std::cout << "Enter quantity: ";
     std::cin >> product.quantity;
@@ -168,16 +165,14 @@ void updateProduct() {
     std::cin.ignore();
     std::cout << "Enter new name (or press Enter to keep current): ";
     
-    char newName[NAME_LENGTH];
-    int i = 0;
-    char ch;
-    while (std::cin.get(ch) && ch != '\n' && i < NAME_LENGTH - 1) {
-        newName[i++] = ch;
-    }
-    newName[i] = '\0';
+    std::string newName;
+    std::getline(std::cin, newName);
     
-    if (stringLength(newName) > 0) {
-        copyString(product.name, newName, NAME_LENGTH);
+    if (!newName.empty()) {
+        if (newName.length() > NAME_LENGTH) {
+            newName.resize(NAME_LENGTH);
+        }
+        product.name = newName;
     }
 
     std::cout << "Enter new quantity (or -1 to keep current): ";

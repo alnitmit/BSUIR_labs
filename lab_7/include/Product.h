@@ -1,20 +1,19 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
 
-const int NAME_LENGTH = 50;
-extern const char* FILENAME;
+#include <string>
+
+constexpr int NAME_LENGTH = 50;
+extern const std::string FILENAME;
 
 struct Product {
-    int id;
-    char name[NAME_LENGTH];
-    int quantity;
-    double price;
-    bool active;
+    int id = 0;
+    std::string name;
+    int quantity = 0;
+    double price = 0.0;
+    bool active = true;
 
-    Product();
+    Product() = default;
 };
-
-void copyString(char* dest, const char* src, int maxLength);
-int stringLength(const char* str);
 
 #endif

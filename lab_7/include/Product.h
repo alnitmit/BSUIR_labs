@@ -2,8 +2,8 @@
 #define PRODUCT_H
 
 #include <string>
-#include <cstddef>
 #include <array>
+#include <cstddef>
 
 constexpr int NAME_LENGTH = 50;
 extern const std::string FILENAME;

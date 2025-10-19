@@ -1,5 +1,9 @@
 #include "../include/String.h"
-#include "../include/Exception.h"
+#include "../include/exceptions/Exception.h"
+#include "../include/exceptions/MemoryAllocationException.h"
+#include "../include/exceptions/IndexOutOfBoundsException.h"
+#include "../include/exceptions/InvalidArgumentException.h"
+#include "../include/exceptions/OverflowException.h"
 #include <iostream>
 
 void clearInputBuffer() {

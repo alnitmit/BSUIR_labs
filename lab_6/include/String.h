@@ -1,7 +1,11 @@
 #ifndef STRING_H
 #define STRING_H
 
-#include "Exception.h"
+#include "exceptions/Exception.h"
+#include "exceptions/MemoryAllocationException.h"
+#include "exceptions/IndexOutOfBoundsException.h"
+#include "exceptions/InvalidArgumentException.h"
+#include "exceptions/OverflowException.h"
 #include <iostream>
 
 class String {

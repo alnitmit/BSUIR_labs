@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include "Menu.h"
-#include "Product.h"
+#include "../include/Menu.h"
+#include "../include/Product.h"
 
 int main() {
     int choice;

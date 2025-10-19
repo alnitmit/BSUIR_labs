@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include "Menu.h"
-#include "FileOperations.h"
+#include "../include/Menu.h"
+#include "../include/FileOperations.h"
 
 void displayMenu() {
     std::cout << "\n=== WAREHOUSE MANAGEMENT SYSTEM ===\n";

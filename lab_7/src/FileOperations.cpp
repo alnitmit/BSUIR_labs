@@ -3,8 +3,8 @@
 #include <string>
 #include <cstring>
 #include <cstddef>
-#include "FileOperations.h"
-#include "Product.h"
+#include "../include/FileOperations.h"
+#include "../include/Product.h"
 
 bool idExists(std::fstream& file, int id) {
     Product product;

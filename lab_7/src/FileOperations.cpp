@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 #include <cstring>
-#include <cstddef>
 #include "../include/FileOperations.h"
 #include "../include/Product.h"
 
@@ -10,7 +9,7 @@ bool idExists(std::fstream& file, int id) {
     Product product;
     file.seekg(0, std::ios::beg);
     
-    while (file.read(reinterpret_cast<std::byte*>(&product), sizeof(Product))) {
+    while (file.read(reinterpret_cast<char*>(&product), sizeof(Product))) {
         if (product.active && product.id == id) {
             return true;
         }
@@ -41,9 +40,8 @@ void addProduct() {
     std::string tempName;
     std::getline(std::cin, tempName);
     
-    // Копируем строку в фиксированный массив
     std::strncpy(product.name.data(), tempName.c_str(), NAME_LENGTH - 1);
-    product.name[NAME_LENGTH - 1] = '\0'; // Гарантируем нулевое завершение
+    product.name[NAME_LENGTH - 1] = '\0';
     
     std::cout << "Enter quantity: ";
     std::cin >> product.quantity;
@@ -53,7 +51,7 @@ void addProduct() {
 
     product.active = true;
 
-    file.write(reinterpret_cast<const std::byte*>(&product), sizeof(Product));
+    file.write(reinterpret_cast<const char*>(&product), sizeof(Product));
     file.close();
     
     std::cout << "Product added successfully!\n";
@@ -74,7 +72,7 @@ void displayAllProducts() {
 
     double totalInventoryValue = 0.0;
 
-    while (file.read(reinterpret_cast<std::byte*>(&product), sizeof(Product))) {
+    while (file.read(reinterpret_cast<char*>(&product), sizeof(Product))) {
         if (product.active) {
             found = true;
             double totalValue = product.quantity * product.price;
@@ -112,7 +110,7 @@ void findProduct() {
     Product product;
     bool found = false;
 
-    while (file.read(reinterpret_cast<std::byte*>(&product), sizeof(Product))) {
+    while (file.read(reinterpret_cast<char*>(&product), sizeof(Product))) {
         if (product.active && product.id == searchId) {
             found = true;
             std::cout << "\nProduct found:\n";
@@ -147,7 +145,7 @@ void updateProduct() {
     bool found = false;
     std::streampos position;
 
-    while (file.read(reinterpret_cast<std::byte*>(&product), sizeof(Product))) {
+    while (file.read(reinterpret_cast<char*>(&product), sizeof(Product))) {
         if (product.active && product.id == updateId) {
             found = true;
             position = file.tellg() - static_cast<std::streampos>(sizeof(Product));
@@ -192,7 +190,7 @@ void updateProduct() {
     }
 
     file.seekp(position);
-    file.write(reinterpret_cast<const std::byte*>(&product), sizeof(Product));
+    file.write(reinterpret_cast<const char*>(&product), sizeof(Product));
     file.close();
 
     std::cout << "Product information updated!\n";
@@ -213,7 +211,7 @@ void deleteProduct() {
     bool found = false;
     std::streampos position;
 
-    while (file.read(reinterpret_cast<std::byte*>(&product), sizeof(Product))) {
+    while (file.read(reinterpret_cast<char*>(&product), sizeof(Product))) {
         if (product.active && product.id == deleteId) {
             found = true;
             position = file.tellg() - static_cast<std::streampos>(sizeof(Product));
@@ -229,7 +227,7 @@ void deleteProduct() {
 
     product.active = false;
     file.seekp(position);
-    file.write(reinterpret_cast<const std::byte*>(&product), sizeof(Product));
+    file.write(reinterpret_cast<const char*>(&product), sizeof(Product));
     file.close();
 
     std::cout << "Product deleted!\n";
@@ -246,7 +244,7 @@ void showTotalInventoryValue() {
     double totalValue = 0.0;
     int totalItems = 0;
 
-    while (file.read(reinterpret_cast<std::byte*>(&product), sizeof(Product))) {
+    while (file.read(reinterpret_cast<char*>(&product), sizeof(Product))) {
         if (product.active) {
             totalValue += product.quantity * product.price;
             totalItems += product.quantity;

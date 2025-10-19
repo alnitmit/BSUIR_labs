@@ -22,3 +22,5 @@ int stringLength(const char* str) {
     }
     return length;
 }
+
+const char* FILENAME = "inventory.dat";

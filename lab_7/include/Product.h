@@ -2,7 +2,7 @@
 #define PRODUCT_H
 
 const int NAME_LENGTH = 50;
-const char* FILENAME = "inventory.dat";
+extern const char* FILENAME;
 
 struct Product {
     int id;

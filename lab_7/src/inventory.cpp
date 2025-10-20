@@ -17,20 +17,42 @@ template<typename T>
 void readAsBytes(std::istream& is, T& obj) {
     std::byte buffer[sizeof(obj)];
     is.read(reinterpret_cast<char*>(buffer), sizeof(obj));
-    std::memcpy(&obj, buffer, sizeof(obj));
+    if (is.gcount() == sizeof(obj)) {
+        std::memcpy(&obj, buffer, sizeof(obj));
+    } else {
+        is.setstate(std::ios::failbit);
+    }
 }
 
 void writeString(std::ostream& os, const std::string& str) {
     size_t size = str.size();
     writeAsBytes(os, size);
-    os.write(str.c_str(), static_cast<std::streamsize>(size));
+    if (size > 0) {
+        os.write(str.c_str(), static_cast<std::streamsize>(size));
+    }
 }
 
-void readString(std::istream& is, std::string& str) {
+bool readString(std::istream& is, std::string& str) {
     size_t size;
     readAsBytes(is, size);
-    str.resize(size);
-    is.read(str.data(), static_cast<std::streamsize>(size));
+    
+    // Проверка на корректный размер строки
+    if (is.fail() || size > 1000000) { // Ограничим максимальный размер для безопасности
+        is.setstate(std::ios::failbit);
+        return false;
+    }
+    
+    if (size > 0) {
+        str.resize(size);
+        is.read(&str[0], static_cast<std::streamsize>(size));
+        if (is.gcount() != static_cast<std::streamsize>(size)) {
+            is.setstate(std::ios::failbit);
+            return false;
+        }
+    } else {
+        str.clear();
+    }
+    return true;
 }
 
 void writeItem(std::ostream& os, const Item& item) {
@@ -43,7 +65,7 @@ void writeItem(std::ostream& os, const Item& item) {
 
 bool readItem(std::istream& is, Item& item) {
     readAsBytes(is, item.id);
-    readString(is, item.name);
+    if (!readString(is, item.name)) return false;
     readAsBytes(is, item.quantity);
     readAsBytes(is, item.cost);
     readAsBytes(is, item.active);
@@ -140,6 +162,9 @@ void displayAllItems() {
     if (!found) {
         std::cout << "No active items found.\n";
     }
+    
+    // Явно сбрасываем состояние потока
+    file.clear();
 }
 
 bool findItem(int id, Item& foundItem, long& position) {
@@ -156,6 +181,7 @@ bool findItem(int id, Item& foundItem, long& position) {
             return true;
         }
         position = file.tellg();
+        if (position == -1) break; // Если достигнут конец файла
     }
     return false;
 }
@@ -167,6 +193,8 @@ bool updateItemInFile(long position, const Item& item) {
     }
 
     file.seekp(position);
+    if (file.fail()) return false;
+    
     writeItem(file, item);
     return !file.fail();
 }

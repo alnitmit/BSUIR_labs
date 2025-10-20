@@ -24,14 +24,17 @@ void addItem() {
         return;
     }
 
-    if (std::ifstream inFile(FILENAME, std::ios::binary); inFile) {
+    std::ifstream inFile(FILENAME, std::ios::binary);
+    if (inFile) {
         Item temp{};
         while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
             if (temp.active && temp.id == newItem.id) {
                 std::cout << "Item with this ID already exists.\n";
+                inFile.close();
                 return;
             }
         }
+        inFile.close();
     }
 
     std::cout << "Enter item name: ";
@@ -58,10 +61,10 @@ void addItem() {
 
     newItem.active = true;
 
-    if (std::ofstream outFile(FILENAME, std::ios::binary | std::ios::app); outFile) {
-        outFile.write(reinterpret_cast<const char*>(&newItem), sizeof(Item));
-        std::cout << "Item added successfully.\n";
-    }
+    std::ofstream outFile(FILENAME, std::ios::binary | std::ios::app);
+    outFile.write(reinterpret_cast<const char*>(&newItem), sizeof(Item));
+    outFile.close();
+    std::cout << "Item added successfully.\n";
 }
 
 void displayAllItems() {
@@ -80,6 +83,7 @@ void displayAllItems() {
             found = true;
         }
     }
+    file.close();
 
     if (!found) {
         std::cout << "No active items found.\n";
@@ -114,6 +118,7 @@ void deleteItem() {
             break;
         }
     }
+    file.close();
 
     if (found) {
         std::cout << "Item deleted successfully.\n";
@@ -153,6 +158,7 @@ void updateItem() {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Invalid input. Operation cancelled.\n";
+                file.close();
                 return;
             }
             
@@ -162,6 +168,7 @@ void updateItem() {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Invalid input. Operation cancelled.\n";
+                file.close();
                 return;
             }
 
@@ -171,6 +178,7 @@ void updateItem() {
             break;
         }
     }
+    file.close();
 
     if (found) {
         std::cout << "Item updated successfully.\n";

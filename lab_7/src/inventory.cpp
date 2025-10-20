@@ -1,6 +1,7 @@
 #include "../include/item.h"
 
 const std::string FILENAME = "inventory.dat";
+const std::string TEMP_FILENAME = "temp_inventory.dat";
 
 void writeItem(std::ostream& os, const Item& item) {
     os.write(reinterpret_cast<const char*>(&item), sizeof(Item));
@@ -56,7 +57,7 @@ void addItem() {
     if (inFile) {
         Item temp{};
         while (readItem(inFile, temp)) {
-            if (temp.active && temp.id == newItem.id) {
+            if (temp.id == newItem.id) {
                 std::cout << "Item with this ID already exists.\n";
                 return;
             }
@@ -75,8 +76,6 @@ void addItem() {
 
     if (!getValidInput("Enter quantity: ", newItem.quantity)) return;
     if (!getValidInput("Enter cost: ", newItem.cost)) return;
-
-    newItem.active = true;
 
     std::ofstream outFile(FILENAME, std::ios::binary | std::ios::app);
     if (outFile) {
@@ -97,15 +96,13 @@ void displayAllItems() {
     Item temp{};
     bool found = false;
     while (readItem(file, temp)) {
-        if (temp.active) {
-            std::cout << "ID: " << temp.id << ", Name: " << temp.name
-                      << ", Quantity: " << temp.quantity << ", Cost: " << temp.cost << '\n';
-            found = true;
-        }
+        std::cout << "ID: " << temp.id << ", Name: " << temp.name
+                  << ", Quantity: " << temp.quantity << ", Cost: " << temp.cost << '\n';
+        found = true;
     }
 
     if (!found) {
-        std::cout << "No active items found.\n";
+        std::cout << "No items found.\n";
     }
 }
 
@@ -118,7 +115,7 @@ bool findItem(int id, Item& foundItem, long& position) {
     position = file.tellg();
     Item temp{};
     while (readItem(file, temp)) {
-        if (temp.active && temp.id == id) {
+        if (temp.id == id) {
             foundItem = temp;
             return true;
         }
@@ -146,16 +143,45 @@ void deleteItem() {
     int idToDelete;
     if (!getValidInput("Enter item ID to delete: ", idToDelete)) return;
 
-    Item foundItem{};
-    long position;
-    if (findItem(idToDelete, foundItem, position)) {
-        foundItem.active = false;
-        if (updateItemInFile(position, foundItem)) {
-            std::cout << "Item deleted successfully.\n";
+    std::ifstream inFile(FILENAME, std::ios::binary);
+    if (!inFile) {
+        std::cout << "Error opening file for reading.\n";
+        return;
+    }
+
+    std::ofstream tempFile(TEMP_FILENAME, std::ios::binary | std::ios::out);
+    if (!tempFile) {
+        std::cout << "Error creating temporary file.\n";
+        inFile.close();
+        return;
+    }
+
+    Item temp{};
+    bool found = false;
+    
+    while (readItem(inFile, temp)) {
+        if (temp.id == idToDelete) {
+            found = true;
         } else {
-            std::cout << "Error updating file.\n";
+            writeItem(tempFile, temp);
+        }
+    }
+
+    inFile.close();
+    tempFile.close();
+
+    if (found) {
+        if (std::remove(FILENAME.c_str()) != 0) {
+            std::cout << "Error deleting original file.\n";
+            return;
+        }
+        if (std::rename(TEMP_FILENAME.c_str(), FILENAME.c_str()) != 0) {
+            std::cout << "Error renaming temporary file.\n";
+        } else {
+            std::cout << "Item deleted successfully.\n";
         }
     } else {
+        std::remove(TEMP_FILENAME.c_str());
         std::cout << "Item not found.\n";
     }
 }

@@ -11,7 +11,6 @@ struct Item {
     char name[50];
     int quantity;
     double cost;
-    bool active;
 };
 
 void writeItem(std::ostream& os, const Item& item);

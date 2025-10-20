@@ -1,24 +1,26 @@
+
 #include "../include/item.h"
 #include <fstream>
 #include <limits>
 #include <cstring>
+#include <array>
 
 const std::string FILENAME = "inventory.dat";
 const int NAME_SIZE = 50;
 
 template<typename T>
 void writeAsBytes(std::ostream& os, const T& obj) {
-    std::byte buffer[sizeof(obj)];
-    std::memcpy(buffer, &obj, sizeof(obj));
-    os.write(reinterpret_cast<const char*>(buffer), sizeof(obj));
+    std::array<std::byte, sizeof(obj)> buffer;
+    std::memcpy(buffer.data(), &obj, sizeof(obj));
+    os.write(reinterpret_cast<const char*>(buffer.data()), sizeof(obj));
 }
 
 template<typename T>
 void readAsBytes(std::istream& is, T& obj) {
-    std::byte buffer[sizeof(obj)];
-    is.read(reinterpret_cast<char*>(buffer), sizeof(obj));
+    std::array<std::byte, sizeof(obj)> buffer;
+    is.read(reinterpret_cast<char*>(buffer.data()), sizeof(obj));
     if (is.gcount() == sizeof(obj)) {
-        std::memcpy(&obj, buffer, sizeof(obj));
+        std::memcpy(&obj, buffer.data(), sizeof(obj));
     } else {
         is.setstate(std::ios::failbit);
     }
@@ -33,7 +35,7 @@ void writeString(std::ostream& os, const std::string& str) {
 }
 
 bool readString(std::istream& is, std::string& str) {
-    size_t size;
+    size_t size = 0; // Инициализируем нулем
     readAsBytes(is, size);
     
     // Проверка на корректный размер строки
@@ -44,7 +46,7 @@ bool readString(std::istream& is, std::string& str) {
     
     if (size > 0) {
         str.resize(size);
-        is.read(&str[0], static_cast<std::streamsize>(size));
+        is.read(str.data(), static_cast<std::streamsize>(size));
         if (is.gcount() != static_cast<std::streamsize>(size)) {
             is.setstate(std::ios::failbit);
             return false;

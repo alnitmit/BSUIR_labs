@@ -5,7 +5,7 @@ int main() {
     int choice = 0;
 
     do {
-        std::cout << "\n=== Inventory Management System ===\n";
+        std::cout << "\n\tInventory Management System\n";
         std::cout << "1. Add item\n";
         std::cout << "2. Display all items\n";
         std::cout << "3. Delete item\n";
@@ -20,7 +20,7 @@ int main() {
             case 2: displayAllItems(); break;
             case 3: deleteItem(); break;
             case 4: updateItem(); break;
-            case 5: std::cout << "Exiting program...\n"; break;
+            case 5: std::cout << "Exiting program.\n"; break;
             default: std::cout << "Invalid choice. Please try again.\n";
         }
     } while (choice != 5);

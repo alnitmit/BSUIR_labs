@@ -20,5 +20,9 @@ void addItem();
 void displayAllItems();
 void deleteItem();
 void updateItem();
+bool getValidInput(const std::string& prompt, int& value);
+bool getValidInput(const std::string& prompt, double& value);
+bool findItem(int id, Item& foundItem, long& position);
+bool updateItemInFile(long position, const Item& item);
 
 #endif

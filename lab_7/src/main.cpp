@@ -15,32 +15,15 @@ int main() {
         std::cout << "5. Exit\n";
         std::cout << "Enter your choice: ";
         
-        std::cin >> choice;
-        if (std::cin.fail()) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Invalid input. Please try again.\n";
-            continue;
-        }
+        if (!getValidInput("", choice)) continue;
 
         switch (choice) {
-            case 1: 
-                addItem(); 
-                break;
-            case 2: 
-                displayAllItems(); 
-                break;
-            case 3: 
-                deleteItem(); 
-                break;
-            case 4: 
-                updateItem(); 
-                break;
-            case 5: 
-                std::cout << "Exiting program...\n"; 
-                break;
-            default: 
-                std::cout << "Invalid choice. Please try again.\n";
+            case 1: addItem(); break;
+            case 2: displayAllItems(); break;
+            case 3: deleteItem(); break;
+            case 4: updateItem(); break;
+            case 5: std::cout << "Exiting program...\n"; break;
+            default: std::cout << "Invalid choice. Please try again.\n";
         }
     } while (choice != 5);
 

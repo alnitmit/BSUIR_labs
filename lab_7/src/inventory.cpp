@@ -2,7 +2,7 @@
 #include <fstream>
 #include <limits>
 
-const char* FILENAME = "inventory.dat";
+const std::string FILENAME = "inventory.dat";
 const int NAME_SIZE = 50;
 
 void initializeFile() {
@@ -24,22 +24,19 @@ void addItem() {
         return;
     }
 
-    std::ifstream inFile(FILENAME, std::ios::binary);
-    if (inFile) {
+    if (std::ifstream inFile(FILENAME, std::ios::binary); inFile) {
         Item temp{};
         while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
             if (temp.active && temp.id == newItem.id) {
                 std::cout << "Item with this ID already exists.\n";
-                inFile.close();
                 return;
             }
         }
-        inFile.close();
     }
 
     std::cout << "Enter item name: ";
     std::cin.ignore();
-    std::cin.getline(newItem.name, NAME_SIZE);
+    std::getline(std::cin, newItem.name);
     
     std::cout << "Enter quantity: ";
     std::cin >> newItem.quantity;
@@ -61,19 +58,19 @@ void addItem() {
 
     newItem.active = true;
 
-    std::ofstream outFile(FILENAME, std::ios::binary | std::ios::app);
-    outFile.write(reinterpret_cast<const char*>(&newItem), sizeof(Item));
-    outFile.close();
-    std::cout << "Item added successfully.\n";
+    if (std::ofstream outFile(FILENAME, std::ios::binary | std::ios::app); outFile) {
+        outFile.write(reinterpret_cast<const char*>(&newItem), sizeof(Item));
+        std::cout << "Item added successfully.\n";
+    }
 }
 
 void displayAllItems() {
-    std::ifstream file(FILENAME, std::ios::binary);
-    if (!file) {
+    if (std::ifstream file(FILENAME, std::ios::binary); !file) {
         std::cout << "No items found.\n";
         return;
     }
 
+    std::ifstream file(FILENAME, std::ios::binary);
     Item temp{};
     bool found = false;
     while (file.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
@@ -83,7 +80,6 @@ void displayAllItems() {
             found = true;
         }
     }
-    file.close();
 
     if (!found) {
         std::cout << "No active items found.\n";
@@ -101,12 +97,12 @@ void deleteItem() {
         return;
     }
 
-    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
-    if (!file) {
+    if (std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out); !file) {
         std::cout << "Error opening file.\n";
         return;
     }
 
+    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
     Item temp{};
     bool found = false;
     while (file.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
@@ -118,7 +114,6 @@ void deleteItem() {
             break;
         }
     }
-    file.close();
 
     if (found) {
         std::cout << "Item deleted successfully.\n";
@@ -138,19 +133,19 @@ void updateItem() {
         return;
     }
 
-    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
-    if (!file) {
+    if (std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out); !file) {
         std::cout << "Error opening file.\n";
         return;
     }
 
+    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
     Item temp{};
     bool found = false;
     while (file.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
         if (temp.active && temp.id == idToUpdate) {
             std::cout << "Enter new name: ";
             std::cin.ignore();
-            std::cin.getline(temp.name, NAME_SIZE);
+            std::getline(std::cin, temp.name);
             
             std::cout << "Enter new quantity: ";
             std::cin >> temp.quantity;
@@ -158,7 +153,6 @@ void updateItem() {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Invalid input. Operation cancelled.\n";
-                file.close();
                 return;
             }
             
@@ -168,7 +162,6 @@ void updateItem() {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 std::cout << "Invalid input. Operation cancelled.\n";
-                file.close();
                 return;
             }
 
@@ -178,7 +171,6 @@ void updateItem() {
             break;
         }
     }
-    file.close();
 
     if (found) {
         std::cout << "Item updated successfully.\n";

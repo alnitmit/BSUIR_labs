@@ -2,16 +2,17 @@
 #define ITEM_H
 
 #include <iostream>
+#include <string>
 
 struct Item {
     int id;
-    char name[50];
+    std::string name;
     int quantity;
     double cost;
     bool active;
 };
 
-extern const char* FILENAME;
+extern const std::string FILENAME;
 extern const int NAME_SIZE;
 
 void initializeFile();

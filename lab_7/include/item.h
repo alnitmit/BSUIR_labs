@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstddef>
 
 struct Item {
     int id;
@@ -24,5 +25,7 @@ bool getValidInput(const std::string& prompt, int& value);
 bool getValidInput(const std::string& prompt, double& value);
 bool findItem(int id, Item& foundItem, long& position);
 bool updateItemInFile(long position, const Item& item);
+void writeItem(std::ostream& os, const Item& item);
+bool readItem(std::istream& is, Item& item);
 
 #endif

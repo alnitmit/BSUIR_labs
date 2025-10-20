@@ -32,8 +32,7 @@ bool getValidInput(const std::string& prompt, double& value) {
 }
 
 void initializeFile() {
-    std::fstream file(FILENAME, std::ios::binary | std::ios::out | std::ios::in);
-    if (!file) {
+    if (std::fstream file(FILENAME, std::ios::binary | std::ios::out | std::ios::in); !file) {
         file.open(FILENAME, std::ios::binary | std::ios::out);
     }
 }
@@ -43,8 +42,7 @@ void addItem() {
     
     if (!getValidInput("Enter item ID: ", newItem.id)) return;
 
-    std::ifstream inFile(FILENAME, std::ios::binary);
-    if (inFile) {
+    if (std::ifstream inFile(FILENAME, std::ios::binary); inFile) {
         Item temp{};
         while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
             if (temp.active && temp.id == newItem.id) {
@@ -63,18 +61,21 @@ void addItem() {
 
     newItem.active = true;
 
-    std::ofstream outFile(FILENAME, std::ios::binary | std::ios::app);
-    outFile.write(reinterpret_cast<const char*>(&newItem), sizeof(Item));
-    std::cout << "Item added successfully.\n";
+    if (std::ofstream outFile(FILENAME, std::ios::binary | std::ios::app); outFile) {
+        outFile.write(reinterpret_cast<const char*>(&newItem), sizeof(Item));
+        std::cout << "Item added successfully.\n";
+    } else {
+        std::cout << "Error opening file for writing.\n";
+    }
 }
 
 void displayAllItems() {
-    std::ifstream file(FILENAME, std::ios::binary);
-    if (!file) {
+    if (std::ifstream file(FILENAME, std::ios::binary); !file) {
         std::cout << "No items found.\n";
         return;
     }
 
+    std::ifstream file(FILENAME, std::ios::binary);
     Item temp{};
     bool found = false;
     while (file.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
@@ -91,11 +92,11 @@ void displayAllItems() {
 }
 
 bool findItem(int id, Item& foundItem, long& position) {
-    std::ifstream file(FILENAME, std::ios::binary);
-    if (!file) {
+    if (std::ifstream file(FILENAME, std::ios::binary); !file) {
         return false;
     }
 
+    std::ifstream file(FILENAME, std::ios::binary);
     position = 0;
     Item temp{};
     while (file.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
@@ -109,11 +110,11 @@ bool findItem(int id, Item& foundItem, long& position) {
 }
 
 bool updateItemInFile(long position, const Item& item) {
-    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
-    if (!file) {
+    if (std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out); !file) {
         return false;
     }
 
+    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
     file.seekp(position);
     file.write(reinterpret_cast<const char*>(&item), sizeof(Item));
     return true;

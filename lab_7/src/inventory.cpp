@@ -115,7 +115,7 @@ bool findItem(int id, Item& foundItem, long& position) {
         return false;
     }
 
-    position = 0;
+    position = file.tellg();
     Item temp{};
     while (readItem(file, temp)) {
         if (temp.active && temp.id == id) {
@@ -133,7 +133,11 @@ bool updateItemInFile(long position, const Item& item) {
         return false;
     }
 
-    file.seekp(position);
+    file.seekp(position, std::ios::beg);
+    if (file.fail()) {
+        return false;
+    }
+    
     writeItem(file, item);
     return !file.fail();
 }
@@ -163,6 +167,8 @@ void updateItem() {
     Item foundItem{};
     long position;
     if (findItem(idToUpdate, foundItem, position)) {
+        std::cout << "Current item: " << foundItem.name << ", Qty: " << foundItem.quantity << ", Cost: " << foundItem.cost << '\n';
+        
         std::cout << "Enter new name: ";
         std::string name;
         std::getline(std::cin, name);

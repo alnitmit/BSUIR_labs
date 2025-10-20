@@ -14,12 +14,12 @@ endif()
 find_package(PkgConfig)
 
 set(SOURCES
-    main.cpp
-    inventory.cpp
+    src/main.cpp
+    src/inventory.cpp
 )
 
 set(HEADERS
-    item.h
+    include/item.h
 )
 
 add_executable(inventory_manager ${SOURCES} ${HEADERS})

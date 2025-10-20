@@ -10,15 +10,17 @@ const int NAME_SIZE = 50;
 
 template<typename T>
 void writeAsBytes(std::ostream& os, const T& obj) {
-    std::array<std::byte, sizeof(obj)> buffer;
+
+    std::array<char, sizeof(obj)> buffer;
     std::memcpy(buffer.data(), &obj, sizeof(obj));
-    os.write(reinterpret_cast<const char*>(buffer.data()), sizeof(obj));
+    os.write(buffer.data(), sizeof(obj));
 }
 
 template<typename T>
 void readAsBytes(std::istream& is, T& obj) {
-    std::array<std::byte, sizeof(obj)> buffer;
-    is.read(reinterpret_cast<char*>(buffer.data()), sizeof(obj));
+    std::array<char, sizeof(obj)> buffer;
+    is.read(buffer.data(), sizeof(obj));
+    
     if (is.gcount() == sizeof(obj)) {
         std::memcpy(&obj, buffer.data(), sizeof(obj));
     } else {
@@ -35,11 +37,10 @@ void writeString(std::ostream& os, const std::string& str) {
 }
 
 bool readString(std::istream& is, std::string& str) {
-    size_t size = 0; // Инициализируем нулем
+    size_t size = 0;
     readAsBytes(is, size);
     
-    // Проверка на корректный размер строки
-    if (is.fail() || size > 1000000) { // Ограничим максимальный размер для безопасности
+    if (is.fail() || size > 1000000) {
         is.setstate(std::ios::failbit);
         return false;
     }
@@ -165,7 +166,6 @@ void displayAllItems() {
         std::cout << "No active items found.\n";
     }
     
-    // Явно сбрасываем состояние потока
     file.clear();
 }
 
@@ -183,7 +183,7 @@ bool findItem(int id, Item& foundItem, long& position) {
             return true;
         }
         position = file.tellg();
-        if (position == -1) break; // Если достигнут конец файла
+        if (position == -1) break;
     }
     return false;
 }

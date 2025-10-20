@@ -1,18 +1,23 @@
 #include "../include/item.h"
 #include <fstream>
 #include <limits>
+#include <cstring>
 
 const std::string FILENAME = "inventory.dat";
 const int NAME_SIZE = 50;
 
 template<typename T>
 void writeAsBytes(std::ostream& os, const T& obj) {
-    os.write(reinterpret_cast<const char*>(&obj), sizeof(obj));
+    std::byte buffer[sizeof(obj)];
+    std::memcpy(buffer, &obj, sizeof(obj));
+    os.write(reinterpret_cast<const char*>(buffer), sizeof(obj));
 }
 
 template<typename T>
 void readAsBytes(std::istream& is, T& obj) {
-    is.read(reinterpret_cast<char*>(&obj), sizeof(obj));
+    std::byte buffer[sizeof(obj)];
+    is.read(reinterpret_cast<char*>(buffer), sizeof(obj));
+    std::memcpy(&obj, buffer, sizeof(obj));
 }
 
 void writeString(std::ostream& os, const std::string& str) {
@@ -25,7 +30,7 @@ void readString(std::istream& is, std::string& str) {
     size_t size;
     readAsBytes(is, size);
     str.resize(size);
-    is.read(&str[0], static_cast<std::streamsize>(size));
+    is.read(str.data(), static_cast<std::streamsize>(size));
 }
 
 void writeItem(std::ostream& os, const Item& item) {

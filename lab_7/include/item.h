@@ -11,8 +11,8 @@ struct Item {
     bool active;
 };
 
-const char* FILENAME = "inventory.dat";
-const int NAME_SIZE = 50;
+extern const char* FILENAME;
+extern const int NAME_SIZE;
 
 void initializeFile();
 void addItem();

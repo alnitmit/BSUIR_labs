@@ -1,6 +1,9 @@
-#include "item.h"
+#include "../include/item.h"
 #include <fstream>
 #include <limits>
+
+const char* FILENAME = "inventory.dat";
+const int NAME_SIZE = 50;
 
 void initializeFile() {
     std::fstream file(FILENAME, std::ios::binary | std::ios::out | std::ios::in);

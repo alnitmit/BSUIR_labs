@@ -65,12 +65,12 @@ void addItem() {
 }
 
 void displayAllItems() {
-    if (std::ifstream file(FILENAME, std::ios::binary); !file) {
+    std::ifstream file(FILENAME, std::ios::binary);
+    if (!file) {
         std::cout << "No items found.\n";
         return;
     }
 
-    std::ifstream file(FILENAME, std::ios::binary);
     Item temp{};
     bool found = false;
     while (file.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
@@ -97,12 +97,12 @@ void deleteItem() {
         return;
     }
 
-    if (std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out); !file) {
+    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
+    if (!file) {
         std::cout << "Error opening file.\n";
         return;
     }
 
-    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
     Item temp{};
     bool found = false;
     while (file.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
@@ -133,12 +133,12 @@ void updateItem() {
         return;
     }
 
-    if (std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out); !file) {
+    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
+    if (!file) {
         std::cout << "Error opening file.\n";
         return;
     }
 
-    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
     Item temp{};
     bool found = false;
     while (file.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {

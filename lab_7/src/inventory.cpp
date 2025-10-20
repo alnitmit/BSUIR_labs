@@ -1,49 +1,9 @@
-#include "../include/item.h"
+#include "item.h"
 #include <fstream>
 #include <limits>
 
-const std::string FILENAME = "inventory.dat";
+const char* FILENAME = "inventory.dat";
 const int NAME_SIZE = 50;
-
-template<typename T>
-void writeAsBytes(std::ostream& os, const T& obj) {
-    os.write(reinterpret_cast<const char*>(&obj), sizeof(obj));
-}
-
-template<typename T>
-void readAsBytes(std::istream& is, T& obj) {
-    is.read(reinterpret_cast<char*>(&obj), sizeof(obj));
-}
-
-void writeString(std::ostream& os, const std::string& str) {
-    size_t size = str.size();
-    writeAsBytes(os, size);
-    os.write(str.c_str(), static_cast<std::streamsize>(size));
-}
-
-void readString(std::istream& is, std::string& str) {
-    size_t size;
-    readAsBytes(is, size);
-    str.resize(size);
-    is.read(&str[0], static_cast<std::streamsize>(size));
-}
-
-void writeItem(std::ostream& os, const Item& item) {
-    writeAsBytes(os, item.id);
-    writeString(os, item.name);
-    writeAsBytes(os, item.quantity);
-    writeAsBytes(os, item.cost);
-    writeAsBytes(os, item.active);
-}
-
-bool readItem(std::istream& is, Item& item) {
-    readAsBytes(is, item.id);
-    readString(is, item.name);
-    readAsBytes(is, item.quantity);
-    readAsBytes(is, item.cost);
-    readAsBytes(is, item.active);
-    return !is.fail();
-}
 
 bool getValidInput(const std::string& prompt, int& value) {
     if (!prompt.empty()) {
@@ -84,7 +44,7 @@ void addItem() {
 
     if (std::ifstream inFile(FILENAME, std::ios::binary); inFile) {
         Item temp{};
-        while (readItem(inFile, temp)) {
+        while (inFile.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
             if (temp.active && temp.id == newItem.id) {
                 std::cout << "Item with this ID already exists.\n";
                 return;
@@ -94,7 +54,7 @@ void addItem() {
 
     std::cout << "Enter item name: ";
     std::cin.ignore();
-    std::getline(std::cin, newItem.name);
+    std::cin.getline(newItem.name, NAME_SIZE);
     
     if (!getValidInput("Enter quantity: ", newItem.quantity)) return;
     if (!getValidInput("Enter cost: ", newItem.cost)) return;
@@ -102,7 +62,7 @@ void addItem() {
     newItem.active = true;
 
     if (std::ofstream outFile(FILENAME, std::ios::binary | std::ios::app); outFile) {
-        writeItem(outFile, newItem);
+        outFile.write(reinterpret_cast<const char*>(&newItem), sizeof(Item));
         std::cout << "Item added successfully.\n";
     } else {
         std::cout << "Error opening file for writing.\n";
@@ -118,7 +78,7 @@ void displayAllItems() {
     std::ifstream file(FILENAME, std::ios::binary);
     Item temp{};
     bool found = false;
-    while (readItem(file, temp)) {
+    while (file.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
         if (temp.active) {
             std::cout << "ID: " << temp.id << ", Name: " << temp.name
                       << ", Quantity: " << temp.quantity << ", Cost: " << temp.cost << '\n';
@@ -131,48 +91,30 @@ void displayAllItems() {
     }
 }
 
-bool findItem(int id, Item& foundItem, long& position) {
-    if (std::ifstream file(FILENAME, std::ios::binary); !file) {
-        return false;
-    }
-
-    std::ifstream file(FILENAME, std::ios::binary);
-    position = 0;
-    Item temp{};
-    while (readItem(file, temp)) {
-        if (temp.active && temp.id == id) {
-            foundItem = temp;
-            return true;
-        }
-        position = file.tellg();
-    }
-    return false;
-}
-
-bool updateItemInFile(long position, const Item& item) {
-    if (std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out); !file) {
-        return false;
-    }
-
-    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
-    file.seekp(position);
-    writeItem(file, item);
-    return !file.fail();
-}
-
 void deleteItem() {
     int idToDelete;
     if (!getValidInput("Enter item ID to delete: ", idToDelete)) return;
 
-    Item foundItem{};
-    long position;
-    if (findItem(idToDelete, foundItem, position)) {
-        foundItem.active = false;
-        if (updateItemInFile(position, foundItem)) {
-            std::cout << "Item deleted successfully.\n";
-        } else {
-            std::cout << "Error updating file.\n";
+    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
+    if (!file) {
+        std::cout << "Error opening file.\n";
+        return;
+    }
+
+    Item temp{};
+    bool found = false;
+    while (file.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
+        if (temp.active && temp.id == idToDelete) {
+            temp.active = false;
+            file.seekp(-static_cast<int>(sizeof(Item)), std::ios::cur);
+            file.write(reinterpret_cast<const char*>(&temp), sizeof(Item));
+            found = true;
+            break;
         }
+    }
+
+    if (found) {
+        std::cout << "Item deleted successfully.\n";
     } else {
         std::cout << "Item not found.\n";
     }
@@ -182,21 +124,32 @@ void updateItem() {
     int idToUpdate;
     if (!getValidInput("Enter item ID to update: ", idToUpdate)) return;
 
-    Item foundItem{};
-    long position;
-    if (findItem(idToUpdate, foundItem, position)) {
-        std::cout << "Enter new name: ";
-        std::cin.ignore();
-        std::getline(std::cin, foundItem.name);
-        
-        if (!getValidInput("Enter new quantity: ", foundItem.quantity)) return;
-        if (!getValidInput("Enter new cost: ", foundItem.cost)) return;
+    std::fstream file(FILENAME, std::ios::binary | std::ios::in | std::ios::out);
+    if (!file) {
+        std::cout << "Error opening file.\n";
+        return;
+    }
 
-        if (updateItemInFile(position, foundItem)) {
-            std::cout << "Item updated successfully.\n";
-        } else {
-            std::cout << "Error updating file.\n";
+    Item temp{};
+    bool found = false;
+    while (file.read(reinterpret_cast<char*>(&temp), sizeof(Item))) {
+        if (temp.active && temp.id == idToUpdate) {
+            std::cout << "Enter new name: ";
+            std::cin.ignore();
+            std::cin.getline(temp.name, NAME_SIZE);
+            
+            if (!getValidInput("Enter new quantity: ", temp.quantity)) return;
+            if (!getValidInput("Enter new cost: ", temp.cost)) return;
+
+            file.seekp(-static_cast<int>(sizeof(Item)), std::ios::cur);
+            file.write(reinterpret_cast<const char*>(&temp), sizeof(Item));
+            found = true;
+            break;
         }
+    }
+
+    if (found) {
+        std::cout << "Item updated successfully.\n";
     } else {
         std::cout << "Item not found.\n";
     }

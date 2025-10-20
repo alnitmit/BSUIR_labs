@@ -21,7 +21,6 @@ void addItem() {
         return;
     }
 
-    // Проверка на существующий ID
     std::ifstream inFile(FILENAME, std::ios::binary);
     if (inFile) {
         Item temp{};

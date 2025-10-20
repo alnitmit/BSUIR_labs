@@ -1,77 +1,13 @@
-
 #include "../include/item.h"
-#include <fstream>
-#include <limits>
-#include <cstring>
-#include <array>
 
 const std::string FILENAME = "inventory.dat";
-const int NAME_SIZE = 50;
-
-template<typename T>
-void writeAsBytes(std::ostream& os, const T& obj) {
-
-    std::array<char, sizeof(obj)> buffer;
-    std::memcpy(buffer.data(), &obj, sizeof(obj));
-    os.write(buffer.data(), sizeof(obj));
-}
-
-template<typename T>
-void readAsBytes(std::istream& is, T& obj) {
-    std::array<char, sizeof(obj)> buffer;
-    is.read(buffer.data(), sizeof(obj));
-    
-    if (is.gcount() == sizeof(obj)) {
-        std::memcpy(&obj, buffer.data(), sizeof(obj));
-    } else {
-        is.setstate(std::ios::failbit);
-    }
-}
-
-void writeString(std::ostream& os, const std::string& str) {
-    size_t size = str.size();
-    writeAsBytes(os, size);
-    if (size > 0) {
-        os.write(str.c_str(), static_cast<std::streamsize>(size));
-    }
-}
-
-bool readString(std::istream& is, std::string& str) {
-    size_t size = 0;
-    readAsBytes(is, size);
-    
-    if (is.fail() || size > 1000000) {
-        is.setstate(std::ios::failbit);
-        return false;
-    }
-    
-    if (size > 0) {
-        str.resize(size);
-        is.read(str.data(), static_cast<std::streamsize>(size));
-        if (is.gcount() != static_cast<std::streamsize>(size)) {
-            is.setstate(std::ios::failbit);
-            return false;
-        }
-    } else {
-        str.clear();
-    }
-    return true;
-}
 
 void writeItem(std::ostream& os, const Item& item) {
-    writeAsBytes(os, item.id);
-    writeString(os, item.name);
-    writeAsBytes(os, item.quantity);
-    writeAsBytes(os, item.cost);
-    writeAsBytes(os, item.active);
+    os.write(reinterpret_cast<const char*>(&item), sizeof(Item));
 }
 
 bool readItem(std::istream& is, Item& item) {
-    readAsBytes(is, item.id);
-    if (!readString(is, item.name)) return false;
-    readAsBytes(is, item.quantity);
-    readAsBytes(is, item.cost);
-    readAsBytes(is, item.active);
+    is.read(reinterpret_cast<char*>(&item), sizeof(Item));
     return !is.fail();
 }
 
@@ -129,8 +65,14 @@ void addItem() {
     inFile.close();
 
     std::cout << "Enter item name: ";
-    std::getline(std::cin, newItem.name);
+    std::string name;
+    std::getline(std::cin, name);
     
+    for (int i = 0; i < 49 && i < name.length(); i++) {
+        newItem.name[i] = name[i];
+    }
+    newItem.name[49] = '\0';
+
     if (!getValidInput("Enter quantity: ", newItem.quantity)) return;
     if (!getValidInput("Enter cost: ", newItem.cost)) return;
 
@@ -165,8 +107,6 @@ void displayAllItems() {
     if (!found) {
         std::cout << "No active items found.\n";
     }
-    
-    file.clear();
 }
 
 bool findItem(int id, Item& foundItem, long& position) {
@@ -183,7 +123,6 @@ bool findItem(int id, Item& foundItem, long& position) {
             return true;
         }
         position = file.tellg();
-        if (position == -1) break;
     }
     return false;
 }
@@ -195,8 +134,6 @@ bool updateItemInFile(long position, const Item& item) {
     }
 
     file.seekp(position);
-    if (file.fail()) return false;
-    
     writeItem(file, item);
     return !file.fail();
 }
@@ -227,7 +164,13 @@ void updateItem() {
     long position;
     if (findItem(idToUpdate, foundItem, position)) {
         std::cout << "Enter new name: ";
-        std::getline(std::cin, foundItem.name);
+        std::string name;
+        std::getline(std::cin, name);
+        
+        for (int i = 0; i < 49 && i < name.length(); i++) {
+            foundItem.name[i] = name[i];
+        }
+        foundItem.name[49] = '\0';
         
         if (!getValidInput("Enter new quantity: ", foundItem.quantity)) return;
         if (!getValidInput("Enter new cost: ", foundItem.cost)) return;

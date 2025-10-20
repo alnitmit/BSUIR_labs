@@ -1,6 +1,4 @@
 #include "../include/item.h"
-#include <iostream>
-#include <limits>
 
 int main() {
     initializeFile();

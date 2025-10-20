@@ -2,30 +2,28 @@
 #define ITEM_H
 
 #include <iostream>
+#include <fstream>
 #include <string>
-#include <cstddef>
+#include <limits>
 
 struct Item {
     int id;
-    std::string name;
+    char name[50];
     int quantity;
     double cost;
     bool active;
 };
 
-extern const std::string FILENAME;
-extern const int NAME_SIZE;
-
+void writeItem(std::ostream& os, const Item& item);
+bool readItem(std::istream& is, Item& item);
+bool getValidInput(const std::string& prompt, int& value);
+bool getValidInput(const std::string& prompt, double& value);
 void initializeFile();
 void addItem();
 void displayAllItems();
-void deleteItem();
-void updateItem();
-bool getValidInput(const std::string& prompt, int& value);
-bool getValidInput(const std::string& prompt, double& value);
 bool findItem(int id, Item& foundItem, long& position);
 bool updateItemInFile(long position, const Item& item);
-void writeItem(std::ostream& os, const Item& item);
-bool readItem(std::istream& is, Item& item);
+void deleteItem();
+void updateItem();
 
 #endif

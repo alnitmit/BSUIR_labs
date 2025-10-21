@@ -70,7 +70,7 @@ bool Inventory::findItem(int id, Item& foundItem, long& position) {
 }
 
 bool Inventory::updateItemInFile(long position, const Item& item) {
-    std::fstream file(filename, std::ios::binary);
+    std::fstream file(filename, std::ios::binary | std::ios::in | std::ios::out);
     if (!file) return false;
 
     file.seekp(position, std::ios::beg);
@@ -86,9 +86,9 @@ bool Inventory::updateItemInFile(long position, const Item& item) {
 }
 
 void Inventory::initializeFile() {
-    std::fstream file(filename, std::ios::binary);
+    std::fstream file(filename, std::ios::binary | std::ios::out | std::ios::in);
     if (!file) {
-        file.open(filename, std::ios::binary);
+        file.open(filename, std::ios::binary | std::ios::out);
         file.close();
     }
 }
@@ -154,7 +154,7 @@ void Inventory::deleteItem() {
         return;
     }
 
-    std::ofstream tempFile(tempFilename, std::ios::binary);
+    std::ofstream tempFile(tempFilename, std::ios::binary | std::ios::out);
     if (!tempFile) {
         std::cout << "Error creating temporary file.\n";
         inFile.close();

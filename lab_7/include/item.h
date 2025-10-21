@@ -1,28 +1,34 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#include <string>
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <limits>
 
-struct Item {
+class Item {
+private:
     int id;
-    char name[50];
+    std::string name;
     int quantity;
     double cost;
-};
 
-void writeItem(std::ostream& os, const Item& item);
-bool readItem(std::istream& is, Item& item);
-bool getValidInput(const std::string& prompt, int& value);
-bool getValidInput(const std::string& prompt, double& value);
-void initializeFile();
-void addItem();
-void displayAllItems();
-bool findItem(int id, Item& foundItem, long& position);
-bool updateItemInFile(long position, const Item& item);
-void deleteItem();
-void updateItem();
+public:
+    Item();
+    Item(int id, const std::string& name, int quantity, double cost);
+    
+    int getId() const;
+    std::string getName() const;
+    int getQuantity() const;
+    double getCost() const;
+    
+    void setId(int newId);
+    void setName(const std::string& newName);
+    void setQuantity(int newQuantity);
+    void setCost(double newCost);
+    
+    void serialize(std::ostream& os) const;
+    bool deserialize(std::istream& is);
+    void display() const;
+};
 
 #endif

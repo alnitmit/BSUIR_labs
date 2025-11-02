@@ -26,22 +26,22 @@ jobs:
 
 
 
-      - name: Build lab_1
+      - name: Build lab_8
         run: |
-          rm -rf lab_1/build
-          mkdir lab_1/build
-          cmake -S lab_1 -B lab_1/build 
-          build-wrapper-linux-x86-64 --out-dir lab_1/build_wrapper cmake --build lab_1/build --config Release
+          rm -rf lab_8/build
+          mkdir lab_8/build
+          cmake -S lab_8 -B lab_8/build 
+          build-wrapper-linux-x86-64 --out-dir lab_8/build_wrapper cmake --build lab_8/build --config Release
 
-      - name: SonarCloud scan lab_1
+      - name: SonarCloud scan lab_8
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN1 }}
         with:
           args: >
-            -Dsonar.projectKey=lab_1
+            -Dsonar.projectKey=lab_8
             -Dsonar.organization=${{ env.SONAR_ORG }}
-            -Dsonar.sources=lab_1
-            -Dsonar.cfamily.compile-commands=lab_1/build_wrapper/compile_commands.json
+            -Dsonar.sources=lab_8
+            -Dsonar.cfamily.compile-commands=lab_8/build_wrapper/compile_commands.json
             -Dsonar.coverage.exclusions=**
             -Dsonar.cfamily.skipCoverage=true

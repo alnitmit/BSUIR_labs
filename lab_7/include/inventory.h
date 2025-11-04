@@ -16,8 +16,8 @@ private:
     bool updateItemInFile(long position, const Item& item);
     
 public:
-    Inventory(const std::string& filename = "inventory.dat", 
-              const std::string& tempFilename = "temp_inventory.dat");
+    Inventory(const std::string& filename = "inventory.txt", 
+              const std::string& tempFilename = "temp_inventory.txt");
     
     void initializeFile();
     void addItem();

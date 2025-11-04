@@ -1,4 +1,5 @@
 #include "../include/item.h"
+#include <sstream>
 
 Item::Item() : id(0), name(""), quantity(0), cost(0.0) {}
 
@@ -16,39 +17,25 @@ void Item::setQuantity(int newQuantity) { quantity = newQuantity; }
 void Item::setCost(double newCost) { cost = newCost; }
 
 void Item::serialize(std::ostream& os) const {
-    os.write((const char*)&id, sizeof(id));
-    
-    size_t nameLength = name.length();
-    os.write((const char*)&nameLength, sizeof(nameLength));
-    os.write(name.c_str(), nameLength);
-    
-    os.write((const char*)&quantity, sizeof(quantity));
-    os.write((const char*)&cost, sizeof(cost));
+    os << id << "\t" << name << "\t" << quantity << "\t" << cost << "\n";
 }
 
 bool Item::deserialize(std::istream& is) {
-    is.read((char*)&id, sizeof(id));
-    if (is.fail()) return false;
-    
-    size_t nameLength;
-    is.read((char*)&nameLength, sizeof(nameLength));
-    if (is.fail()) return false;
-    
-    char* buffer = new char[nameLength + 1];
-    is.read(buffer, nameLength);
-    if (is.fail()) {
-        delete[] buffer;
+    std::string line;
+    if (!std::getline(is, line)) {
         return false;
     }
-    buffer[nameLength] = '\0';
-    name = buffer;
-    delete[] buffer;
+
+    std::istringstream iss(line);
+    if (!(iss >> id)) return false;
     
-    is.read((char*)&quantity, sizeof(quantity));
-    if (is.fail()) return false;
+    iss >> std::ws;
+    if (!std::getline(iss, name, '\t')) return false;
     
-    is.read((char*)&cost, sizeof(cost));
-    return !is.fail();
+    if (!(iss >> quantity)) return false;
+    if (!(iss >> cost)) return false;
+
+    return true;
 }
 
 void Item::display() const {

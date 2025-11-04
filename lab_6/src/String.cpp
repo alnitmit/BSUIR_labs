@@ -33,8 +33,8 @@ String::String() : data(new char[1]) {
 }
 
 String::String(const char* str) : data(nullptr) {
-    if (!str) {
-        throw InvalidArgumentException("Null pointer passed to constructor");
+    if (!str || str[0] != '\0') {
+        throw ArgumentException("Null pointer passed to constructor");
     }
 
     int str_len = 0;

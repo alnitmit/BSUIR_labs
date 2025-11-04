@@ -4,6 +4,7 @@
 #include "../include/exceptions/IndexOutOfBoundsException.h"
 #include "../include/exceptions/InvalidArgumentException.h"
 #include "../include/exceptions/OverflowException.h"
+#include "../include/exceptions/ArgumentException.h"
 #include <iostream>
 
 void clearInputBuffer() {
@@ -137,6 +138,8 @@ void runStringDemoProgram() {
             std::cout << "Overflow Error: " << e.what() << std::endl;
         } catch (const IndexOutOfBoundsException& e) {
             std::cout << "Index Error: " << e.what() << std::endl;
+        } catch (const ArgumentException& e) {
+            std::cout << "Argument Error: " << e.what() << std::endl;
         } catch (const InvalidArgumentException& e) {
             std::cout << "Argument Error: " << e.what() << std::endl;
         } catch (const Exception& e) {

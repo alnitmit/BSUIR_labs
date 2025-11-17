@@ -1,11 +1,12 @@
-#pragma once
+#ifndef LAB8_TREENODE_H
+#define LAB8_TREENODE_H
 
-template <typename T>
-class TreeNode {
+template <typename T> class TreeNode {
 public:
-    T data;
-    TreeNode* left;
-    TreeNode* right;
-
-    TreeNode(const T& value) : data(value), left(nullptr), right(nullptr) {}
+  T data;
+  TreeNode *left = nullptr;
+  TreeNode *right = nullptr;
+  explicit TreeNode(const T &value) : data(value) {}
 };
+
+#endif

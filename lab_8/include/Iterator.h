@@ -49,7 +49,6 @@ public:
   }
 };
 
-// Определения методов Tree после определения Iterator
 template <typename T> Iterator<T> Tree<T>::begin() { return Iterator<T>(root); }
 
 template <typename T> Iterator<T> Tree<T>::end() { return Iterator<T>(); }

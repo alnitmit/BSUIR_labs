@@ -5,7 +5,6 @@
 #include <functional>
 #include <iostream>
 
-// Предварительное объявление Iterator
 template <typename T> class Iterator;
 
 template <typename T> class Tree {
@@ -72,7 +71,6 @@ public:
 
   TreeNode<T> *getRoot() const { return root; }
 
-  // Объявления методов
   Iterator<T> begin();
   Iterator<T> end();
 };

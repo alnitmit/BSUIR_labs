@@ -91,8 +91,7 @@ template <typename T> void runProgram() {
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         break;
       }
-      TreeNode<T> *found = alg.search(tree.getRoot(), value);
-      if (found) {
+      if (TreeNode<T> *found = alg.search(tree.getRoot(), value)) {
         cout << "Value " << value << " found in the tree.\n";
       } else {
         cout << "Value " << value << " not found in the tree.\n";
